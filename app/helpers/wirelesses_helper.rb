@@ -1,0 +1,2 @@
+module WirelessesHelper
+end
