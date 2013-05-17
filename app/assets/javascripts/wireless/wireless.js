@@ -10,9 +10,9 @@ function initialize(){
   //Add Shape instance to stage display list.
   create_node(150, 150);
   create_node(250, 150);
-  
+
   //Update stage will render next frame
-  
+
   //Update stage will render next frame
   createjs.Ticker.setFPS(30);
   createjs.Ticker.addEventListener("tick", handleTick);
@@ -25,11 +25,11 @@ function handleTick() {
 
 function createCommunicationRangeCircle(x, y, color_opt){
   var range = new createjs.Shape();
-  var color = color_opt || "blue"
+  var color = color_opt || "blue";
   range.x = x;
   range.y = y;
   range.alpha = 0.1;
-  range.graphics.beginFill(color).drawCircle(0, 0, 180)
+  range.graphics.beginFill(color).drawCircle(0, 0, 180);
   simulator.addChild(range);
   return range;
 }
@@ -47,13 +47,13 @@ function create_node(x, y, color_opt){
   node.neighbor_node_list = {};
   node.edge_list = {};
   simulator.addChild(node);
-  
+
   // 順番が逆になると自分が隣接ノードに登録されてしまう。
   add_neighbor_node(node);
   add_node(node);
-  
+
   simulator.node_list[node.id] = node;
-   
+
   return node;
 }
 
@@ -63,6 +63,12 @@ function add_node(node){
     simulator.node_list[id].neighbor_node_list[node.id] = node;
     var line = new createjs.Shape();
     line.color = "green";
+    line.text = new createjs.Text("test", "14px Arial", "#ff7700");
+    line.text.x = (simulator.node_list[id].x + node.x) * 0.5;
+    line.text.y = (simulator.node_list[id].y + node.y) * 0.5;
+    line.textAlign = "left";
+    line.text.textBaseLine = "middle";
+    simulator.addChild(line.text);
     simulator.node_list[id].edge_list[node.id] = line;
     simulator.addChild(line);
   }
@@ -73,6 +79,12 @@ function add_neighbor_node(node){
   for(id in simulator.node_list){
     node.neighbor_node_list[id] = simulator.node_list[id];
     var line = new createjs.Shape();
+    line.text = new createjs.Text("", "14px Arial", "#ff7700");
+    line.textAlign = "left";
+    line.text.x = (simulator.node_list[id].x + node.x) * 0.5;
+    line.text.y = (simulator.node_list[id].y + node.y) * 0.5;
+    line.text.textBaseLine = "middle";
+    simulator.addChild(line.text);
     node.edge_list[id] = line;
     simulator.addChild(line);
   }
@@ -81,6 +93,11 @@ function add_neighbor_node(node){
 function checkConnectionNeighbor(my, neighbor){
   var dist = calcDistance(my.x, my.y, neighbor.x, neighbor.y);
   var rssi = calcRssiTwoRay(dist);
+  if(true || my.id == simulator.selected_target){
+    my.edge_list[neighbor.id].text.text = rssi + "dBm";
+  }else{
+    my.edge_list[neighbor.id].text.text = "";
+  }
   if(rssi >= -65){
     my.edge_list[neighbor.id].color = "green";
     return true; 
@@ -138,18 +155,25 @@ function remove_node(){
 
 function remove_neighbor_node(remove_id){
   console.log(remove_id)
-  for(id in simulator.node_list){
-    simulator.removeChild(simulator.node_list[remove_id].edge_list[id]);
-    simulator.removeChild(simulator.node_list[id].edge_list[remove_id]);
-    delete simulator.node_list[id].edge_list[remove_id];
-    delete simulator.node_list[remove_id].edge_list[id];
-    delete simulator.node_list[id].neighbor_node_list[remove_id];
-  }
+    for(id in simulator.node_list){
+      if(id != remove_id){
+        simulator.removeChild(simulator.node_list[remove_id].edge_list[id].text);
+        simulator.removeChild(simulator.node_list[remove_id].edge_list[id]);
+        simulator.removeChild(simulator.node_list[id].edge_list[remove_id].text);
+        simulator.removeChild(simulator.node_list[id].edge_list[remove_id]);
+        delete simulator.node_list[id].edge_list[remove_id];
+        delete simulator.node_list[remove_id].edge_list[id];
+        delete simulator.node_list[id].neighbor_node_list[remove_id];
+      }
+    }
 }
 
 function draw_edge(node, neighbor, color_opt){
   var line = node.edge_list[neighbor.id].graphics;
   line.clear();
+  var text = node.edge_list[neighbor.id].text;
+  text.x = (simulator.node_list[neighbor.id].x + node.x) * 0.5 - 10;
+  text.y = (simulator.node_list[neighbor.id].y + node.y) * 0.5;
   var color = color_opt || "green";
   line.beginStroke(color);
   line.moveTo(node.x, node.y);
@@ -159,6 +183,7 @@ function draw_edge(node, neighbor, color_opt){
 function clear_edge(node, neighbor){
   var line = node.edge_list[neighbor.id].graphics;
   line.clear();
+  node.edge_list[neighbor.id].text.text = "";
 }
 
 function node_update(){
@@ -190,7 +215,7 @@ function calcRssiTwoRay(d){
   var ht = 1.0;   // 送信アンテナの地面からの高さ
   var hr = 1.0;   // 受信アンテナの地面からの高さ
   var L = 1.0;    // システムロス
-  
+
   var Pr = (Pt*Gt*Gr*ht*hr)/Math.pow(d, 4)*L;
   var rssi = 10 * log10(Pr/0.001) * 100;
   return Math.round(rssi)/100;
