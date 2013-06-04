@@ -14,4 +14,28 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
+//= require jquery.ui.all
 //= require_tree .
+
+
+$(document).ready(function(){
+  $( "div#master" ).slider({
+    value: 0.0,
+    min: 0.0,
+    max: 1.0,
+    step: 0.001,
+    range: "min",
+    slide: function(event, ui){
+      $('span#tx_power').text($('#master').slider('value') + 'mW');
+      
+      if(simulator.selected_target != -1){
+        var node = simulator.node_list[simulator.selected_target];
+        node.tx_power = $('#master').slider('value');
+        clearCircle(simulator.node_list[node.id]);
+        console.log(calcRnageSize(node));
+        node.communication_range = createCommunicationRangeCircle(node.x, node.y, "blue", calcRnageSize(node));
+        simulator.addChild(node.communication_range);
+      }
+    }
+  });
+});

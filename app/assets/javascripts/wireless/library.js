@@ -5,6 +5,10 @@ function mousePressHandler(e) {
   node.offsetY = node.y - e.stageY; 
   
   simulator.selected_target = node.id;
+  $("span#node_id").text(node.id);
+  $("div#master").slider('value', simulator.node_list[node.id].tx_power);
+  $("span#tx_power").text(simulator.node_list[node.id].tx_power);
+  
   
   e.onMouseMove = mouseMoveHandler;
   e.onMouseUp = mouseUpHandler;

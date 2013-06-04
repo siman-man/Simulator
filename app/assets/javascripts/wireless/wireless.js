@@ -23,17 +23,18 @@ function handleTick() {
   simulator.update();
 }
 
-function createCommunicationRangeCircle(x, y, color_opt){
+function createCommunicationRangeCircle(x, y, color_opt, size_opt){
   var range = new createjs.Shape();
   var color = color_opt || "blue";
+  var size  = size_opt || "180";
   range.x = x;
   range.y = y;
-  range.alpha = 0.1;
-  range.graphics.beginFill(color).drawCircle(0, 0, 180);
-  simulator.addChild(range);
+  range.alpha = 0.05;
+  range.graphics.beginFill(color).drawCircle(0, 0, size);
   return range;
 }
 
+// ノード作成＆情報の初期化
 function create_node(x, y, color_opt){
   var color = color_opt || "black";
   var node = new createjs.Shape();
@@ -43,7 +44,9 @@ function create_node(x, y, color_opt){
   node.drag = false;
   node.onPress = mousePressHandler;
   node.x = x; node.y = y;
+  node.tx_power = 0.280;
   node.communication_range = createCommunicationRangeCircle(x, y);
+  simulator.addChild(node.communication_range);
   node.neighbor_node_list = {};
   node.edge_list = {};
   simulator.addChild(node);
@@ -92,19 +95,22 @@ function add_neighbor_node(node){
 
 function checkConnectionNeighbor(my, neighbor){
   var dist = calcDistance(my.x, my.y, neighbor.x, neighbor.y);
-  var rssi = calcRssiTwoRay(dist);
-  if(true || my.id == simulator.selected_target){
-    my.edge_list[neighbor.id].text.text = rssi + "dBm";
+  var rssi1 = calcRssiTwoRay(my, dist);
+  var rssi2 = calcRssiTwoRay(neighbor, dist);
+  
+  // 選択したノード周辺のdBmを閲覧できるようにする。(今は全部のノードで閲覧できるようにしている)
+  if(my.id == simulator.selected_target){
+    my.edge_list[neighbor.id].text.text = rssi1 + "dBm";
   }else{
     my.edge_list[neighbor.id].text.text = "";
   }
-  if(rssi >= -65){
+  if(rssi1 >= -65 && rssi2 >= -65 ){
     my.edge_list[neighbor.id].color = "green";
     return true; 
-  }else if(rssi >= -80){
+  }else if(rssi1 >= -80 && rssi2 >= -80){
     my.edge_list[neighbor.id].color = "yellow";
     return true;
-  }else if(rssi >= -90){
+  }else if(rssi1 >= -90 && rssi2 >= -90){
     my.edge_list[neighbor.id].color = "red";
     return true;
   }else{
@@ -122,6 +128,10 @@ function update(node){
     }
   }
   draw_nodes();
+}
+
+function updateNavBar(){
+  $('span#tx_power').text($('#master').slider('value') + 'mW');
 }
 
 function draw_nodes(){
@@ -186,6 +196,11 @@ function clear_edge(node, neighbor){
   node.edge_list[neighbor.id].text.text = "";
 }
 
+function clearCircle(node){
+  var range = node.communication_range.graphics;
+  range.clear();
+}
+
 function node_update(){
   for(id in simulator.node_list){
     update(simulator.node_list[id]);
@@ -196,7 +211,8 @@ function calcDistance(x1, y1, x2, y2){
   return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
 }
 
-function calcRssiFreeSpace(d){
+// FreeSpaceモデル
+function calcRssiFreeSpace(node, d){
   var Pt = 0.281; // ノード構成時に指定した物理層による(WirelessPhyならば初期値0.281)
   var Gt = 1.0;   // 送信アンテナのゲイン
   var Gr = 1.0;   // 受信アンテナのゲイン
@@ -208,17 +224,33 @@ function calcRssiFreeSpace(d){
   return Math.round(rssi)/100;
 }
 
-function calcRssiTwoRay(d){
-  var Pt = 0.281;
+
+// Tow-Rayモデル
+function calcRssiTwoRay(node, d){
+  var Pt = node.tx_power;
   var Gt = 1.0;   // 送信アンテナのゲイン
   var Gr = 1.0;   // 受信アンテナのゲイン
   var ht = 1.0;   // 送信アンテナの地面からの高さ
   var hr = 1.0;   // 受信アンテナの地面からの高さ
   var L = 1.0;    // システムロス
 
-  var Pr = (Pt*Gt*Gr*ht*hr)/Math.pow(d, 4)*L;
+  var Pr = (Pt*Gt*Gr*(ht*ht)*(hr*hr))/Math.pow(d, 4)*L;
   var rssi = 10 * log10(Pr/0.001) * 100;
   return Math.round(rssi)/100;
+}
+
+function calcRnageSize(node){
+  var Pt = node.tx_power;
+  var Gt = 1.0;
+  var Gr = 1.0;
+  var ht = 1.0;
+  var hr = 1.0;
+  var L = 1.0;
+  
+  var Pr = 3.162277660168379e-10; // -65dBmを指定
+  //var Pr = 1e-13;
+  var d = Math.sqrt(Math.sqrt((Pt*Gt*Gr*(ht*ht)*(hr*hr))/(Pr*L)));
+  return d;
 }
 
 function log10(x){
