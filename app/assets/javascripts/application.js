@@ -19,11 +19,12 @@
 
 
 $(document).ready(function(){
+  
   $( "div#master" ).slider({
     value: 0.0,
     min: 0.0,
     max: 1.0,
-    step: 0.001,
+    step: 0.005,
     range: "min",
     slide: function(event, ui){
       $('span#tx_power').text($('#master').slider('value') + 'mW');

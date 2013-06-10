@@ -2,7 +2,9 @@ var canvas = document.getElementById('canvas');
 var canvas_width = window.innerWidth;
 var canvas_height = window.innerHeight;
 var simulator = new createjs.Stage(canvas); 
-var node_size = 10;
+var node_size = 12;
+var error_rssi = -150;
+var node_speed = 5;
 simulator.node_list = [];
 simulator.selected_target = -1;
 
@@ -45,9 +47,11 @@ function create_node(x, y, color_opt){
   node.onPress = mousePressHandler;
   node.x = x; node.y = y;
   node.tx_power = 0.280;
-  node.communication_range = createCommunicationRangeCircle(x, y);
+  var size = calcRnageSize(node);
+  node.communication_range = createCommunicationRangeCircle(x, y, "blue", size);
   simulator.addChild(node.communication_range);
   node.neighbor_node_list = {};
+  node.neighbor_rssi_list = {};
   node.edge_list = {};
   simulator.addChild(node);
 
@@ -95,10 +99,17 @@ function add_neighbor_node(node){
 
 function checkConnectionNeighbor(my, neighbor){
   var dist = calcDistance(my.x, my.y, neighbor.x, neighbor.y);
-  var rssi1 = calcRssiTwoRay(my, dist);
-  var rssi2 = calcRssiTwoRay(neighbor, dist);
+  var rssi1 = calcRssiTwoRay(my, dist);       // 自分から相手に届くRSSIの値
+  //var rssi2 = calcRssiTwoRay(neighbor, dist); // 相手から自分に届くRSSIの値
+  var rssi2 = neighbor.neighbor_rssi_list[my.id];
   
-  // 選択したノード周辺のdBmを閲覧できるようにする。(今は全部のノードで閲覧できるようにしている)
+  if(rssi1 >= -90){
+    my.neighbor_rssi_list[neighbor.id] = rssi1;
+  }else{
+    my.neighbor_rssi_list[neighbor.id] = error_rssi;  // 取得出来なかった際の値
+  }
+  
+  // 選択したノード周辺のdBmを閲覧できるようにする。
   if(my.id == simulator.selected_target){
     my.edge_list[neighbor.id].text.text = rssi1 + "dBm";
   }else{
@@ -118,6 +129,14 @@ function checkConnectionNeighbor(my, neighbor){
   }
 }
 
+function modeChange(){
+  if($("#auto_move").attr("checked")){
+    $("#auto_move").attr("checked", false)
+  }else{
+    $("#auto_move").attr("checked", true)
+  }
+}
+
 function update(node){
   for(id in node.neighbor_node_list){
     var neighbor = node.neighbor_node_list[id];
@@ -127,7 +146,11 @@ function update(node){
       clear_edge(node, neighbor)
     }
   }
+  if( $("#auto_move").attr("checked") ){
+    move_node(node);
+  }
   draw_nodes();
+  console.log($("input#auto_move").attr("checked"));
 }
 
 function updateNavBar(){
@@ -248,7 +271,7 @@ function calcRnageSize(node){
   var L = 1.0;
   
   var Pr = 3.162277660168379e-10; // -65dBmを指定
-  //var Pr = 1e-13;
+  //var Pr = 1e-12;
   var d = Math.sqrt(Math.sqrt((Pt*Gt*Gr*(ht*ht)*(hr*hr))/(Pr*L)));
   return d;
 }
