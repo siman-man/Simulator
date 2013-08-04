@@ -1,33 +1,42 @@
-function mousePressHandler(e) {
-  var node = e.target;
-  node.drag = true;
-  node.offsetX = node.x - e.stageX;
-  node.offsetY = node.y - e.stageY; 
+
+var Library = {
+  mousePressHandler: function(e) {
+    var node = e.target;
+    var WS = Wireless.simulator;
+    node.drag = true;
+    WS.operation_flag = true;
+    node.offsetX = node.x - e.stageX;
+    node.offsetY = node.y - e.stageY; 
   
-  simulator.selected_target = node.id;
-  $("span#node_id").text(node.id);
-  $("div#master").slider('value', simulator.node_list[node.id].tx_power);
-  $("span#tx_power").text(simulator.node_list[node.id].tx_power);
+    WS.selected_target = node.id;
+    $("span#node_id").text(node.id);
+    if(node.ob_type == 'access_point'){
+      $("div#master").slider('value', WS.node_list[node.id].tx_power);
+      $("span#tx_power").text(WS.node_list[node.id].tx_power);
+    }
+
+    console.log(WS.selected_target);
   
-  
-  e.onMouseMove = mouseMoveHandler;
-  e.onMouseUp = mouseUpHandler;
-}
+    e.onMouseMove = Library.mouseMoveHandler;
+    e.onMouseUp = Library.mouseUpHandler;
+  },
 
+  mouseMoveHandler: function(e){
+    var node = e.target;
+    console.log(e.stageX);
+    console.log(node.id);
 
-function mouseMoveHandler(e){
-  var node = e.target;
-  console.log(e.stageX);
-  console.log(node.id);
+    node.x = e.stageX + node.offsetX;
+    node.y = e.stageY + node.offsetY;
+    if(node.ob_type == 'access_point'){
+      node.communication_range.x = e.stageX + node.offsetX;
+      node.communication_range.y = e.stageY + node.offsetY;
+    }
+  },
 
-  node.x = e.stageX + node.offsetX;
-  node.y = e.stageY + node.offsetY;
-  node.communication_range.x = e.stageX + node.offsetX;
-  node.communication_range.y = e.stageY + node.offsetY;
-}
-
-function mouseUpHandler(e){
-  var node = e.target;
-  node.drag = false;
-  console.log("Mouseup");
-}
+  mouseUpHandler: function(e){
+    var node = e.target;
+    node.drag = false;
+    console.log("Mouseup");
+  }
+};

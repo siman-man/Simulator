@@ -1,29 +1,28 @@
-<body onLoad="initialize()">
+<body>
 	<div id="algorithm_panel" class="panel right_panel">
 		<header><h2 class="header_title">Control Panel</h2></header>
 
 		<div class="accordion">
-			<h3 id="draw_objects"><a href="#">Draw Object</a></h3>
+			<h3 id="draw_objects"><a href="#">オブジェクト設置</a></h3>
 			<div id="draw_options" class="draw_tool">
-				<header class="option_header">
-					<h3>Options</h3>
-				</header>
 				<div id="draw_object" class="sub_options">
 					<input type="radio" name="draw_object" value="wall" checked />
-					<label class="option_label">Wall</label> <br>
+					<label class="option_label">ノード</label> <br />
 					<input type="radio" name="draw_object" value="access_point"/>
-					<label class="option_label">AccessPoint</label> <br>
+					<label class="option_label">AccessPoint</label> <br />
+					<input type="radio" name="draw_object" value="human"/>
+					<label class="option_label">Human</label> <br />
 				</div>
 			</div>
 
 			<h3>ノードの追加&削除</h3>
 			<div id="draw_object" class="sub_options">
-				<button id="button1" class="btn" onClick="create_node(30,30)" >ノードの追加</button>
-				<button id="button2" class="btn" onClick="remove_node()" >ノードの削除</button>
+				<button id="button1" class="btn" onClick="Wireless.create_node(30,30)" >ノードの追加</button>
+				<button id="button2" class="btn" onClick="Wireless.remove_node()" >ノードの削除</button>
 			</div>
 			<h3>自動移動</h3>
 			<div id="draw_object" class="sub_options">
-				<input type="checkbox" id="auto_move" value="on" onClick="modeChange();" >自動移動</input>
+				<input type="checkbox" id="auto_move" value="on" onClick="Wireless.modeChange();" >自動移動</input>
 			</div>
 			<h3>ノード情報</h3>
 			<div id="draw_object" class="sub_options">

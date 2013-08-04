@@ -1,116 +1,145 @@
-var canvas = document.getElementById('canvas');
-var canvas_width = window.innerWidth;
-var canvas_height = window.innerHeight;
-var simulator = new createjs.Stage(canvas); 
-var node_size = 12;
-var error_rssi = -150;
-var node_speed = 5;
-simulator.node_list = [];
-simulator.selected_target = -1;
+var Wireless = {
+  canvas: document.getElementById('canvas'),
+  canvas_width: window.innerWidth,
+  canvas_height: window.innerHeight,
+  simulator: new createjs.Stage(canvas), 
+  node_size: 12,
+  error_rssi: -150,
+  node_speed: 5,
 
-function initialize(){   
-  //Add Shape instance to stage display list.
-  create_node(150, 150);
-  create_node(250, 150);
+  onmousedown: function(e) {
+    var WS = Wireless.simulator;
+    console.log(WS.operation_flag)
+    if(!WS.operation_flag){
+      var x = y = 0;
+      x = e.clientX - canvas.offsetLeft;
+      y = e.clientY - canvas.offsetTop;
 
-  //Update stage will render next frame
+      var draw_type = $("input[name='draw_object']:checked").val();
+      if(draw_type == 'access_point'){
+        Wireless.create_node(x, y);
+      }else if(draw_type == 'human'){
+        Human.create_human(x, y);
+      }
+      console.log(draw_type);
+    }
+    WS.operation_flag = false;
+  },
 
-  //Update stage will render next frame
-  createjs.Ticker.setFPS(30);
-  createjs.Ticker.addEventListener("tick", handleTick);
-}
+  initialize: function(){
+    this.simulator.node_list = [];
+    this.simulator.human_list = [];
+    this.simulator.selected_target = -1;
+    this.simulator.operation_flag = false;
 
-function handleTick() {
-  node_update();
-  simulator.update();
-}
+    //Add Shape instance to stage display list.
+    this.create_node(150, 150);
+    this.create_node(250, 150);
 
-function createCommunicationRangeCircle(x, y, color_opt, size_opt){
-  var range = new createjs.Shape();
-  var color = color_opt || "blue";
-  var size  = size_opt || "180";
-  range.x = x;
-  range.y = y;
-  range.alpha = 0.05;
-  range.graphics.beginFill(color).drawCircle(0, 0, size);
-  return range;
-}
+    //Update stage will render next frame
 
-// ノード作成＆情報の初期化
-function create_node(x, y, color_opt){
-  var color = color_opt || "black";
-  var node = new createjs.Shape();
-  node.id = simulator.node_list.length;
-  node.color = color;
-  node.graphics.beginFill(node.color).drawCircle(0, 0, 12);
-  node.drag = false;
-  node.onPress = mousePressHandler;
-  node.x = x; node.y = y;
-  node.tx_power = 0.280;
-  var size = calcRnageSize(node);
-  node.communication_range = createCommunicationRangeCircle(x, y, "blue", size);
-  simulator.addChild(node.communication_range);
-  node.neighbor_node_list = {};
-  node.neighbor_rssi_list = {};
-  node.edge_list = {};
-  simulator.addChild(node);
+    //Update stage will render next frame
+    createjs.Ticker.setFPS(30);
+    createjs.Ticker.addEventListener("tick", this.handleTick);
+  },
 
-  // 順番が逆になると自分が隣接ノードに登録されてしまう。
-  add_neighbor_node(node);
-  add_node(node);
+  handleTick: function() {
+    Wireless.node_update();
+    Wireless.simulator.update();
+    Human.human_update();
+  },
 
-  simulator.node_list[node.id] = node;
+  createCommunicationRangeCircle: function(x, y, color_opt, size_opt){
+    var range = new createjs.Shape();
+    var color = color_opt || "blue";
+    var size  = size_opt || "180";
+    range.x = x;
+    range.y = y;
+    range.alpha = 0.05;
+    range.graphics.beginFill(color).drawCircle(0, 0, size);
+    return range;
+  },
 
-  return node;
-}
+  // ノード作成＆情報の初期化
+  create_node: function(x, y, color_opt){
+    var WS = this.simulator;
+    var color = color_opt || "black";
+    var node = new createjs.Shape();
+    node.ob_type = "access_point"
+    node.id = WS.node_list.length;
+    node.color = color;
+    node.graphics.beginFill(node.color).drawCircle(0, 0, 12);
+    node.drag = false;
+    node.onPress = Library.mousePressHandler;
+    node.x = x; node.y = y;
+    node.tx_power = 0.280;
+    var size = this.calcRnageSize(node);
+    node.communication_range = this.createCommunicationRangeCircle(x, y, "blue", size);
+    WS.addChild(node.communication_range);
+    node.neighbor_node_list = {};
+    node.neighbor_rssi_list = {};
+    node.edge_list = {};
+    WS.addChild(node);
+
+    // 順番が逆になると自分が隣接ノードに登録されてしまう。
+    this.add_neighbor_node(node);
+    this.add_node(node);
+
+    WS.node_list[node.id] = node;
+
+    return node;
+  },
 
 // 全体のnode_listに格納されているnodeのneighborに新しいnodeを追加する
-function add_node(node){
-  for(id in simulator.node_list){
-    simulator.node_list[id].neighbor_node_list[node.id] = node;
+add_node: function(node){
+  var WS = this.simulator;
+  for(id in WS.node_list){
+    WS.node_list[id].neighbor_node_list[node.id] = node;
     var line = new createjs.Shape();
     line.color = "green";
     line.text = new createjs.Text("test", "14px Arial", "#ff7700");
-    line.text.x = (simulator.node_list[id].x + node.x) * 0.5;
-    line.text.y = (simulator.node_list[id].y + node.y) * 0.5;
+    line.text.x = (WS.node_list[id].x + node.x) * 0.5;
+    line.text.y = (WS.node_list[id].y + node.y) * 0.5;
     line.textAlign = "left";
     line.text.textBaseLine = "middle";
-    simulator.addChild(line.text);
-    simulator.node_list[id].edge_list[node.id] = line;
-    simulator.addChild(line);
+    WS.addChild(line.text);
+    WS.node_list[id].edge_list[node.id] = line;
+    WS.addChild(line);
   }
-}
+},
 
 // nodeのneighborをnode_listから取得して追加を行う
-function add_neighbor_node(node){
-  for(id in simulator.node_list){
-    node.neighbor_node_list[id] = simulator.node_list[id];
+add_neighbor_node: function(node){
+  var WS = this.simulator;
+  for(id in WS.node_list){
+    node.neighbor_node_list[id] = WS.node_list[id];
     var line = new createjs.Shape();
     line.text = new createjs.Text("", "14px Arial", "#ff7700");
     line.textAlign = "left";
-    line.text.x = (simulator.node_list[id].x + node.x) * 0.5;
-    line.text.y = (simulator.node_list[id].y + node.y) * 0.5;
+    line.text.x = (WS.node_list[id].x + node.x) * 0.5;
+    line.text.y = (WS.node_list[id].y + node.y) * 0.5;
     line.text.textBaseLine = "middle";
-    simulator.addChild(line.text);
+    WS.addChild(line.text);
     node.edge_list[id] = line;
-    simulator.addChild(line);
+    WS.addChild(line);
   }
-}
+},
 
-function checkConnectionNeighbor(my, neighbor){
-  var dist = calcDistance(my.x, my.y, neighbor.x, neighbor.y);
-  var rssi1 = calcRssiTwoRay(my, dist);       // 自分から相手に届くRSSIの値
+checkConnectionNeighbor: function(my, neighbor){
+  var WS = this.simulator;
+  var dist = this.calcDistance(my.x, my.y, neighbor.x, neighbor.y);
+  var rssi1 = this.calcRssiTwoRay(my, dist);       // 自分から相手に届くRSSIの値
   //var rssi2 = calcRssiTwoRay(neighbor, dist); // 相手から自分に届くRSSIの値
   var rssi2 = neighbor.neighbor_rssi_list[my.id];
   
   if(rssi1 >= -90){
     my.neighbor_rssi_list[neighbor.id] = rssi1;
   }else{
-    my.neighbor_rssi_list[neighbor.id] = error_rssi;  // 取得出来なかった際の値
+    my.neighbor_rssi_list[neighbor.id] = this.error_rssi;  // 取得出来なかった際の値
   }
   
   // 選択したノード周辺のdBmを閲覧できるようにする。
-  if(my.id == simulator.selected_target){
+  if(my.id == WS.selected_target){
     my.edge_list[neighbor.id].text.text = rssi1 + "dBm";
   }else{
     my.edge_list[neighbor.id].text.text = "";
@@ -127,115 +156,123 @@ function checkConnectionNeighbor(my, neighbor){
   }else{
     return false;
   }
-}
+},
 
-function modeChange(){
+modeChange: function(){
   if($("#auto_move").attr("checked")){
     $("#auto_move").attr("checked", false)
   }else{
     $("#auto_move").attr("checked", true)
   }
-}
+},
 
-function update(node){
+update: function(node){
+  var WS = this.simulator;
   for(id in node.neighbor_node_list){
     var neighbor = node.neighbor_node_list[id];
-    if(checkConnectionNeighbor(node, neighbor)){
-      draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
+    if(this.checkConnectionNeighbor(node, neighbor)){
+      this.draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
     }else{
-      clear_edge(node, neighbor)
+      this.clear_edge(node, neighbor)
     }
   }
   if( $("#auto_move").attr("checked") ){
-    move_node(node);
+    Move.move_node(node);
   }
-  draw_nodes();
+  this.draw_nodes();
   console.log($("input#auto_move").attr("checked"));
-}
+},
 
-function updateNavBar(){
+updateNavBar: function(){
   $('span#tx_power').text($('#master').slider('value') + 'mW');
-}
+},
 
-function draw_nodes(){
+draw_nodes: function(){
   var node;
-  var target_num = simulator.selected_target;
+  var WS = this.simulator;
+  var target_num = WS.selected_target;
 
-  for(id in simulator.node_list){
+  for(id in WS.node_list){
     if(target_num == id){
-      node = simulator.node_list[id];
+      node = WS.node_list[id];
       node.graphics.clear();
-      node.graphics.beginFill("red").drawCircle(0, 0, node_size);
+      node.graphics.beginFill("red").drawCircle(0, 0, this.node_size);
     }else{
-      node = simulator.node_list[id];
+      node = WS.node_list[id];
       node.graphics.clear();
-      node.graphics.beginFill(node.color).drawCircle(0, 0, node_size);
+      node.graphics.beginFill(node.color).drawCircle(0, 0, this.node_size);
     }
   }
-}
+},
 
 
-function remove_node(){
-  if( simulator.selected_target != -1){
-    var node = simulator.node_list[simulator.selected_target];
-    remove_neighbor_node(simulator.selected_target);
-    delete simulator.node_list[simulator.selected_target];
-    simulator.removeChild(node.communication_range);
-    simulator.removeChild(node);
-    simulator.selected_target = -1;
+remove_node: function(){
+  var WS = this.simulator;
+
+  if( WS.selected_target != -1){
+    var node = WS.node_list[WS.selected_target];
+    this.remove_neighbor_node(WS.selected_target);
+    delete WS.node_list[WS.selected_target];
+    WS.removeChild(node.communication_range);
+    WS.removeChild(node);
+    WS.selected_target = -1;
   }
-}
+},
 
-function remove_neighbor_node(remove_id){
+remove_neighbor_node: function(remove_id){
+  var WS = this.simulator;
   console.log(remove_id)
-    for(id in simulator.node_list){
-      if(id != remove_id){
-        simulator.removeChild(simulator.node_list[remove_id].edge_list[id].text);
-        simulator.removeChild(simulator.node_list[remove_id].edge_list[id]);
-        simulator.removeChild(simulator.node_list[id].edge_list[remove_id].text);
-        simulator.removeChild(simulator.node_list[id].edge_list[remove_id]);
-        delete simulator.node_list[id].edge_list[remove_id];
-        delete simulator.node_list[remove_id].edge_list[id];
-        delete simulator.node_list[id].neighbor_node_list[remove_id];
-      }
-    }
-}
 
-function draw_edge(node, neighbor, color_opt){
+  for(id in WS.node_list){
+    if(id != remove_id){
+      WS.removeChild(WS.node_list[remove_id].edge_list[id].text);
+      WS.removeChild(WS.node_list[remove_id].edge_list[id]);
+      WS.removeChild(WS.node_list[id].edge_list[remove_id].text);
+      WS.removeChild(WS.node_list[id].edge_list[remove_id]);
+      delete WS.node_list[id].edge_list[remove_id];
+      delete WS.node_list[remove_id].edge_list[id];
+      delete WS.node_list[id].neighbor_node_list[remove_id];
+    }
+  }
+},
+
+draw_edge: function(node, neighbor, color_opt){
+  var WS = this.simulator;
   var line = node.edge_list[neighbor.id].graphics;
   line.clear();
   var text = node.edge_list[neighbor.id].text;
-  text.x = (simulator.node_list[neighbor.id].x + node.x) * 0.5 - 10;
-  text.y = (simulator.node_list[neighbor.id].y + node.y) * 0.5;
+  text.x = (WS.node_list[neighbor.id].x + node.x) * 0.5 - 10;
+  text.y = (WS.node_list[neighbor.id].y + node.y) * 0.5;
   var color = color_opt || "green";
   line.beginStroke(color);
   line.moveTo(node.x, node.y);
   line.lineTo(neighbor.x, neighbor.y);
-}
+},
 
-function clear_edge(node, neighbor){
+clear_edge: function(node, neighbor){
   var line = node.edge_list[neighbor.id].graphics;
   line.clear();
   node.edge_list[neighbor.id].text.text = "";
-}
+},
 
-function clearCircle(node){
+clearCircle: function(node){
   var range = node.communication_range.graphics;
   range.clear();
-}
+},
 
-function node_update(){
-  for(id in simulator.node_list){
-    update(simulator.node_list[id]);
+node_update: function(){
+  var WS = this.simulator;
+  for(id in WS.node_list){
+    this.update(WS.node_list[id]);
   }  
-}
+},
 
-function calcDistance(x1, y1, x2, y2){
+calcDistance: function(x1, y1, x2, y2){
   return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
-}
+},
 
 // FreeSpaceモデル
-function calcRssiFreeSpace(node, d){
+calcRssiFreeSpace: function(node, d){
   var Pt = 0.281; // ノード構成時に指定した物理層による(WirelessPhyならば初期値0.281)
   var Gt = 1.0;   // 送信アンテナのゲイン
   var Gr = 1.0;   // 受信アンテナのゲイン
@@ -245,11 +282,11 @@ function calcRssiFreeSpace(node, d){
   var Pr = (Pt*Gt*Gr*Math.pow(lambda, 2))/(Math.pow(4*Math.PI, 2.0)*Math.pow(d, 2.0)*L);
   var rssi = 10 * log10(Pr/0.001) * 100;
   return Math.round(rssi)/100;
-}
+},
 
 
 // Tow-Rayモデル
-function calcRssiTwoRay(node, d){
+calcRssiTwoRay: function(node, d){
   var Pt = node.tx_power;
   var Gt = 1.0;   // 送信アンテナのゲイン
   var Gr = 1.0;   // 受信アンテナのゲイン
@@ -258,24 +295,25 @@ function calcRssiTwoRay(node, d){
   var L = 1.0;    // システムロス
 
   var Pr = (Pt*Gt*Gr*(ht*ht)*(hr*hr))/Math.pow(d, 4)*L;
-  var rssi = 10 * log10(Pr/0.001) * 100;
+  var rssi = 10 * this.log10(Pr/0.001) * 100;
   return Math.round(rssi)/100;
-}
+},
 
-function calcRnageSize(node){
-  var Pt = node.tx_power;
-  var Gt = 1.0;
-  var Gr = 1.0;
-  var ht = 1.0;
-  var hr = 1.0;
-  var L = 1.0;
+  calcRnageSize: function(node){
+    var Pt = node.tx_power;
+    var Gt = 1.0;
+    var Gr = 1.0;
+    var ht = 1.0;
+    var hr = 1.0;
+    var L = 1.0;
   
-  var Pr = 3.162277660168379e-10; // -65dBmを指定
-  //var Pr = 1e-12;
-  var d = Math.sqrt(Math.sqrt((Pt*Gt*Gr*(ht*ht)*(hr*hr))/(Pr*L)));
-  return d;
-}
+    var Pr = 3.162277660168379e-10; // -65dBmを指定
+    //var Pr = 1e-12;
+    var d = Math.sqrt(Math.sqrt((Pt*Gt*Gr*(ht*ht)*(hr*hr))/(Pr*L)));
+    return d;
+  },
 
-function log10(x){
-  return(Math.log(x) / Math.log(10));
-}
+  log10: function(x){
+    return(Math.log(x) / Math.log(10));
+  }
+};

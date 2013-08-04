@@ -19,7 +19,6 @@
 
 
 $(document).ready(function(){
-  
   $( "div#master" ).slider({
     value: 0.0,
     min: 0.0,
@@ -39,4 +38,8 @@ $(document).ready(function(){
       }
     }
   });
+
+  Wireless.initialize();
+  Human.initialize();
+  canvas.addEventListener('dblclick', Wireless.onmousedown, false);
 });
