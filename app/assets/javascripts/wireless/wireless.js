@@ -180,7 +180,6 @@ update: function(node){
     Move.move_node(node);
   }
   this.draw_nodes();
-  console.log($("input#auto_move").attr("checked"));
 },
 
 updateNavBar: function(){

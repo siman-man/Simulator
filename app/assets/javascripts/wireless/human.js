@@ -14,7 +14,7 @@ var Human = {
     human.id = WS.human_list.length + 10000;
     human.color = color;
     human.connection = new createjs.Shape();
-    human.graphics.beginFill(human.color).drawCircle(0, 0, 12);
+    human.graphics.beginFill(human.color).drawCircle(0, 0, 8);
     human.drag = false;
     human.onPress = Library.mousePressHandler;
     human.x = x; human.y = y;
@@ -37,7 +37,9 @@ var Human = {
   human_update: function(){
  		var max_rssi, rssi;
   	var WS = Wireless.simulator;
-  	for(var id in WS.human_list){
+  	
+    this.move_human();
+    for(var id in WS.human_list){
   		max_rssi = -120;
     	var human = WS.human_list[id];
     	for(var i in WS.node_list){
@@ -51,7 +53,6 @@ var Human = {
     		}
     	}
   	}
-  	this.move_human();
   	this.draw_humans();
   },
 
@@ -60,7 +61,8 @@ var Human = {
   	var human;
   	for(var id in WS.human_list){
   		human = WS.human_list[id];
-  		Move.randomWalk(human, 'human');
+  		//Move.randomWalk(human, 'human');
+      MoveModel.randomWayPoint(human);
   	}
   },
 
@@ -94,7 +96,7 @@ var Human = {
   	for(id in WS.human_list){
     	human = WS.human_list[id];
     	human.graphics.clear();
- 	  	human.graphics.beginFill("blue").drawCircle(0, 0, 12);
+ 	  	human.graphics.beginFill("blue").drawCircle(0, 0, 8);
   	}
   }
 };

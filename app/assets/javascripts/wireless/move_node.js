@@ -60,6 +60,6 @@ var Move = {
       my.y += node_speed;
       my.communication_range.y += node_speed;
     }
-  }
+  },
 };
 
