@@ -1,4 +1,6 @@
 var Human = {
+  human_size: 6,
+
 	initialize: function() {
 		var WS = Wireless.simulator;  
   	//Add Shape instance to stage display list.
@@ -11,14 +13,24 @@ var Human = {
     var color = color_opt || "blue";
     var human = new createjs.Shape();
     human.ob_type = "human"
-    human.id = WS.human_list.length + 10000;
+    human.id = WS.human_list.length + 100000;
     human.color = color;
     human.connection = new createjs.Shape();
-    human.graphics.beginFill(human.color).drawCircle(0, 0, 8);
+    human.graphics.beginFill(human.color).drawCircle(0, 0, this.human_size);
     human.drag = false;
     human.onPress = Library.mousePressHandler;
     human.x = x; human.y = y;
     var size = Wireless.calcRnageSize(human);
+
+    human.state = StateMachine.create({
+      initial: 'move',
+      events: [
+        { name: 'rest',  from: 'move',  to: 'stop' },
+        { name: 'walk', from: 'stop', to: 'move'    },
+        { name: 'disappear',  from: ['move', 'rest'],    to: 'delete' },
+      ]
+    });
+
     //WS.addChild(human.communication_range);
     //human.neighbor_human_list = {};
     //human.edge_list = {};
@@ -62,7 +74,8 @@ var Human = {
   	for(var id in WS.human_list){
   		human = WS.human_list[id];
   		//Move.randomWalk(human, 'human');
-      MoveModel.randomWayPoint(human);
+      //MoveModel.randomWayPoint(human);
+      MoveModel.sampleMove(human);
   	}
   },
 
@@ -96,7 +109,7 @@ var Human = {
   	for(id in WS.human_list){
     	human = WS.human_list[id];
     	human.graphics.clear();
- 	  	human.graphics.beginFill("blue").drawCircle(0, 0, 8);
+ 	  	human.graphics.beginFill("blue").drawCircle(0, 0, this.human_size);
   	}
   }
 };

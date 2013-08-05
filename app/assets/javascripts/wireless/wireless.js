@@ -11,9 +11,8 @@ var Wireless = {
     var WS = Wireless.simulator;
     console.log(WS.operation_flag)
     if(!WS.operation_flag){
-      var x = y = 0;
-      x = e.clientX - canvas.offsetLeft;
-      y = e.clientY - canvas.offsetTop;
+      var x = e.clientX - canvas.offsetLeft;
+      var y = e.clientY - canvas.offsetTop;
 
       var draw_type = $("input[name='draw_object']:checked").val();
       if(draw_type == 'access_point'){

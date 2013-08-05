@@ -19,6 +19,7 @@
 
 
 $(document).ready(function(){
+  var WS = Wireless.simulator;
   $( "div#master" ).slider({
     value: 0.0,
     min: 0.0,
@@ -28,13 +29,12 @@ $(document).ready(function(){
     slide: function(event, ui){
       $('span#tx_power').text($('#master').slider('value') + 'mW');
       
-      if(simulator.selected_target != -1){
-        var node = simulator.node_list[simulator.selected_target];
+      if(Wireless.simulator.selected_target != -1){
+        var node = WS.node_list[WS.selected_target];
         node.tx_power = $('#master').slider('value');
-        clearCircle(simulator.node_list[node.id]);
-        console.log(calcRnageSize(node));
-        node.communication_range = createCommunicationRangeCircle(node.x, node.y, "blue", calcRnageSize(node));
-        simulator.addChild(node.communication_range);
+        Wireless.clearCircle(WS.node_list[node.id]);
+        node.communication_range = Wireless.createCommunicationRangeCircle(node.x, node.y, "blue", Wireless.calcRnageSize(node));
+        WS.addChild(node.communication_range);
       }
     }
   });
