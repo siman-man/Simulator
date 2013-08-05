@@ -60,7 +60,7 @@ var Human = {
   	var human;
   	for(var id in WS.human_list){
   		human = WS.human_list[id];
-  		Move.randomWalkHuman(human);
+  		Move.randomWalk(human, 'human');
   	}
   },
 

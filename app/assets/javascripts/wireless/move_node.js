@@ -20,40 +20,26 @@ var Move = {
         this.approachNode(node, neighbor);
       }
     }else{
-      this.randomWalk(node);
+      this.randomWalk(node, 'ap');
    }
   },
 
 
-  randomWalk: function(node){
+  randomWalk: function(node, type){
     var node_speed = Wireless.node_speed;
     var num = Math.random();
     if(num > 0.75){
       node.x += node_speed;
-      node.communication_range.x += node_speed;
+      if(type == 'ap') node.communication_range.x += node_speed;
     }else if(num > 0.5){
       node.y += node_speed;
-      node.communication_range.y += node_speed;
+      if(type == 'ap') node.communication_range.y += node_speed;
     }else if(num > 0.25){
       node.x -= node_speed;
-      node.communication_range.x -= node_speed;
+      if(type == 'ap') node.communication_range.x -= node_speed;
     }else{
       node.y -= node_speed;
-      node.communication_range.y -= node_speed;
-    }
-  },
-
-  randomWalkHuman: function(node){
-    var node_speed = Wireless.node_speed;
-    var num = Math.random();
-    if(num > 0.75){
-      node.x += node_speed;
-    }else if(num > 0.5){
-      node.y += node_speed;
-    }else if(num > 0.25){
-      node.x -= node_speed;
-    }else{
-      node.y -= node_speed;
+      if(type == 'ap') node.communication_range.y -= node_speed;
     }
   },
 
