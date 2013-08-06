@@ -2,7 +2,7 @@
 var Library = {
   mousePressHandler: function(e) {
     var node = e.target;
-    var WS = Wireless.simulator;
+    var WS = Simulator;
     node.drag = true;
     WS.operation_flag = true;
     node.offsetX = node.x - e.stageX;
@@ -11,8 +11,8 @@ var Library = {
     WS.selected_target = node.id;
     $("span#node_id").text(node.id);
     if(node.ob_type == 'access_point'){
-      $("div#master").slider('value', WS.node_list[node.id].tx_power);
-      $("span#tx_power").text(WS.node_list[node.id].tx_power);
+      $("div#master").slider('value', WS.server_list[node.id].tx_power);
+      $("span#tx_power").text(WS.server_list[node.id].tx_power);
     }
 
     console.log(WS.selected_target);

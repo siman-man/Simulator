@@ -7,7 +7,6 @@ var MoveModel = {
    * 3. 移動が完了したらまた新たな座標を決定する。
    */
   randomWayPoint: function(human){
-    var directWayPoint, checkArrive, moveToWayPoint;
     console.log(human.state.current)
 
   	human.way_point = human.way_point || this.directWayPoint();
@@ -32,11 +31,14 @@ var MoveModel = {
   },
 
   directWayPoint: function(){
-    var x = Math.random() * Wireless.canvas_width * 1.1;
-    var y = Math.random() * Wireless.canvas_height * 1.1;
+    var x = Math.random() * Simulator.canvas_width * 1.1;
+    var y = Math.random() * Simulator.canvas_height * 1.1;
     return {x: x, y: y};
   },
 
+  /*
+   * WayPointに向かって進む処理
+   */
   moveToWayPoint: function(human, speed){
     var dx = human.way_point.x - human.x;
     var dy = human.way_point.y - human.y;

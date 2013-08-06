@@ -1,5 +1,6 @@
 var Article = {
+	
 	init: function(){
-		
+
 	}
 }

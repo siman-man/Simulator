@@ -1,14 +1,10 @@
 var Wireless = {
-  canvas: document.getElementById('canvas'),
-  canvas_width: window.innerWidth,
-  canvas_height: window.innerHeight,
-  simulator: new createjs.Stage(canvas), 
   node_size: 12,
   error_rssi: -150,
   node_speed: 5,
 
   onmousedown: function(e) {
-    var WS = Wireless.simulator;
+    var WS = Simulator;
     console.log(WS.operation_flag)
     if(!WS.operation_flag){
       var x = e.clientX - canvas.offsetLeft;
@@ -25,27 +21,6 @@ var Wireless = {
     WS.operation_flag = false;
   },
 
-  init: function(){
-    this.simulator.node_list = [];
-    this.simulator.human_list = [];
-    this.simulator.selected_target = -1;
-    this.simulator.operation_flag = false;
-
-    //Add Shape instance to stage display list.
-    this.create_node(150, 150);
-    this.create_node(250, 150);
-
-    //Update stage will render next frame
-    createjs.Ticker.setFPS(30);
-    createjs.Ticker.addEventListener("tick", this.handleTick);
-  },
-
-  handleTick: function() {
-    Wireless.node_update();
-    Wireless.simulator.update();
-    Human.human_update();
-  },
-
   createCommunicationRangeCircle: function(x, y, color_opt, size_opt){
     var range = new createjs.Shape();
     var color = color_opt || "blue";
@@ -59,11 +34,11 @@ var Wireless = {
 
   // ノード作成＆情報の初期化
   create_node: function(x, y, color_opt){
-    var WS = this.simulator;
+    var WS = Simulator;
     var color = color_opt || "black";
     var node = new createjs.Shape();
     node.ob_type = "access_point"
-    node.id = WS.node_list.length;
+    node.id = WS.server_list.length;
     node.color = color;
     node.graphics.beginFill(node.color).drawCircle(0, 0, 12);
     node.drag = false;
@@ -72,58 +47,58 @@ var Wireless = {
     node.tx_power = 0.280;
     var size = this.calcRnageSize(node);
     node.communication_range = this.createCommunicationRangeCircle(x, y, "blue", size);
-    WS.addChild(node.communication_range);
-    node.neighbor_node_list = {};
+    WS.map.addChild(node.communication_range);
+    node.neighbor_server_list = {};
     node.neighbor_rssi_list = {};
     node.edge_list = {};
-    WS.addChild(node);
+    WS.map.addChild(node);
 
     // 順番が逆になると自分が隣接ノードに登録されてしまう。
     this.add_neighbor_node(node);
     this.add_node(node);
 
-    WS.node_list[node.id] = node;
+    WS.server_list[node.id] = node;
 
     return node;
   },
 
-// 全体のnode_listに格納されているnodeのneighborに新しいnodeを追加する
+// 全体のserver_listに格納されているnodeのneighborに新しいnodeを追加する
 add_node: function(node){
-  var WS = this.simulator;
-  for(id in WS.node_list){
-    WS.node_list[id].neighbor_node_list[node.id] = node;
+  var WS = Simulator;
+  for(id in WS.server_list){
+    WS.server_list[id].neighbor_server_list[node.id] = node;
     var line = new createjs.Shape();
     line.color = "green";
     line.text = new createjs.Text("test", "14px Arial", "#ff7700");
-    line.text.x = (WS.node_list[id].x + node.x) * 0.5;
-    line.text.y = (WS.node_list[id].y + node.y) * 0.5;
+    line.text.x = (WS.server_list[id].x + node.x) * 0.5;
+    line.text.y = (WS.server_list[id].y + node.y) * 0.5;
     line.textAlign = "left";
     line.text.textBaseLine = "middle";
-    WS.addChild(line.text);
-    WS.node_list[id].edge_list[node.id] = line;
-    WS.addChild(line);
+    WS.map.addChild(line.text);
+    WS.server_list[id].edge_list[node.id] = line;
+    WS.map.addChild(line);
   }
 },
 
-// nodeのneighborをnode_listから取得して追加を行う
+// nodeのneighborをserver_listから取得して追加を行う
 add_neighbor_node: function(node){
-  var WS = this.simulator;
-  for(id in WS.node_list){
-    node.neighbor_node_list[id] = WS.node_list[id];
+  var WS = Simulator;
+  for(id in WS.server_list){
+    node.neighbor_server_list[id] = WS.server_list[id];
     var line = new createjs.Shape();
     line.text = new createjs.Text("", "14px Arial", "#ff7700");
     line.textAlign = "left";
-    line.text.x = (WS.node_list[id].x + node.x) * 0.5;
-    line.text.y = (WS.node_list[id].y + node.y) * 0.5;
+    line.text.x = (WS.server_list[id].x + node.x) * 0.5;
+    line.text.y = (WS.server_list[id].y + node.y) * 0.5;
     line.text.textBaseLine = "middle";
-    WS.addChild(line.text);
+    WS.map.addChild(line.text);
     node.edge_list[id] = line;
-    WS.addChild(line);
+    WS.map.addChild(line);
   }
 },
 
 checkConnectionNeighbor: function(my, neighbor){
-  var WS = this.simulator;
+  var WS = Simulator;
   var dist = this.calcDistance(my.x, my.y, neighbor.x, neighbor.y);
   var rssi1 = this.calcRssiTwoRay(my, dist);       // 自分から相手に届くRSSIの値
   //var rssi2 = calcRssiTwoRay(neighbor, dist); // 相手から自分に届くRSSIの値
@@ -164,9 +139,9 @@ modeChange: function(){
 },
 
 update: function(node){
-  var WS = this.simulator;
-  for(id in node.neighbor_node_list){
-    var neighbor = node.neighbor_node_list[id];
+  var WS = Simulator;
+  for(id in node.neighbor_server_list){
+    var neighbor = node.neighbor_server_list[id];
     if(this.checkConnectionNeighbor(node, neighbor)){
       this.draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
     }else{
@@ -185,16 +160,16 @@ updateNavBar: function(){
 
 draw_nodes: function(){
   var node;
-  var WS = this.simulator;
+  var WS = Simulator;
   var target_num = WS.selected_target;
 
-  for(id in WS.node_list){
+  for(id in WS.server_list){
     if(target_num == id){
-      node = WS.node_list[id];
+      node = WS.server_list[id];
       node.graphics.clear();
       node.graphics.beginFill("red").drawCircle(0, 0, this.node_size);
     }else{
-      node = WS.node_list[id];
+      node = WS.server_list[id];
       node.graphics.clear();
       node.graphics.beginFill(node.color).drawCircle(0, 0, this.node_size);
     }
@@ -203,12 +178,12 @@ draw_nodes: function(){
 
 
 remove_node: function(){
-  var WS = this.simulator;
+  var WS = Simulator;
 
   if( WS.selected_target != -1){
-    var node = WS.node_list[WS.selected_target];
+    var node = WS.server_list[WS.selected_target];
     this.remove_neighbor_node(WS.selected_target);
-    delete WS.node_list[WS.selected_target];
+    delete WS.server_list[WS.selected_target];
     WS.removeChild(node.communication_range);
     WS.removeChild(node);
     WS.selected_target = -1;
@@ -216,29 +191,29 @@ remove_node: function(){
 },
 
 remove_neighbor_node: function(remove_id){
-  var WS = this.simulator;
+  var WS = Simulator;
   console.log(remove_id)
 
-  for(id in WS.node_list){
+  for(id in WS.server_list){
     if(id != remove_id){
-      WS.removeChild(WS.node_list[remove_id].edge_list[id].text);
-      WS.removeChild(WS.node_list[remove_id].edge_list[id]);
-      WS.removeChild(WS.node_list[id].edge_list[remove_id].text);
-      WS.removeChild(WS.node_list[id].edge_list[remove_id]);
-      delete WS.node_list[id].edge_list[remove_id];
-      delete WS.node_list[remove_id].edge_list[id];
-      delete WS.node_list[id].neighbor_node_list[remove_id];
+      WS.removeChild(WS.server_list[remove_id].edge_list[id].text);
+      WS.removeChild(WS.server_list[remove_id].edge_list[id]);
+      WS.removeChild(WS.server_list[id].edge_list[remove_id].text);
+      WS.removeChild(WS.server_list[id].edge_list[remove_id]);
+      delete WS.server_list[id].edge_list[remove_id];
+      delete WS.server_list[remove_id].edge_list[id];
+      delete WS.server_list[id].neighbor_server_list[remove_id];
     }
   }
 },
 
 draw_edge: function(node, neighbor, color_opt){
-  var WS = this.simulator;
+  var WS = Simulator;
   var line = node.edge_list[neighbor.id].graphics;
   line.clear();
   var text = node.edge_list[neighbor.id].text;
-  text.x = (WS.node_list[neighbor.id].x + node.x) * 0.5 - 10;
-  text.y = (WS.node_list[neighbor.id].y + node.y) * 0.5;
+  text.x = (WS.server_list[neighbor.id].x + node.x) * 0.5 - 10;
+  text.y = (WS.server_list[neighbor.id].y + node.y) * 0.5;
   var color = color_opt || "green";
   line.beginStroke(color);
   line.moveTo(node.x, node.y);
@@ -257,9 +232,9 @@ clearCircle: function(node){
 },
 
 node_update: function(){
-  var WS = this.simulator;
-  for(id in WS.node_list){
-    this.update(WS.node_list[id]);
+  var WS = Simulator;
+  for(id in WS.server_list){
+    this.update(WS.server_list[id]);
   }  
 },
 

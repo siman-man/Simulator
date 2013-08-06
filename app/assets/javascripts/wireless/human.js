@@ -2,14 +2,14 @@ var Human = {
   human_size: 6,
 
 	init: function() {
-		var WS = Wireless.simulator;  
+		var WS = Simulator;  
   	//Add Shape instance to stage display list.
   	this.create_human(300, 150);
   	this.create_human(400, 150);
   },
   // ノード作成＆情報の初期化
   create_human: function(x, y, color_opt){
-    var WS = Wireless.simulator;
+    var WS = Simulator;
     var color = color_opt || "blue";
     var human = new createjs.Shape();
     human.ob_type = "human"
@@ -34,8 +34,8 @@ var Human = {
     //WS.addChild(human.communication_range);
     //human.neighbor_human_list = {};
     //human.edge_list = {};
-    WS.addChild(human);
-    WS.addChild(human.connection);
+    WS.map.addChild(human);
+    WS.map.addChild(human.connection);
 
     // 順番が逆になると自分が隣接ノードに登録されてしまう。
     // this.add_neighbor_human(human);
@@ -48,14 +48,14 @@ var Human = {
 
   human_update: function(){
  		var max_rssi, rssi;
-  	var WS = Wireless.simulator;
+  	var WS = Simulator;
   	
     this.move_human();
     for(var id in WS.human_list){
   		max_rssi = -120;
     	var human = WS.human_list[id];
-    	for(var i in WS.node_list){
-    		var node = WS.node_list[i];
+    	for(var i in WS.server_list){
+    		var node = WS.server_list[i];
     		rssi = this.checkConnectionAccessPoint(human, node)
     		if(rssi > max_rssi){
       		this.draw_edge(human, node, "orange");
@@ -69,7 +69,7 @@ var Human = {
   },
 
   move_human: function(){
-  	var WS = Wireless.simulator;
+  	var WS = Simulator;
   	var human;
   	for(var id in WS.human_list){
   		human = WS.human_list[id];
@@ -80,7 +80,7 @@ var Human = {
   },
 
   checkConnectionAccessPoint: function(human, node){
-  	var WS = this.simulator;
+  	var WS = Simulator;
   	var dist = Wireless.calcDistance(human.x, human.y, node.x, node.y);
   	var rssi1 = Wireless.calcRssiTwoRay(node, dist);       // 自分から相手に届くRSSIの値
 
@@ -88,7 +88,7 @@ var Human = {
 	},
 
 	draw_edge: function(human, node, color_opt){
-		var WS = Wireless.simulator;
+		var WS = Simulator;
   	var line = human.connection.graphics;
   	line.clear();
   	var color = color_opt || "orange";
@@ -104,7 +104,7 @@ var Human = {
 
 	draw_humans: function(){
   	var human;
-  	var WS = Wireless.simulator;
+  	var WS = Simulator;
 
   	for(id in WS.human_list){
     	human = WS.human_list[id];
