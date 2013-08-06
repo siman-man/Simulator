@@ -2,7 +2,7 @@ var View = {
 	packet_color: "yellow",
 	packet_size: 2,
 
-	sendPacket: function(packet, speed){
+	movePacket: function(packet, speed){
 		var dest = packet.dest;
 
 		var dx = dest.x - packet.x;
