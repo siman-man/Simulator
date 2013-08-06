@@ -1,7 +1,7 @@
 var Human = {
   human_size: 6,
 
-	initialize: function() {
+	init: function() {
 		var WS = Wireless.simulator;  
   	//Add Shape instance to stage display list.
   	this.create_human(300, 150);

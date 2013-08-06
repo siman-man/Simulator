@@ -39,7 +39,7 @@ $(document).ready(function(){
     }
   });
 
-  Wireless.initialize();
-  Human.initialize();
+  Wireless.init();
+  Human.init();
   canvas.addEventListener('dblclick', Wireless.onmousedown, false);
 });

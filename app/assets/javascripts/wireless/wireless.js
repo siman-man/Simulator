@@ -25,7 +25,7 @@ var Wireless = {
     WS.operation_flag = false;
   },
 
-  initialize: function(){
+  init: function(){
     this.simulator.node_list = [];
     this.simulator.human_list = [];
     this.simulator.selected_target = -1;
@@ -34,8 +34,6 @@ var Wireless = {
     //Add Shape instance to stage display list.
     this.create_node(150, 150);
     this.create_node(250, 150);
-
-    //Update stage will render next frame
 
     //Update stage will render next frame
     createjs.Ticker.setFPS(30);
