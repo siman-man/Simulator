@@ -8,8 +8,10 @@
 				<div id="draw_object" class="sub_options">
 					<input type="radio" name="draw_object" value="access_point"/>
 					<label class="option_label">AccessPoint</label> <br />
-					<input type="radio" name="draw_object" value="human"/>
-					<label class="option_label">Human</label> <br />
+					<input type="radio" name="draw_object" value="user"/>
+					<label class="option_label">user</label> <br />
+					<input type="radio" name="draw_object" value="nothing"/>
+					<label class="option_label">nothing</label> <br />
 				</div>
 			</div>
 
@@ -22,12 +24,23 @@
 			<div id="draw_object" class="sub_options">
 				<input type="checkbox" id="auto_move" value="on" onClick="Wireless.modeChange();" >自動移動</input>
 			</div>
+		</div><!-- .accordion -->
+	</div>
+
+	<div id="server_panel" class="panel right_panel">
+		<header><h2 class="header_title">Server Panel</h2></header>
+		<div class="server_info">
 			<h3>ノード情報</h3>
-			<div id="draw_object" class="sub_options">
+			<div id="server_info" class="sub_options">
 				<%= render 'node_info' %>
 			</div>
-		</div><!-- .accordion -->
-	</div><!-- #algorithm_panel -->
+			<h3>記事一覧</h3>
+			<div id="articles" class="sub_options">
+				<p>sample</p>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 

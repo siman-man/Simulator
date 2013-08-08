@@ -6,27 +6,28 @@ var MoveModel = {
    * 2. その座標に向かって移動する
    * 3. 移動が完了したらまた新たな座標を決定する。
    */
-  randomWayPoint: function(human){
-    console.log(human.state.current)
+  randomWayPoint: function(user){
+    console.log(user.state.current)
 
-  	human.way_point = human.way_point || this.directWayPoint();
+  	user.way_point = user.way_point || this.directWayPoint();
 
-    this.moveToWayPoint(human, 5);
-    if(this.checkArrive(human)) human.way_point = null;
+    this.moveToWayPoint(user, 5);
+    if(this.checkArrive(user)) user.way_point = null;
   },
 
-  sampleMove: function(human){
-    if(human.state.current == 'move'){
-      human.way_point = human.way_point || this.directWayPoint();
-      this.moveToWayPoint(human, 5);
-      if(this.checkArrive(human)){
-        human.way_point = null;
-        human.state.rest();
-        human.stop_count = this.createStopCount();
+  sampleMove: function(user){
+    if(user.state.current == 'move'){
+      user.way_point = user.way_point || this.directWayPoint();
+      this.moveToWayPoint(user, 5);
+      if(this.checkArrive(user)){
+        user.way_point = null;
+        user.state.rest(user);
+        console.log(user.state.current);
+        user.stop_count = this.createStopCount();
       }
     }else{
-      human.stop_count -= 1;
-      if(human.stop_count == 0) human.state.walk();
+      user.stop_count -= 1;
+      if(user.stop_count == 0) user.state.walk();
     }
   },
 
@@ -39,18 +40,18 @@ var MoveModel = {
   /*
    * WayPointに向かって進む処理
    */
-  moveToWayPoint: function(human, speed){
-    var dx = human.way_point.x - human.x;
-    var dy = human.way_point.y - human.y;
+  moveToWayPoint: function(user, speed){
+    var dx = user.way_point.x - user.x;
+    var dy = user.way_point.y - user.y;
     var radian = Math.atan2(dy, dx);
 
-    human.x += Math.cos(radian) * speed;
-    human.y += Math.sin(radian) * speed;
+    user.x += Math.cos(radian) * speed;
+    user.y += Math.sin(radian) * speed;
   },
 
-  checkArrive: function(human){
-    var dx = human.x - human.way_point.x;
-    var dy = human.y - human.way_point.y;
+  checkArrive: function(user){
+    var dx = user.x - user.way_point.x;
+    var dy = user.y - user.way_point.y;
     return ( dx * dx + dy * dy <= 16 )? true : false;
   },
 

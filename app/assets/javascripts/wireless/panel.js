@@ -10,6 +10,11 @@
       $('.panel').draggable();
       $('.accordion').accordion({
         collapsible: true,
+        heightStyle: "fill",
+      });
+      $('.server_info').accordion({
+        collapsible: true,
+        heightStyle: "fill",
       });
       $('.option_label').click(function() {
         $(this).prev().click();

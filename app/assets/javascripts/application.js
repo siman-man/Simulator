@@ -34,12 +34,12 @@ $(document).ready(function(){
         node.tx_power = $('#master').slider('value');
         Wireless.clearCircle(WS.server_list[node.id]);
         node.communication_range = Wireless.createCommunicationRangeCircle(node.x, node.y, "blue", Wireless.calcRnageSize(node));
-        WS.addChild(node.communication_range);
+        WS.map.addChild(node.communication_range);
       }
     }
   });
 
   Simulator.init();
-  Human.init();
-  canvas.addEventListener('dblclick', Wireless.onmousedown, false);
+  User.init();
+  canvas.addEventListener('click', Wireless.onmousedown, false);
 });

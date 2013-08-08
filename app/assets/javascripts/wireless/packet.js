@@ -19,7 +19,7 @@ var Packet = {
 		console.log('set packet ' + packet.id);
 	},
 
-	setPacketId: function(packet){
+	generatePacketId: function(packet){
 		var id = Simulator.packet_id;
 		Simulator.packet_id++;
 		return id;
@@ -28,7 +28,7 @@ var Packet = {
 	createPacket: function(from, dest){
 		var packet = new createjs.Shape();
 		packet.graphics.beginFill(this.packet_color).drawCircle(0, 0, this.packet_size);
-		packet.id = this.setPacketId(packet);
+		packet.id = this.generatePacketId(packet);
 		packet.from = from;
 		packet.dest = dest;
 		packet.x = from.x;
