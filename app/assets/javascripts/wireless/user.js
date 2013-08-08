@@ -81,7 +81,7 @@ var User = {
   	var color = color_opt || "orange";
   	line.setStrokeStyle(3).beginStroke(color);
   	line.moveTo(user.x + 20, user.y + 20);
-  	line.lineTo(node.x, node.y);
+  	line.lineTo(node.x + 20, node.y + 20);
 	},
 
 	clear_edge: function(user){

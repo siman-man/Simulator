@@ -31,8 +31,8 @@ var Packet = {
 		packet.id = this.generatePacketId(packet);
 		packet.from = from;
 		packet.dest = dest;
-		packet.x = from.x;
-		packet.y = from.y;
+		packet.x = from.x + 20;
+		packet.y = from.y + 20;
 
 		return packet;
 	},
@@ -51,8 +51,8 @@ var Packet = {
 	},
 
 	arriveChecker: function(packet){
-		var dx = packet.x - packet.dest.x;
-    var dy = packet.y - packet.dest.y;
+		var dx = packet.x - 20 - packet.dest.x;
+    var dy = packet.y - 20 - packet.dest.y;
     return ( dx * dx + dy * dy <= 9 )? true : false;
 	}
 };

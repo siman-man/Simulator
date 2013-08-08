@@ -37,11 +37,11 @@ var Wireless = {
   create_node: function(x, y, color_opt){
     var WS = Simulator;
     var color = color_opt || "black";
-    var node = new createjs.Shape();
+    var node = new createjs.Bitmap('/assets/server.gif');
     node.ob_type = "access_point"
     node.id = WS.server_list.length;
     node.color = color;
-    node.graphics.beginFill(node.color).drawCircle(0, 0, 12);
+    //node.graphics.beginFill(node.color).drawCircle(0, 0, 12);
     node.drag = false;
     node.onPress = Library.mousePressHandler;
     node.x = x; node.y = y;
@@ -168,12 +168,12 @@ draw_nodes: function(){
   for(id in WS.server_list){
     if(target_num == id){
       node = WS.server_list[id];
-      node.graphics.clear();
-      node.graphics.beginFill("red").drawCircle(0, 0, this.node_size);
+      //node.graphics.clear();
+      //node.graphics.beginFill("red").drawCircle(0, 0, this.node_size);
     }else{
       node = WS.server_list[id];
-      node.graphics.clear();
-      node.graphics.beginFill(node.color).drawCircle(0, 0, this.node_size);
+      //node.graphics.clear();
+      //node.graphics.beginFill(node.color).drawCircle(0, 0, this.node_size);
     }
   }
 },
@@ -218,8 +218,8 @@ draw_edge: function(node, neighbor, color_opt){
   text.y = (WS.server_list[neighbor.id].y + node.y) * 0.5;
   var color = color_opt || "green";
   line.beginStroke(color);
-  line.moveTo(node.x, node.y);
-  line.lineTo(neighbor.x, neighbor.y);
+  line.moveTo(node.x + 20, node.y + 20);
+  line.lineTo(neighbor.x + 20, neighbor.y + 20);
 },
 
 clear_edge: function(node, neighbor){
