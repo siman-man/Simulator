@@ -38,7 +38,7 @@ var User = {
  		var max_rssi, rssi;
   	var WS = Simulator;
   	
-    this.move_user();
+    this.moveUser();
     for(var id in WS.user_list){
   		max_rssi = -120;
     	var user = WS.user_list[id];
@@ -56,7 +56,7 @@ var User = {
   	this.draw_users();
   },
 
-  move_user: function(){
+  moveUser: function(){
   	var WS = Simulator;
   	var user;
   	for(var id in WS.user_list){

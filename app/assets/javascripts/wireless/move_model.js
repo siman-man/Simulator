@@ -16,7 +16,6 @@ var MoveModel = {
       if(this.checkArrive(user)){
         user.way_point = null;
         user.state.rest(user);
-        console.log(user.state.current);
         user.stop_count = this.createStopCount();
       }
     }else{
@@ -62,10 +61,9 @@ var MoveModel = {
   directWayPointServer: function(user){
     console.log(user.circuit.length);
     if(user.circuit.length == 0){
-      console.log('hello')
       user.circuit = this.createCircuit();
     } 
-    console.log(user.circuit);
+    
     var id = user.circuit.shift();
     var x = Simulator.server_list[id].x + this.jitter();
     var y = Simulator.server_list[id].y + this.jitter();

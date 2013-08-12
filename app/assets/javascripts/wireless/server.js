@@ -33,7 +33,6 @@ var Wireless = {
     return range;
   },
 
-  // ノード作成＆情報の初期化
   createServer: function(x, y, color_opt){
     var WS = Simulator;
     var color = color_opt || "black";
@@ -57,15 +56,14 @@ var Wireless = {
 
     // 順番が逆になると自分が隣接ノードに登録されてしまう。
     this.add_neighbor_node(node);
-    this.add_node(node);
+    this.addServer(node);
 
     WS.server_list[node.id] = node;
 
     return node;
   },
 
-// 全体のserver_listに格納されているnodeのneighborに新しいnodeを追加する
-add_node: function(node){
+addServer: function(node){
   var WS = Simulator;
   for(id in WS.server_list){
     WS.server_list[id].neighbor_server_list[node.id] = node;

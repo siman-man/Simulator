@@ -23,8 +23,6 @@ var Library = {
 
   mouseMoveHandler: function(e){
     var node = e.target;
-    console.log(e.stageX);
-    console.log(node.id);
 
     node.x = e.stageX + node.offsetX;
     node.y = e.stageY + node.offsetY;

@@ -16,7 +16,6 @@ var Packet = {
 		var packet = this.createPacket(from, dest);
 		Simulator.packet_list[packet.id] = packet;
 		Simulator.map.addChild(packet);
-		console.log('set packet ' + packet.id);
 	},
 
 	generatePacketId: function(packet){
