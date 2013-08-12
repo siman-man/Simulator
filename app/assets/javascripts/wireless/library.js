@@ -29,8 +29,8 @@ var Library = {
     node.x = e.stageX + node.offsetX;
     node.y = e.stageY + node.offsetY;
     if(node.ob_type == 'access_point'){
-      node.communication_range.x = e.stageX + node.offsetX;
-      node.communication_range.y = e.stageY + node.offsetY;
+      node.communication_range.x = e.stageX + node.offsetX + 20;
+      node.communication_range.y = e.stageY + node.offsetY + 20;
     }
   },
 

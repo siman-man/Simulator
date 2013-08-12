@@ -14,8 +14,8 @@
 
 	init: function(){
     //Add Shape instance to stage display list.
-    Wireless.create_node(150, 150);
-    Wireless.create_node(250, 150);
+    Wireless.createServer(150, 150);
+    Wireless.createServer(250, 150);
 
     //Update stage will render next frame
     createjs.Ticker.setFPS(30);

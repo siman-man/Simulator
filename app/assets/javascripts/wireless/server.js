@@ -12,7 +12,7 @@ var Wireless = {
 
       var draw_type = $("input[name='draw_object']:checked").val();
       if(draw_type == 'access_point'){
-        Wireless.create_node(x, y);
+        Wireless.createServer(x, y);
       }else if(draw_type == 'user'){
         User.create_user(x, y);
       }
@@ -34,7 +34,7 @@ var Wireless = {
   },
 
   // ノード作成＆情報の初期化
-  create_node: function(x, y, color_opt){
+  createServer: function(x, y, color_opt){
     var WS = Simulator;
     var color = color_opt || "black";
     var node = new createjs.Bitmap('/assets/server.gif');
@@ -47,7 +47,7 @@ var Wireless = {
     node.x = x; node.y = y;
     node.tx_power = 0.280;
     var size = this.calcRnageSize(node);
-    node.communication_range = this.createCommunicationRangeCircle(x, y, "blue", size);
+    node.communication_range = this.createCommunicationRangeCircle(x+20, y+20, "blue", size);
     WS.map.addChild(node.communication_range);
     node.neighbor_server_list = {};
     node.neighbor_rssi_list = {};

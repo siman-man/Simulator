@@ -17,6 +17,7 @@ var User = {
     WS.user_id++;
     user.color = color;
     user.connection = new createjs.Shape();
+    user.circuit = [];
     //user.graphics.beginFill(user.color).drawCircle(0, 0, this.user_size);
     user.drag = false;
     user.onPress = Library.mousePressHandler;
@@ -95,7 +96,7 @@ var User = {
 
   	for(id in WS.user_list){
     	user = WS.user_list[id];
-    	//user.graphics.clear();
+    	//user.draw;
  	  	//user.graphics.beginFill("blue").drawCircle(0, 0, this.user_size);
   	}
   }

@@ -1,11 +1,5 @@
 var MoveModel = {
 
-  /*
-   * ランダムウェイポイントの実装。
-   * 1. ランダムな座標を指定する
-   * 2. その座標に向かって移動する
-   * 3. 移動が完了したらまた新たな座標を決定する。
-   */
   randomWayPoint: function(user){
     console.log(user.state.current)
 
@@ -17,7 +11,7 @@ var MoveModel = {
 
   sampleMove: function(user){
     if(user.state.current == 'move'){
-      user.way_point = user.way_point || this.directWayPoint();
+      user.way_point = user.way_point || this.directWayPointServer(user);
       this.moveToWayPoint(user, 5);
       if(this.checkArrive(user)){
         user.way_point = null;
@@ -37,9 +31,47 @@ var MoveModel = {
     return {x: x, y: y};
   },
 
-  /*
-   * WayPointに向かって進む処理
-   */
+  jitter: function(jitter){
+    var jitter = jitter || 30;
+    var value = Math.random() * jitter;
+
+    return (0.5 < Math.random())? -1 * value : value;
+  },
+
+  shuffle: function(array){
+    var t, j = k = 0;
+    var size = array.length;
+    for(var i = 0; i < size; i++){
+      j = Math.random() * size | 0;
+      t = array[j];
+      array[j] = array[k];
+      array[k] = t;
+      k = j;
+    }
+  },
+
+  createCircuit: function(){
+    var circuit = [];
+    for(var i = 0; i < Simulator.server_list.length; i++){
+      circuit.push(i);
+    }
+    this.shuffle(circuit);
+    return circuit;
+  },
+
+  directWayPointServer: function(user){
+    console.log(user.circuit.length);
+    if(user.circuit.length == 0){
+      console.log('hello')
+      user.circuit = this.createCircuit();
+    } 
+    console.log(user.circuit);
+    var id = user.circuit.shift();
+    var x = Simulator.server_list[id].x + this.jitter();
+    var y = Simulator.server_list[id].y + this.jitter();
+    return {x: x, y: y};
+  },
+
   moveToWayPoint: function(user, speed){
     var dx = user.way_point.x - user.x;
     var dy = user.way_point.y - user.y;
