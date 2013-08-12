@@ -5,7 +5,9 @@ ruby '2.0.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 
-gem 'sqlite3', group: [:development, :test]
+group :development do
+  gem 'sqlite3', '1.3.7'
+end
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
