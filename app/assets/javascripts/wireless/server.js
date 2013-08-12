@@ -36,127 +36,122 @@ var Wireless = {
   createServer: function(x, y, color_opt){
     var WS = Simulator;
     var color = color_opt || "black";
-    var node = new createjs.Bitmap('/assets/server.gif');
-    node.ob_type = "access_point"
-    node.id = WS.server_list.length;
-    node.color = color;
+    var server = new createjs.Bitmap('/assets/server.gif');
+    server.ob_type = "access_point"
+    server.id = WS.server_list.length;
+    server.color = color;
     //node.graphics.beginFill(node.color).drawCircle(0, 0, 12);
-    node.drag = false;
-    node.onPress = Library.mousePressHandler;
-    node.x = x; node.y = y;
-    node.tx_power = 0.280;
-    var size = this.calcRnageSize(node);
-    node.communication_range = this.createCommunicationRangeCircle(x+20, y+20, "blue", size);
-    WS.map.addChild(node.communication_range);
-    node.neighbor_server_list = {};
-    node.neighbor_rssi_list = {};
-    node.edge_list = {};
-    node.article_list = {};
-    WS.map.addChild(node);
+    server.drag = false;
+    server.onPress = Library.mousePressHandler;
+    server.x = x; server.y = y;
+    server.tx_power = 0.280;
+    var size = this.calcRnageSize(server);
+    server.communication_range = this.createCommunicationRangeCircle(x+20, y+20, "blue", size);
+    WS.map.addChild(size.communication_range);
+    server.neighbor_server_list = {};
+    server.neighbor_rssi_list = {};
+    server.edge_list = {};
+    server.article_list = {};
+    WS.map.addChild(server);
+
+    server.status = ServerStatus.init();
 
     // 順番が逆になると自分が隣接ノードに登録されてしまう。
-    this.add_neighbor_node(node);
-    this.addServer(node);
+    this.addNeighborServer(server);
+    this.addServer(server);
 
-    WS.server_list[node.id] = node;
+    WS.server_list[server.id] = server;
 
-    return node;
+    return server;
   },
 
-addServer: function(node){
-  var WS = Simulator;
-  for(id in WS.server_list){
-    WS.server_list[id].neighbor_server_list[node.id] = node;
-    var line = new createjs.Shape();
-    line.color = "green";
-    line.text = new createjs.Text("test", "14px Arial", "#ff7700");
-    line.text.x = (WS.server_list[id].x + node.x) * 0.5;
-    line.text.y = (WS.server_list[id].y + node.y) * 0.5;
-    line.textAlign = "left";
-    line.text.textBaseLine = "middle";
-    WS.map.addChild(line.text);
-    WS.server_list[id].edge_list[node.id] = line;
-    WS.map.addChild(line);
-  }
-},
-
-// nodeのneighborをserver_listから取得して追加を行う
-add_neighbor_node: function(node){
-  var WS = Simulator;
-  for(id in WS.server_list){
-    node.neighbor_server_list[id] = WS.server_list[id];
-    var line = new createjs.Shape();
-    line.text = new createjs.Text("", "14px Arial", "#ff7700");
-    line.textAlign = "left";
-    line.text.x = (WS.server_list[id].x + node.x) * 0.5;
-    line.text.y = (WS.server_list[id].y + node.y) * 0.5;
-    line.text.textBaseLine = "middle";
-    WS.map.addChild(line.text);
-    node.edge_list[id] = line;
-    WS.map.addChild(line);
-  }
-},
-
-checkConnectionNeighbor: function(my, neighbor){
-  var WS = Simulator;
-  var dist = this.calcDistance(my.x, my.y, neighbor.x, neighbor.y);
-  var rssi1 = this.calcRssiTwoRay(my, dist);       // 自分から相手に届くRSSIの値
-  //var rssi2 = calcRssiTwoRay(neighbor, dist); // 相手から自分に届くRSSIの値
-  var rssi2 = neighbor.neighbor_rssi_list[my.id];
-  
-  if(rssi1 >= -90){
-    my.neighbor_rssi_list[neighbor.id] = rssi1;
-  }else{
-    my.neighbor_rssi_list[neighbor.id] = this.error_rssi;  // 取得出来なかった際の値
-  }
-  
-  // 選択したノード周辺のdBmを閲覧できるようにする。
-  if(my.id == WS.selected_target){
-    my.edge_list[neighbor.id].text.text = rssi1 + "dBm";
-  }else{
-    my.edge_list[neighbor.id].text.text = "";
-  }
-  if(rssi1 >= -65 && rssi2 >= -65 ){
-    my.edge_list[neighbor.id].color = "green";
-    return true; 
-  }else if(rssi1 >= -80 && rssi2 >= -80){
-    my.edge_list[neighbor.id].color = "yellow";
-    return true;
-  }else if(rssi1 >= -90 && rssi2 >= -90){
-    my.edge_list[neighbor.id].color = "red";
-    return true;
-  }else{
-    return false;
-  }
-},
-
-modeChange: function(){
-  if($("#auto_move").attr("checked")){
-    $("#auto_move").attr("checked", false)
-  }else{
-    $("#auto_move").attr("checked", true)
-  }
-},
-
-update: function(node){
-  var WS = Simulator;
-  for(id in node.neighbor_server_list){
-    var neighbor = node.neighbor_server_list[id];
-    if(this.checkConnectionNeighbor(node, neighbor)){
-      this.draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
-    }else{
-      this.clear_edge(node, neighbor)
+  addServer: function(node){
+    var WS = Simulator;
+    for(id in WS.server_list){
+      WS.server_list[id].neighbor_server_list[node.id] = node;
+      var line = new createjs.Shape();
+      line.color = "green";
+      line.text = new createjs.Text("test", "14px Arial", "#ff7700");
+      line.text.x = (WS.server_list[id].x + node.x) * 0.5;
+      line.text.y = (WS.server_list[id].y + node.y) * 0.5;
+      line.textAlign = "left";
+      line.text.textBaseLine = "middle";
+      WS.map.addChild(line.text);
+      WS.server_list[id].edge_list[node.id] = line;
+      WS.map.addChild(line);
     }
-  }
-  if( $("#auto_move").attr("checked") ){
-    Move.move_node(node);
-  }
-  this.draw_nodes();
-},
+  },
 
-updateNavBar: function(){
-  $('span#tx_power').text($('#master').slider('value') + 'mW');
-},
+  // nodeのneighborをserver_listから取得して追加を行う
+  addNeighborServer: function(node){
+    var WS = Simulator;
+    for(id in WS.server_list){
+      node.neighbor_server_list[id] = WS.server_list[id];
+      var line = new createjs.Shape();
+      line.text = new createjs.Text("", "14px Arial", "#ff7700");
+      line.textAlign = "left";
+      line.text.x = (WS.server_list[id].x + node.x) * 0.5;
+      line.text.y = (WS.server_list[id].y + node.y) * 0.5;
+      line.text.textBaseLine = "middle";
+      WS.map.addChild(line.text);
+      node.edge_list[id] = line;
+      WS.map.addChild(line);
+    }
+  },
+
+  checkConnectionNeighbor: function(my, neighbor){
+    var WS = Simulator;
+    var dist = this.calcDistance(my.x, my.y, neighbor.x, neighbor.y);
+    var rssi1 = this.calcRssiTwoRay(my, dist);       // 自分から相手に届くRSSIの値
+    //var rssi2 = calcRssiTwoRay(neighbor, dist); // 相手から自分に届くRSSIの値
+    var rssi2 = neighbor.neighbor_rssi_list[my.id];
+  
+    my.neighbor_rssi_list[neighbor.id] = (rssi1 >= -90)? rssi1 : this.error_rssi;
+  
+    // 選択したノード周辺のdBmを閲覧できるようにする。
+    my.edge_list[neighbor.id].text.text = (my.id == WS.selected_target)? rssi1 + "dBm" : "";
+  
+    if(rssi1 >= -65 && rssi2 >= -65 ){
+      my.edge_list[neighbor.id].color = "green";
+      return true; 
+    }else if(rssi1 >= -80 && rssi2 >= -80){
+      my.edge_list[neighbor.id].color = "yellow";
+      return true;
+    }else if(rssi1 >= -90 && rssi2 >= -90){
+      my.edge_list[neighbor.id].color = "red";
+      return true;
+    }else{
+      return false;
+    }
+  },
+
+  modeChange: function(){
+    if($("#auto_move").attr("checked")){
+      $("#auto_move").attr("checked", false)
+    }else{
+      $("#auto_move").attr("checked", true)
+    }
+  },
+
+  update: function(node){
+    var WS = Simulator;
+    for(id in node.neighbor_server_list){
+      var neighbor = node.neighbor_server_list[id];
+      if(this.checkConnectionNeighbor(node, neighbor)){
+        this.draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
+      }else{
+        this.clear_edge(node, neighbor)
+      }
+    }
+    if( $("#auto_move").attr("checked") ){
+      Move.move_node(node);
+    }
+    this.draw_nodes();
+  },
+
+  updateNavBar: function(){
+    $('span#tx_power').text($('#master').slider('value') + 'mW');
+  },
 
 draw_nodes: function(){
   var node;
