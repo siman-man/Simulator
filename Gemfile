@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.0.0.beta1'
 
-gem 'sqlite3'
+group :development do
+  gem 'sqlite3'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -13,6 +15,7 @@ group :assets do
   gem 'therubyracer'
   gem 'less-rails'
   gem 'twitter-bootstrap-rails'
+  gem 'pg'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', platforms: :ruby

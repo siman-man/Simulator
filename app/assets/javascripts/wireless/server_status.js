@@ -11,7 +11,7 @@ var ServerStatus = {
 
 			callbacks: {
 				onsleep: function(event, from, to, server) { 
-					$("div#articles").append('<p>hello ' + user.id + '</p>');
+					$("div#articles").append('<p>hello ' + server.id + '</p>');
 				}
 			},
 		});

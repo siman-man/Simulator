@@ -19,6 +19,23 @@
 
 
 $(document).ready(function(){
+  
+  $("div#server_status").change( function(){
+    var status = $("input[name='status']:checked").val();
+    var id = $("span#node_id").text();
+    var server = Simulator.server_list[id];
+    switch(status){
+      case 'active':
+        server.status.restart(server);
+        break;
+      case 'suspend':
+        server.status.suspend(server);
+        break;
+      case 'shutdown':
+        break;
+    }
+  });
+
   var WS = Simulator;
   $( "div#master" ).slider({
     value: 0.0,
@@ -41,5 +58,5 @@ $(document).ready(function(){
 
   Simulator.init();
   User.init();
-  canvas.addEventListener('click', Wireless.onmousedown, false);
+  canvas.addEventListener('click', Simulator.onmousedown, false);
 });

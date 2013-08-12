@@ -31,7 +31,7 @@ var MoveModel = {
   },
 
   jitter: function(jitter){
-    var jitter = jitter || 30;
+    var jitter = jitter || 100;
     var value = Math.random() * jitter;
 
     return (0.5 < Math.random())? -1 * value : value;

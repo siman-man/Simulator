@@ -3,25 +3,6 @@ var Wireless = {
   error_rssi: -150,
   node_speed: 5,
 
-  onmousedown: function(e) {
-    var WS = Simulator;
-    console.log(WS.operation_flag)
-    if(!WS.operation_flag){
-      var x = e.clientX - canvas.offsetLeft;
-      var y = e.clientY - canvas.offsetTop;
-
-      var draw_type = $("input[name='draw_object']:checked").val();
-      if(draw_type == 'access_point'){
-        Wireless.createServer(x, y);
-      }else if(draw_type == 'user'){
-        User.create_user(x, y);
-      }
-      WS.selected_target = -1;
-      console.log(WS.selected_target);
-    }
-    WS.operation_flag = false;
-  },
-
   createCommunicationRangeCircle: function(x, y, color_opt, size_opt){
     var range = new createjs.Shape();
     var color = color_opt || "blue";
@@ -30,6 +11,8 @@ var Wireless = {
     range.y = y;
     range.alpha = 0.05;
     range.graphics.beginFill(color).drawCircle(0, 0, size);
+    Simulator.map.addChild(range);
+
     return range;
   },
 
@@ -40,14 +23,12 @@ var Wireless = {
     server.ob_type = "access_point"
     server.id = WS.server_list.length;
     server.color = color;
-    //node.graphics.beginFill(node.color).drawCircle(0, 0, 12);
     server.drag = false;
     server.onPress = Library.mousePressHandler;
     server.x = x; server.y = y;
     server.tx_power = 0.280;
     var size = this.calcRnageSize(server);
     server.communication_range = this.createCommunicationRangeCircle(x+20, y+20, "blue", size);
-    WS.map.addChild(size.communication_range);
     server.neighbor_server_list = {};
     server.neighbor_rssi_list = {};
     server.edge_list = {};
@@ -137,7 +118,9 @@ var Wireless = {
     var WS = Simulator;
     for(id in node.neighbor_server_list){
       var neighbor = node.neighbor_server_list[id];
-      if(this.checkConnectionNeighbor(node, neighbor)){
+      var s1 = node.status.current;
+      var s2 = neighbor.status.current;
+      if(this.checkConnectionNeighbor(node, neighbor) && s1 == 'active' && s2 == 'active'){
         this.draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
       }else{
         this.clear_edge(node, neighbor)
@@ -153,54 +136,52 @@ var Wireless = {
     $('span#tx_power').text($('#master').slider('value') + 'mW');
   },
 
-draw_nodes: function(){
-  var node;
-  var WS = Simulator;
-  var target_num = WS.selected_target;
+  draw_nodes: function(){
+    var node;
+    var WS = Simulator;
+    var target_num = WS.selected_target;
 
-  for(id in WS.server_list){
-    if(target_num == id){
-      node = WS.server_list[id];
-      //node.graphics.clear();
-      //node.graphics.beginFill("red").drawCircle(0, 0, this.node_size);
-    }else{
-      node = WS.server_list[id];
-      //node.graphics.clear();
-      //node.graphics.beginFill(node.color).drawCircle(0, 0, this.node_size);
+    for(id in WS.server_list){
+      if(target_num == id){
+        node = WS.server_list[id];
+        node.communication_range.graphics.clear();
+        if(node.status.current == 'active') node.communication_range = this.createCommunicationRangeCircle(node.x+20, node.y+20, "blue", 180);
+      }else{
+        node = WS.server_list[id];
+      }
     }
-  }
-},
+  },
 
 
-remove_node: function(){
-  var WS = Simulator;
+  remove_node: function(){
+    var WS = Simulator;
 
-  if( WS.selected_target != -1){
-    var node = WS.server_list[WS.selected_target];
-    this.remove_neighbor_node(WS.selected_target);
-    delete WS.server_list[WS.selected_target];
-    WS.removeChild(node.communication_range);
-    WS.removeChild(node);
-    WS.selected_target = -1;
-  }
-},
-
-remove_neighbor_node: function(remove_id){
-  var WS = Simulator;
-  console.log(remove_id)
-
-  for(id in WS.server_list){
-    if(id != remove_id){
-      WS.removeChild(WS.server_list[remove_id].edge_list[id].text);
-      WS.removeChild(WS.server_list[remove_id].edge_list[id]);
-      WS.removeChild(WS.server_list[id].edge_list[remove_id].text);
-      WS.removeChild(WS.server_list[id].edge_list[remove_id]);
-      delete WS.server_list[id].edge_list[remove_id];
-      delete WS.server_list[remove_id].edge_list[id];
-      delete WS.server_list[id].neighbor_server_list[remove_id];
+    if( WS.selected_target != -1){
+      var node = WS.server_list[WS.selected_target];
+      this.remove_neighbor_node(WS.selected_target);
+      delete WS.server_list[WS.selected_target];
+      WS.removeChild(node.communication_range);
+      WS.removeChild(node);
+      WS.selected_target = -1;
     }
-  }
-},
+  },
+
+  remove_neighbor_node: function(remove_id){
+    var WS = Simulator;
+    console.log(remove_id)
+
+    for(id in WS.server_list){
+      if(id != remove_id){
+        WS.removeChild(WS.server_list[remove_id].edge_list[id].text);
+        WS.removeChild(WS.server_list[remove_id].edge_list[id]);
+        WS.removeChild(WS.server_list[id].edge_list[remove_id].text);
+        WS.removeChild(WS.server_list[id].edge_list[remove_id]);
+        delete WS.server_list[id].edge_list[remove_id];
+        delete WS.server_list[remove_id].edge_list[id];
+        delete WS.server_list[id].neighbor_server_list[remove_id];
+      }
+    }
+  },
 
 draw_edge: function(node, neighbor, color_opt){
   var WS = Simulator;

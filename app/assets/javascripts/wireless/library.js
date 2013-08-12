@@ -9,8 +9,8 @@ var Library = {
     node.offsetY = node.y - e.stageY; 
   
     WS.selected_target = node.id;
-    $("span#node_id").text(node.id);
     if(node.ob_type == 'access_point'){
+      $("span#node_id").text(node.id);
       $("div#master").slider('value', WS.server_list[node.id].tx_power);
       $("span#tx_power").text(WS.server_list[node.id].tx_power);
     }

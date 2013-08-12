@@ -6,11 +6,11 @@
 			<h3 id="draw_objects"><a href="#">オブジェクト設置</a></h3>
 			<div id="draw_options" class="draw_tool">
 				<div id="draw_object" class="sub_options">
-					<input type="radio" name="draw_object" value="access_point"/>
+					<input type="radio" name="draw_object" value="access_point" >
 					<label class="option_label">AccessPoint</label> <br />
-					<input type="radio" name="draw_object" value="user"/>
+					<input type="radio" name="draw_object" value="user" >
 					<label class="option_label">user</label> <br />
-					<input type="radio" name="draw_object" value="nothing"/>
+					<input type="radio" name="draw_object" value="nothing" >
 					<label class="option_label">nothing</label> <br />
 				</div>
 			</div>
@@ -33,6 +33,17 @@
 			<h3>ノード情報</h3>
 			<div id="server_info" class="sub_options">
 				<%= render 'node_info' %>
+			</div>
+			<h3 id="status"><a href="#">サーバ状態</a></h3>
+			<div id="server_info" class="draw_tool">
+				<div id="server_status" class="status">
+					<input type="radio" name="status" value="active" checked >
+					<label class="option_label">Active</label> <br />
+					<input type="radio" name="status" value="suspend" >
+					<label class="option_label">Suspend</label> <br />
+					<input type="radio" name="status" value="shutdown" >
+					<label class="option_label">Shutdown</label> <br />
+				</div>
 			</div>
 			<h3>記事一覧</h3>
 			<div id="articles" class="sub_options">
