@@ -1,4 +1,3 @@
-
 var Library = {
   mousePressHandler: function(e) {
     var node = e.target;
