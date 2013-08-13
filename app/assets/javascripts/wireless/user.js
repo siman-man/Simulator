@@ -22,7 +22,7 @@ var User = {
     user.drag = false;
     user.onPress = Library.mousePressHandler;
     user.x = x; user.y = y;
-    var size = Wireless.calcRnageSize(user);
+    var size = Server.calcRnageSize(user);
 
     user.state = UserAction.init(user);
 
@@ -83,8 +83,8 @@ var User = {
 
   checkConnectionAccessPoint: function(user, server){
   	var WS = Simulator;
-  	var dist = Wireless.calcDistance(user.x, user.y, server.x, server.y);
-  	var rssi1 = Wireless.calcRssiTwoRay(server, dist);       // 自分から相手に届くRSSIの値
+  	var dist = Server.calcDistance(user.x, user.y, server.x, server.y);
+  	var rssi1 = Server.calcRssiTwoRay(server, dist);       // 自分から相手に届くRSSIの値
 
   	return (rssi1 >= -65)? rssi1 : -200;
 	},

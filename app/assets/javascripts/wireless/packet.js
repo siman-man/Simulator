@@ -12,8 +12,9 @@ var Packet = {
 		this.text = text;
 	},
 
-	sendPacket: function(from, dest){
+	send: function(from, dest, data){
 		var packet = this.createPacket(from, dest);
+		packet.data = data;
 		Simulator.packet_list[packet.id] = packet;
 		Simulator.map.addChild(packet);
 	},
@@ -42,7 +43,8 @@ var Packet = {
 			var packet = WS.packet_list[id];
 			View.movePacket(packet, this.packet_speed);
 			if(this.arriveChecker(packet)){
-				console.log('packet delete');
+				console.log('packet arrived');
+				Server.recievePacket(packet);
 				packet.graphics.clear();
 				delete WS.packet_list[id];
 			}

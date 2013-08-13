@@ -14,8 +14,8 @@
 
 	init: function(){
     //Add Shape instance to stage display list.
-    Wireless.createServer(150, 150);
-    Wireless.createServer(550, 150);
+    Server.createServer(150, 150);
+    Server.createServer(550, 150);
 
     //Update stage will render next frame
     createjs.Ticker.setFPS(30);
@@ -23,7 +23,7 @@
   },
 
   handleTick: function() {
-    Wireless.node_update();
+    Server.node_update();
     User.update();
     Packet.update();
     Simulator.map.update();
@@ -38,7 +38,7 @@
 
       var draw_type = $("input[name='draw_object']:checked").val();
       if(draw_type == 'access_point'){
-        Wireless.createServer(x, y);
+        Server.createServer(x, y);
       }else if(draw_type == 'user'){
         User.createUser(x, y);
       }

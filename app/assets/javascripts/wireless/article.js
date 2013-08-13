@@ -1,12 +1,12 @@
 var Article = {
 	createArticle: function(user){
-		var article;
+		var article = new Object();
 		article.user_id = user.id;
 		article.id = this.generateArticleId(article);
-		article.title = generateArticleTitle();
-		article.content = generateArticleContent();
+		article.title = this.generateArticleTitle();
+		article.content = this.generateArticleContent();
 
-		return generateHtmlHead(article);
+		return article;
 	},
 
 	generateArticleId: function(article){

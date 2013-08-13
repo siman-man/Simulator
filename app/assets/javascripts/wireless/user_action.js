@@ -14,7 +14,8 @@ var UserAction = {
 					var connected_list = User.findConnectedServer(user);
 
 					if(connected_list.length != 0){
-						Packet.sendPacket(user, Simulator.server_list[connected_list[0].id]);
+						var article = Article.createArticle(user);
+						Packet.send(user, Simulator.server_list[connected_list[0].id], article);
 					}
 				}
 			},

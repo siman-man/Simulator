@@ -1,7 +1,7 @@
 
 var Move = {
   move_node: function(node){
-    var min_rssi = Wireless.error_rssi;
+    var min_rssi = Server.error_rssi;
     var min_id = -1;
   
     for(id in node.neighbor_node_list){
@@ -26,7 +26,7 @@ var Move = {
 
 
   randomWalk: function(node, type){
-    var node_speed = Wireless.node_speed;
+    var node_speed = Server.node_speed;
     var num = Math.random();
     if(num > 0.75){
       node.x += node_speed;
@@ -44,7 +44,7 @@ var Move = {
   },
 
   approachNode: function(my, neighbor){
-    var node_speed = Wireless.node_speed;
+    var node_speed = Server.node_speed;
     if(my.x > neighbor.x){
       my.x -= node_speed;
       my.communication_range.x -= node_speed;

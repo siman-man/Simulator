@@ -1,7 +1,8 @@
-var Wireless = {
+var Server = {
   node_size: 12,
   error_rssi: -150,
   node_speed: 5,
+  article_list: {},
 
   createCommunicationRangeCircle: function(x, y, color_opt, size_opt){
     var range = new createjs.Shape();
@@ -44,6 +45,15 @@ var Wireless = {
     WS.server_list[server.id] = server;
 
     return server;
+  },
+
+  recievePacket: function(packet){
+    var server = Simulator.server_list[packet.dest.id];
+    var article = packet.data;
+
+    server.article_list[article.id] = article;
+
+    console.log(server.article_list);
   },
 
   addServer: function(node){
@@ -129,14 +139,14 @@ var Wireless = {
     if( $("#auto_move").attr("checked") ){
       Move.move_node(node);
     }
-    this.draw_nodes();
+    this.drawNodes();
   },
 
   updateNavBar: function(){
     $('span#tx_power').text($('#master').slider('value') + 'mW');
   },
 
-  draw_nodes: function(){
+  drawNodes: function(){
     var node;
     var WS = Simulator;
     var target_num = WS.selected_target;
@@ -152,7 +162,6 @@ var Wireless = {
     }
   },
 
-
   remove_node: function(){
     var WS = Simulator;
 
@@ -160,8 +169,8 @@ var Wireless = {
       var node = WS.server_list[WS.selected_target];
       this.remove_neighbor_node(WS.selected_target);
       delete WS.server_list[WS.selected_target];
-      WS.removeChild(node.communication_range);
-      WS.removeChild(node);
+      WS.map.removeChild(node.communication_range);
+      WS.map.removeChild(node);
       WS.selected_target = -1;
     }
   },
@@ -172,10 +181,10 @@ var Wireless = {
 
     for(id in WS.server_list){
       if(id != remove_id){
-        WS.removeChild(WS.server_list[remove_id].edge_list[id].text);
-        WS.removeChild(WS.server_list[remove_id].edge_list[id]);
-        WS.removeChild(WS.server_list[id].edge_list[remove_id].text);
-        WS.removeChild(WS.server_list[id].edge_list[remove_id]);
+        WS.map.removeChild(WS.server_list[remove_id].edge_list[id].text);
+        WS.map.removeChild(WS.server_list[remove_id].edge_list[id]);
+        WS.map.removeChild(WS.server_list[id].edge_list[remove_id].text);
+        WS.map.removeChild(WS.server_list[id].edge_list[remove_id]);
         delete WS.server_list[id].edge_list[remove_id];
         delete WS.server_list[remove_id].edge_list[id];
         delete WS.server_list[id].neighbor_server_list[remove_id];
@@ -183,68 +192,68 @@ var Wireless = {
     }
   },
 
-draw_edge: function(node, neighbor, color_opt){
-  var WS = Simulator;
-  var line = node.edge_list[neighbor.id].graphics;
-  line.clear();
-  var text = node.edge_list[neighbor.id].text;
-  text.x = (WS.server_list[neighbor.id].x + node.x) * 0.5 - 10;
-  text.y = (WS.server_list[neighbor.id].y + node.y) * 0.5;
-  var color = color_opt || "green";
-  line.beginStroke(color);
-  line.moveTo(node.x + 20, node.y + 20);
-  line.lineTo(neighbor.x + 20, neighbor.y + 20);
-},
+  draw_edge: function(node, neighbor, color_opt){
+    var WS = Simulator;
+    var line = node.edge_list[neighbor.id].graphics;
+    line.clear();
+    var text = node.edge_list[neighbor.id].text;
+    text.x = (WS.server_list[neighbor.id].x + node.x) * 0.5 - 10;
+    text.y = (WS.server_list[neighbor.id].y + node.y) * 0.5;
+    var color = color_opt || "green";
+    line.beginStroke(color);
+    line.moveTo(node.x + 20, node.y + 20);
+    line.lineTo(neighbor.x + 20, neighbor.y + 20);
+  },
 
-clear_edge: function(node, neighbor){
-  var line = node.edge_list[neighbor.id].graphics;
-  line.clear();
-  node.edge_list[neighbor.id].text.text = "";
-},
+  clear_edge: function(node, neighbor){
+    var line = node.edge_list[neighbor.id].graphics;
+    line.clear();
+    node.edge_list[neighbor.id].text.text = "";
+  },
 
-clearCircle: function(node){
-  var range = node.communication_range.graphics;
-  range.clear();
-},
+  clearCircle: function(node){
+    var range = node.communication_range.graphics;
+    range.clear();
+  },
 
-node_update: function(){
-  var WS = Simulator;
-  for(id in WS.server_list){
-    this.update(WS.server_list[id]);
-  }  
-},
+  node_update: function(){
+    var WS = Simulator;
+    for(id in WS.server_list){
+      this.update(WS.server_list[id]);
+    }  
+  },
 
-calcDistance: function(x1, y1, x2, y2){
-  return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
-},
+  calcDistance: function(x1, y1, x2, y2){
+    return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
+  },
 
-// FreeSpaceモデル
-calcRssiFreeSpace: function(node, d){
-  var Pt = 0.281; // ノード構成時に指定した物理層による(WirelessPhyならば初期値0.281)
-  var Gt = 1.0;   // 送信アンテナのゲイン
-  var Gr = 1.0;   // 受信アンテナのゲイン
-  var lambda = 300/2485.0; // 波長
-  var L = 1.0; // システムロス
+  // FreeSpaceモデル
+  calcRssiFreeSpace: function(node, d){
+    var Pt = 0.281; // ノード構成時に指定した物理層による(WirelessPhyならば初期値0.281)
+    var Gt = 1.0;   // 送信アンテナのゲイン
+    var Gr = 1.0;   // 受信アンテナのゲイン
+    var lambda = 300/2485.0; // 波長
+    var L = 1.0; // システムロス
 
-  var Pr = (Pt*Gt*Gr*Math.pow(lambda, 2))/(Math.pow(4*Math.PI, 2.0)*Math.pow(d, 2.0)*L);
-  var rssi = 10 * log10(Pr/0.001) * 100;
-  return Math.round(rssi)/100;
-},
+    var Pr = (Pt*Gt*Gr*Math.pow(lambda, 2))/(Math.pow(4*Math.PI, 2.0)*Math.pow(d, 2.0)*L);
+    var rssi = 10 * log10(Pr/0.001) * 100;
+    return Math.round(rssi)/100;
+  },
 
 
-// Tow-Rayモデル
-calcRssiTwoRay: function(node, d){
-  var Pt = node.tx_power;
-  var Gt = 1.0;   // 送信アンテナのゲイン
-  var Gr = 1.0;   // 受信アンテナのゲイン
-  var ht = 1.0;   // 送信アンテナの地面からの高さ
-  var hr = 1.0;   // 受信アンテナの地面からの高さ
-  var L = 1.0;    // システムロス
+  // Tow-Rayモデル
+  calcRssiTwoRay: function(node, d){
+    var Pt = node.tx_power;
+    var Gt = 1.0;   // 送信アンテナのゲイン
+    var Gr = 1.0;   // 受信アンテナのゲイン
+    var ht = 1.0;   // 送信アンテナの地面からの高さ
+    var hr = 1.0;   // 受信アンテナの地面からの高さ
+    var L = 1.0;    // システムロス
 
-  var Pr = (Pt*Gt*Gr*(ht*ht)*(hr*hr))/Math.pow(d, 4)*L;
-  var rssi = 10 * this.log10(Pr/0.001) * 100;
-  return Math.round(rssi)/100;
-},
+    var Pr = (Pt*Gt*Gr*(ht*ht)*(hr*hr))/Math.pow(d, 4)*L;
+    var rssi = 10 * this.log10(Pr/0.001) * 100;
+    return Math.round(rssi)/100;
+  },
 
   calcRnageSize: function(node){
     var Pt = node.tx_power;

@@ -49,7 +49,7 @@ $(document).ready(function(){
       if(Simulator.selected_target != -1){
         var node = WS.server_list[WS.selected_target];
         node.tx_power = $('#master').slider('value');
-        Wireless.clearCircle(WS.server_list[node.id]);
+        Server.clearCircle(WS.server_list[node.id]);
         node.communication_range = Wireless.createCommunicationRangeCircle(node.x, node.y, "blue", Wireless.calcRnageSize(node));
         WS.map.addChild(node.communication_range);
       }
