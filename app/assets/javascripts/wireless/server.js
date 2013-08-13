@@ -120,7 +120,7 @@ var Wireless = {
       var neighbor = node.neighbor_server_list[id];
       var s1 = node.status.current;
       var s2 = neighbor.status.current;
-      if(this.checkConnectionNeighbor(node, neighbor) && s1 == 'active' && s2 == 'active'){
+      if(false && this.checkConnectionNeighbor(node, neighbor) && s1 == 'active' && s2 == 'active'){
         this.draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
       }else{
         this.clear_edge(node, neighbor)

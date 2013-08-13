@@ -15,7 +15,7 @@
 	init: function(){
     //Add Shape instance to stage display list.
     Wireless.createServer(150, 150);
-    Wireless.createServer(250, 150);
+    Wireless.createServer(550, 150);
 
     //Update stage will render next frame
     createjs.Ticker.setFPS(30);
@@ -23,7 +23,6 @@
   },
 
   handleTick: function() {
-  	if(Math.random() < 0.01) Packet.sendPacket(Simulator.server_list[0], Simulator.server_list[1]);;
     Wireless.node_update();
     User.update();
     Packet.update();
@@ -41,7 +40,7 @@
       if(draw_type == 'access_point'){
         Wireless.createServer(x, y);
       }else if(draw_type == 'user'){
-        User.create_user(x, y);
+        User.createUser(x, y);
       }
       WS.selected_target = -1;
       console.log(WS.selected_target);

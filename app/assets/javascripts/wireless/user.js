@@ -4,11 +4,11 @@ var User = {
 	init: function() {
 		var WS = Simulator;  
 
-  	this.create_user(300, 150);
-  	this.create_user(400, 150);
+  	this.createUser(300, 150);
+  	this.createUser(400, 150);
   },
 
-  create_user: function(x, y, color_opt){
+  createUser: function(x, y, color_opt){
     var WS = Simulator;
     var color = color_opt || "blue";
     var user = new createjs.Bitmap('/assets/man.gif');
@@ -67,10 +67,24 @@ var User = {
   	}
   },
 
-  checkConnectionAccessPoint: function(user, node){
+  findConnectedServer: function(user){
+    var connected_list = [];
+    var rssi;
+    for(var id in Simulator.server_list){
+      rssi = this.checkConnectionAccessPoint(user, Simulator.server_list[id])
+      
+      if(rssi != -200){
+        connected_list.push( {id: id, rssi: rssi} );
+      }
+    }
+
+    return connected_list;
+  },
+
+  checkConnectionAccessPoint: function(user, server){
   	var WS = Simulator;
-  	var dist = Wireless.calcDistance(user.x, user.y, node.x, node.y);
-  	var rssi1 = Wireless.calcRssiTwoRay(node, dist);       // 自分から相手に届くRSSIの値
+  	var dist = Wireless.calcDistance(user.x, user.y, server.x, server.y);
+  	var rssi1 = Wireless.calcRssiTwoRay(server, dist);       // 自分から相手に届くRSSIの値
 
   	return (rssi1 >= -65)? rssi1 : -200;
 	},

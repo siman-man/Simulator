@@ -10,7 +10,12 @@ var UserAction = {
 
 			callbacks: {
 				onstop: function(event, from, to, user) { 
-					$("div#articles").append('<p>hello ' + user.id + '</p>');
+					//$("div#articles").append('<p>hello ' + user.id + '</p>');
+					var connected_list = User.findConnectedServer(user);
+
+					if(connected_list.length != 0){
+						Packet.sendPacket(user, Simulator.server_list[connected_list[0].id]);
+					}
 				}
 			},
 		});
