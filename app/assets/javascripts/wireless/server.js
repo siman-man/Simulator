@@ -2,7 +2,6 @@ var Server = {
   node_size: 12,
   error_rssi: -150,
   node_speed: 5,
-  article_list: {},
 
   createCommunicationRangeCircle: function(x, y, color_opt, size_opt){
     var range = new createjs.Shape();
@@ -34,6 +33,7 @@ var Server = {
     server.neighbor_rssi_list = {};
     server.edge_list = {};
     server.article_list = {};
+    server.article_count = 0;
     WS.map.addChild(server);
 
     server.status = ServerStatus.init();
@@ -52,8 +52,9 @@ var Server = {
     var article = packet.data;
 
     server.article_list[article.id] = article;
+    server.article_count++;
 
-    console.log(server.article_list);
+    console.log(server.article_count);
   },
 
   addServer: function(node){

@@ -16,6 +16,7 @@
         collapsible: true,
         heightStyle: "fill",
       });
+      
       $('.option_label').click(function() {
         $(this).prev().click();
       });

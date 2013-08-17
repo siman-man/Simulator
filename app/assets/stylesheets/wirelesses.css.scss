@@ -13,17 +13,24 @@
 }
 
 .right_panel {
-    width: 250px;
     right: 20px;
 }
 
 #algorithm_panel {
+  width: 250px;
   right: 20px;
   top: 20px;
 }
 
 #server_panel {
+  width: 250px;
   left: 100px;
+  top: 300px;
+}
+
+#data_panel {
+  width: 400px;
+  left: 400px;
   top: 300px;
 }
 

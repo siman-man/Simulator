@@ -26,6 +26,7 @@
     Server.node_update();
     User.update();
     Packet.update();
+    Graph.update();
     Simulator.map.update();
   },
 
