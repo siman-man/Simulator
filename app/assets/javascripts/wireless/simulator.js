@@ -34,18 +34,42 @@
     var WS = Simulator;
     console.log(WS.operation_flag)
     if(!WS.operation_flag){
-      var x = e.clientX - canvas.offsetLeft;
-      var y = e.clientY - canvas.offsetTop;
+      
+      var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
+      var y = e.clientY - canvas.offsetTop + document.body.scrollTop;
 
       var draw_type = $("input[name='draw_object']:checked").val();
       if(draw_type == 'access_point'){
         Server.createServer(x, y);
       }else if(draw_type == 'user'){
         User.createUser(x, y);
+      }else if(draw_type == 'road'){
+        Street.createRoad(x, y, true);
       }
       WS.selected_target = -1;
       console.log(WS.selected_target);
+      console.log('mousedown');
     }
+    WS.operation_flag = true;
+  },
+
+  onmousemove: function(e) {
+    var WS = Simulator;
+    console.log(WS.operation_flag);
+    if(WS.operation_flag){
+      var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
+      var y = e.clientY - canvas.offsetTop + document.body.scrollTop;
+
+      var draw_type = $("input[name='draw_object']:checked").val();
+      if(draw_type == 'road'){
+        Street.createRoad(x, y, false);
+      }
+    }
+  },
+
+  onmouseup: function(e){
+    var WS = Simulator;
     WS.operation_flag = false;
+    console.log('onmouseup' + ' ' + WS.operation_flag);
   },
 }

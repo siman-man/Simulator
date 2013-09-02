@@ -2,6 +2,7 @@ var Library = {
   mousePressHandler: function(e) {
     var node = e.target;
     var WS = Simulator;
+    
     node.drag = true;
     WS.operation_flag = true;
     node.offsetX = node.x - e.stageX;

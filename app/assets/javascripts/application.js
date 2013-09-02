@@ -56,8 +56,12 @@ $(document).ready(function(){
     }
   });
 
+  View.drawGrid();
   Simulator.init();
+  Street.init();
   User.init();
   Graph.init();
-  canvas.addEventListener('click', Simulator.onmousedown, false);
+  canvas.addEventListener('mousedown', Simulator.onmousedown, false);
+  canvas.addEventListener('mousemove', Simulator.onmousemove, false);
+  canvas.addEventListener('mouseup', Simulator.onmouseup, false);
 });
