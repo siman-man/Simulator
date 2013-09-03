@@ -3,13 +3,14 @@
   canvas_width: window.innerWidth,
   canvas_height: window.innerHeight,
 	map: new createjs.Stage(canvas), 
-	packet_list: [],
-	server_list: [],
+	packet_list: {},
+	server_list: {},
 	user_list: {},
 	selected_target: -1,
   operation_flag: false,
   packet_id: 0,
   article_id: 0,
+  server_id: 0,
   user_id: 100000,
 
 	init: function(){
@@ -55,7 +56,6 @@
 
   onmousemove: function(e) {
     var WS = Simulator;
-    console.log(WS.operation_flag);
     if(WS.operation_flag){
       var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
       var y = e.clientY - canvas.offsetTop + document.body.scrollTop;

@@ -14,8 +14,6 @@ var Library = {
       $("div#master").slider('value', WS.server_list[node.id].tx_power);
       $("span#tx_power").text(WS.server_list[node.id].tx_power);
     }
-
-    console.log(WS.selected_target);
   
     e.onMouseMove = Library.mouseMoveHandler;
     e.onMouseUp = Library.mouseUpHandler;

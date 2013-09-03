@@ -51,7 +51,7 @@ var MoveModel = {
 
   createCircuit: function(){
     var circuit = [];
-    for(var i = 0; i < Simulator.server_list.length; i++){
+    for(var i in Simulator.server_list){
       circuit.push(i);
     }
     this.shuffle(circuit);
@@ -59,7 +59,6 @@ var MoveModel = {
   },
 
   directWayPointServer: function(user){
-    console.log(user.circuit.length);
     if(user.circuit.length == 0){
       user.circuit = this.createCircuit();
     } 

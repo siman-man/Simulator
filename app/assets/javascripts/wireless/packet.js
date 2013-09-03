@@ -43,7 +43,6 @@ var Packet = {
 			var packet = WS.packet_list[id];
 			View.movePacket(packet, this.packet_speed);
 			if(this.arriveChecker(packet)){
-				console.log('packet arrived');
 				Server.recievePacket(packet);
 				packet.graphics.clear();
 				delete WS.packet_list[id];

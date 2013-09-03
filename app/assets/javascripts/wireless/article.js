@@ -20,7 +20,7 @@ var Article = {
 	},
 
 	generateArticleTitle: function(){
-		return 'Test';
+		return 'hello';
 	},
 
 	generateHtmlHead: function(article){
