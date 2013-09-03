@@ -21,12 +21,16 @@ var Library = {
 
   mouseMoveHandler: function(e){
     var node = e.target;
+    var x = e.stageX + node.offsetX;
+    var y = e.stageY + node.offsetY;
 
-    node.x = e.stageX + node.offsetX;
-    node.y = e.stageY + node.offsetY;
+    var coord = View.point2coord(x, y);
+
+    node.x = coord.x * View.gridSpan;
+    node.y = coord.y * View.gridSpan;
     if(node.ob_type == 'access_point'){
-      node.communication_range.x = e.stageX + node.offsetX + 20;
-      node.communication_range.y = e.stageY + node.offsetY + 20;
+      node.communication_range.x = node.x;
+      node.communication_range.y = node.y;
     }
   },
 

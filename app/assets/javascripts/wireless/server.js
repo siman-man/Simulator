@@ -19,17 +19,19 @@ var Server = {
   createServer: function(x, y, color_opt){
     var WS = Simulator;
     var color = color_opt || "black";
-    var server = new createjs.Bitmap('/assets/server.gif');
+    var server = new createjs.Bitmap('/assets/server.jpeg');
     server.ob_type = "access_point"
     server.id = WS.server_id;
     WS.server_id++;
     server.color = color;
     server.drag = false;
     server.onPress = Library.mousePressHandler;
-    server.x = x; server.y = y;
+    var coord = View.point2coord(x, y);
+    console.log(View.gridSpan);
+    server.x = coord.x * View.gridSpan; server.y = coord.y * View.gridSpan;
     server.tx_power = 0.280;
     var size = this.calcRnageSize(server);
-    server.communication_range = this.createCommunicationRangeCircle(x+20, y+20, "blue", size);
+    server.communication_range = this.createCommunicationRangeCircle(server.x, server.y, "blue", size);
     server.neighbor_server_list = {};
     server.neighbor_rssi_list = {};
     server.edge_list = {};
@@ -157,7 +159,9 @@ var Server = {
       if(target_num == id){
         node = WS.server_list[id];
         node.communication_range.graphics.clear();
-        if(node.status.current == 'active') node.communication_range = this.createCommunicationRangeCircle(node.x+20, node.y+20, "blue", 180);
+        if(node.status.current == 'active'){
+          node.communication_range = this.createCommunicationRangeCircle(node.x, node.y, "blue", 180);
+        }
       }else{
         node = WS.server_list[id];
       }
@@ -203,8 +207,8 @@ var Server = {
     text.y = (WS.server_list[neighbor.id].y + node.y) * 0.5;
     var color = color_opt || "green";
     line.beginStroke(color);
-    line.moveTo(node.x + 20, node.y + 20);
-    line.lineTo(neighbor.x + 20, neighbor.y + 20);
+    line.moveTo(node.x, node.y);
+    line.lineTo(neighbor.x, neighbor.y);
   },
 
   clear_edge: function(node, neighbor){

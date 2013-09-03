@@ -6,8 +6,8 @@ var View = {
 	movePacket: function(packet, speed){
 		var dest = packet.dest;
 
-		var dx = (dest.x + 20) - packet.x;
-		var dy = (dest.y + 20) - packet.y;
+		var dx = (dest.x) - packet.x;
+		var dy = (dest.y) - packet.y;
 		var radian = Math.atan2(dy, dx);
 
 		packet.x += Math.cos(radian) * speed;

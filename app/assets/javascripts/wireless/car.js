@@ -1,0 +1,5 @@
+var Car = {
+	create: function(){
+
+	},
+}
