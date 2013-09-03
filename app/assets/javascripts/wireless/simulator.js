@@ -43,16 +43,19 @@
       switch(draw_type){
         case 'server':
           Server.createServer(x, y);
-        break;
+          break;
         case 'user':
           User.createUser(x, y);
-        break;
+          break;
         case 'road':
           Street.createRoad(x, y, true);
-        break;
+          break;
         case 'tree':
           Tree.create(x, y);
-        break;
+          break;
+        case 'home':
+          Home.create(x, y);
+          break;
       }
 
       WS.selected_target = -1;
