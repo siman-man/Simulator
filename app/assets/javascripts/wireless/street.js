@@ -3,7 +3,7 @@ var Street = {
 	road_type: [],
 
 	init: function(){
-		for(var i = 0; i < 800; i++){
+		for(var i = 0; i < Simulator.canvas_height; i++){
 			this.street[i] = [];
 			this.road_type[i] = [];
 		}

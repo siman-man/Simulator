@@ -16,18 +16,16 @@ var Server = {
     return range;
   },
 
-  createServer: function(x, y, color_opt){
+  create: function(x, y){
     var WS = Simulator;
-    var color = color_opt || "black";
     var server = new createjs.Bitmap('/assets/server.jpeg');
     server.ob_type = "access_point"
     server.id = WS.server_id;
     WS.server_id++;
-    server.color = color;
+
     server.drag = false;
     server.onPress = Library.mousePressHandler;
     var coord = View.point2coord(x, y);
-    console.log(View.gridSpan);
     server.x = coord.x * View.gridSpan; server.y = coord.y * View.gridSpan;
     server.tx_power = 0.280;
     var size = this.calcRnageSize(server);

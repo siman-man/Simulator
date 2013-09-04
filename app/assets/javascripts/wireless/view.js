@@ -2,6 +2,7 @@ var View = {
 	packet_color: "yellow",
 	packet_size: 2,
 	gridSpan: 30,
+	Width: 1600,
 
 	movePacket: function(packet, speed){
 		var dest = packet.dest;
