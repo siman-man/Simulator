@@ -18,10 +18,10 @@ var Street = {
 
 	selectRoadType: function(x, y){
 		var bit = '';
-		bit += (this.street[y][x-1] === undefined)? '0' : '1';
+		bit += (x-1 < 0 || this.street[y][x-1] === undefined)? '0' : '1';
 		bit += (this.street[y][x+1] === undefined)? '0' : '1';
 		bit += (this.street[y+1][x] === undefined)? '0' : '1';
-		bit += (this.street[y-1][x] === undefined)? '0' : '1';
+		bit += (y-1 < 0 || this.street[y-1][x] === undefined)? '0' : '1';
 		
 		return parseInt( bit, 2 );
 	},
@@ -31,9 +31,9 @@ var Street = {
 			if(this.checkRange(x, y)){
 				var type = this.selectRoadType(x, y);
 				var road = new createjs.Bitmap('/assets/road' + type +'.jpeg');
-
 				road.x = x * 30;
 				road.y = y * 30;
+				road.type = type;
 
 				Simulator.map.addChild(road);
 				this.street[y][x] = road;

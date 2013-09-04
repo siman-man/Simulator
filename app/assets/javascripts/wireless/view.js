@@ -39,6 +39,24 @@ var View = {
 	},
 
 	point2coord: function( px, py ){
-		return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 }
+		return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 };
 	},
+
+	point2coordCar: function( px, py, direct){
+		var rest_x = px%this.gridSpan;
+		var rest_y = py%this.gridSpan;
+
+		if(rest_x == 0 && rest_y == 0){
+			return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 };
+		}
+
+		switch(direct){
+			case 2:
+				return { x: (px/this.gridSpan|0) + 1, y: py/this.gridSpan|0 };
+			case 3:
+				return { x: px/this.gridSpan|0, y: (py/this.gridSpan|0) + 1 };
+			default:
+				return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 };
+		}
+	}
 }

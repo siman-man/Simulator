@@ -34,6 +34,7 @@
     Simulator.time++;
     Server.node_update();
     User.update();
+    Car.update();
     Packet.update();
     Graph.update();
     Simulator.map.update();
@@ -64,6 +65,9 @@
             break;
           case 'home':
             Home.create(coord.x, coord.y);
+            break;
+          case 'car':
+            Car.create(coord.x, coord.y);
             break;
           default:
             break;
