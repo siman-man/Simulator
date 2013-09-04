@@ -60,7 +60,7 @@
             Street.createRoad(x, y, true);
             break;
           case 'tree':
-            Tree.create(x, y);
+            Tree.create(coord.x, coord.y);
             break;
           case 'home':
             Home.create(coord.x, coord.y);
@@ -71,8 +71,15 @@
       }else{
         var type = WS.field[coord.y][coord.x].type;
         switch(type){
-          case 'H':
-            Home.remove(coord.x, coord.y);
+          case 'home':
+            if(draw_type == 'home'){
+              Home.remove(coord.x, coord.y);
+            }
+            break;
+          case 'tree':
+            if(draw_type == 'tree'){
+              Tree.remove(coord.x, coord.y);
+            }
             break;
         }
       }

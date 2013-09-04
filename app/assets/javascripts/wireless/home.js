@@ -12,7 +12,7 @@ var Home = {
 		home.type = 'home';
 
 		Simulator.map.addChild(home);
-		Simulator.field[y][x] = { obj: home, type: 'H', id: home.id };
+		Simulator.field[y][x] = { obj: home, type: 'home', id: home.id };
 
 		this.home_list[home.id] = home;
 	},
