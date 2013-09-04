@@ -57,7 +57,7 @@
             User.createUser(x, y);
             break;
           case 'road':
-            Street.createRoad(x, y, true);
+            Street.create(x, y, true);
             break;
           case 'tree':
             Tree.create(coord.x, coord.y);
@@ -97,7 +97,7 @@
 
       var draw_type = $("input[name='draw_object']:checked").val();
       if(draw_type == 'road'){
-        Street.createRoad(x, y, false);
+        Street.create(x, y, false);
       }
     }
   },

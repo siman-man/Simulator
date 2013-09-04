@@ -9,7 +9,7 @@ var Street = {
 		}
 	},
 
-	createRoad: function(x, y, flag){
+	create: function(x, y, flag){
 		var coord = View.point2coord(x, y);
 
 		console.log(coord);
