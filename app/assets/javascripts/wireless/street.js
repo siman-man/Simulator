@@ -56,6 +56,8 @@ var Street = {
 	},
 
 	renewRoad: function(x, y){
+		Car.imageUpdate();
+		User.imageUpdate();
 		if(this.checkRange(x, y) && this.street[y][x] !== undefined){
 			var remove_road = this.street[y][x];
 			Simulator.map.removeChild(remove_road);

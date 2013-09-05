@@ -1,13 +1,6 @@
 var User = {
   user_size: 6,
 
-	init: function() {
-		var WS = Simulator;  
-
-  	this.createUser(300, 150);
-  	this.createUser(400, 150);
-  },
-
   createUser: function(x, y, color_opt){
     var WS = Simulator;
     var color = color_opt || "blue";
@@ -21,7 +14,11 @@ var User = {
     //user.graphics.beginFill(user.color).drawCircle(0, 0, this.user_size);
     user.drag = false;
     user.onPress = Library.mousePressHandler;
-    user.x = x; user.y = y;
+    user.x = x * View.gridSpan;
+    user.y = y * View.gridSpan;
+
+    console.log(user.x, user.y);
+
     var size = Server.calcRnageSize(user);
 
     user.state = UserAction.init(user);
@@ -54,6 +51,15 @@ var User = {
     	}
   	}
   	this.draw_users();
+  },
+
+  imageUpdate: function(){
+    var WS = Simulator;
+    for(var id in WS.user_list){
+      var user = WS.user_list[id];
+      WS.map.removeChild(user);
+      WS.map.addChild(user);
+    }
   },
 
   moveUser: function(){

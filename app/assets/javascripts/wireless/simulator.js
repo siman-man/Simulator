@@ -7,6 +7,7 @@
 	server_list: {},
 	user_list: {},
   field: [],
+  route: [],
 	selected_target: -1,
   operation_flag: false,
   packet_id: 0,
@@ -19,11 +20,12 @@
 	init: function(){
     for(var i = 0; i < this.canvas_height; i++){
       this.field[i] = [];
-    }
+      this.route[i] = [];
 
-    //Add Shape instance to stage display list.
-    Server.create(150, 150);
-    Server.create(550, 150);
+      for(var j = 0; j < this.canvas_width; j++){
+        this.route[i][j] = 1;
+      }
+    }
 
     //Update stage will render next frame
     createjs.Ticker.setFPS(30);
@@ -55,7 +57,7 @@
             Server.create(x, y);
             break;
           case 'user':
-            User.createUser(x, y);
+            User.createUser(coord.x, coord.y);
             break;
           case 'road':
             Street.create(x, y, true);
@@ -69,6 +71,8 @@
           case 'car':
             Car.create(coord.x, coord.y);
             break;
+          case 'office':
+            Office.create(coord.x, coord.y);
           default:
             break;
         }
@@ -83,6 +87,10 @@
           case 'tree':
             if(draw_type == 'tree'){
               Tree.remove(coord.x, coord.y);
+            }
+          case 'office':
+            if(draw_type == 'office'){
+              Office.remove(coord.x, coord.y);
             }
             break;
         }

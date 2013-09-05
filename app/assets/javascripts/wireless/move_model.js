@@ -5,23 +5,29 @@ var MoveModel = {
 
   	user.way_point = user.way_point || this.directWayPoint();
 
-    this.moveToWayPoint(user, 5);
+    if(user.way_point) this.moveToWayPoint(user, 5);
     if(this.checkArrive(user)) user.way_point = null;
   },
 
   sampleMove: function(user){
     if(user.state.current == 'move'){
       user.way_point = user.way_point || this.directWayPointServer(user);
-      this.moveToWayPoint(user, 5);
-      if(this.checkArrive(user)){
-        user.way_point = null;
-        user.state.rest(user);
-        user.stop_count = this.createStopCount();
+      if(user.way_point){ 
+        this.moveToWayPoint(user, 5);
+        if(this.checkArrive(user)){
+          user.way_point = null;
+          user.state.rest(user);
+          user.stop_count = this.createStopCount();
+        }
       }
     }else{
       user.stop_count -= 1;
       if(user.stop_count == 0) user.state.walk();
     }
+  },
+
+  travelWork: function(user){
+
   },
 
   directWayPoint: function(){
@@ -62,7 +68,8 @@ var MoveModel = {
     if(user.circuit.length == 0){
       user.circuit = this.createCircuit();
     } 
-    
+    if(user.circuit.length == 0) return undefined;
+
     var id = user.circuit.shift();
     var x = Simulator.server_list[id].x + this.jitter();
     var y = Simulator.server_list[id].y + this.jitter();

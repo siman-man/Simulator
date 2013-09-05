@@ -35,6 +35,14 @@ var Car = {
 		}
 	},
 
+	imageUpdate: function(){
+		for(var id in this.car_list){
+			var car = this.car_list[id];
+			Simulator.map.removeChild(car);
+			Simulator.map.addChild(car);
+		}
+	},
+
 	move: function(car){
 		var direct = car.direct;
 		var coord = View.point2coordCar(car.x, car.y, car.direct);
