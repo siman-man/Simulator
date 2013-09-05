@@ -27,6 +27,8 @@
       }
     }
 
+    console.log(Search.find({x:0, y:0}, {x:5, y:5}));
+
     //Update stage will render next frame
     createjs.Ticker.setFPS(30);
     createjs.Ticker.addEventListener("tick", this.handleTick);
