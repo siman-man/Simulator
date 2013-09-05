@@ -18,12 +18,12 @@
 
 
 	init: function(){
-    for(var i = 0; i < this.canvas_height; i++){
-      this.field[i] = [];
-      this.route[i] = [];
+    for(var y = 0; y < this.canvas_height; y++){
+      this.field[y] = [];
+      this.route[y] = [];
 
-      for(var j = 0; j < this.canvas_width; j++){
-        this.route[i][j] = 1;
+      for(var x = 0; x < this.canvas_width; x++){
+        this.route[y][x] = { x: x, y: y, type: 'normal', cost: 1 };
       }
     }
 
