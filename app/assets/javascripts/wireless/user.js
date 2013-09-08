@@ -11,13 +11,12 @@ var User = {
     user.color = color;
     user.connection = new createjs.Shape();
     user.circuit = [];
-    //user.graphics.beginFill(user.color).drawCircle(0, 0, this.user_size);
+    user.route_list = {};
+
     user.drag = false;
     user.onPress = Library.mousePressHandler;
     user.x = x * View.gridSpan;
     user.y = y * View.gridSpan;
-
-    console.log(user.x, user.y);
 
     var size = Server.calcRnageSize(user);
 

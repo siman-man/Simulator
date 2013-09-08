@@ -57,7 +57,7 @@ var Car = {
 					car.x += this.speed;
 				}else if(Street.street[coord.y+1][coord.x]){
 					car.direct = 1;
-				}else if(coord.y-1 >= 0 && Street.street[coord.y-1][coord.x]){
+				}else if(Street.street[coord.y-1][coord.x]){
 					car.direct = 3;
 				}else{
 					car.direct = (direct+1)%4;
@@ -81,7 +81,7 @@ var Car = {
 					car.x -= this.speed;
 				}else if(Street.street[coord.y+1][coord.x]){
 					car.direct = 1;
-				}else if(coord.y-1 >= 0 && Street.street[coord.y-1][coord.x]){
+				}else if(Street.street[coord.y-1][coord.x]){
 					car.direct = 3;
 				}else{
 					car.direct = (direct+1)%4;

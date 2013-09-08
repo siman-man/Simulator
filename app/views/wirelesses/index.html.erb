@@ -46,9 +46,13 @@
 				<button id="button1" class="btn" onClick="Server.create(30,30)" >ノードの追加</button>
 				<button id="button2" class="btn" onClick="Server.remove_node()" >ノードの削除</button>
 			</div>
-			<h3>自動移動</h3>
-			<div id="draw_object" class="sub_options">
-				<input type="checkbox" id="auto_move" value="on" onClick="Server.modeChange();" >自動移動</input>
+			<h3>設定ファイル読み込み</h3>
+			<div id="config" class="sub_options">
+				<input type="file" id="config"></input>
+			</div>
+			<h3>ログ</h3>
+			<div id="log" class="sub_options">
+				<a id="download" target="_blank">ダウンロード</a>
 			</div>
 		</div><!-- .accordion -->
 	</div>
@@ -87,5 +91,5 @@
 
 
 
-	<canvas id='canvas' width="1600" height="800" style="background-color:#eee9e9;"></canvas> 
+	<canvas id='canvas' width="1620" height="810" style="background-color:#eee9e9;"></canvas> 
 </body>

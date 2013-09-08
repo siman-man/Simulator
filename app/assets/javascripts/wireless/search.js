@@ -2,6 +2,7 @@ var Search = {
 	find: function(from, to){
 		var close_list = [];
 		var route = [];
+		
 		for(var i = 0; i < Simulator.canvas_height; i++){
 			close_list[i] = [];
 		}
@@ -16,6 +17,10 @@ var Search = {
 			var cell = open_list.shift();
 
 			if(cell.x == to.x && cell.y == to.y){
+				var direct = 0;
+				var px = cell.x;
+				var py = cell.y;
+
 				while(cell.x != from.x || cell.y != from.y){
 					route.unshift({ x: cell.x, y: cell.y });
 					cell = close_list[cell.coord.y][cell.coord.x];

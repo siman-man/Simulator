@@ -12,6 +12,7 @@ var MoveModel = {
   sampleMove: function(user){
     if(user.state.current == 'move'){
       user.way_point = user.way_point || this.directWayPointServer(user);
+
       if(user.way_point){ 
         this.moveToWayPoint(user, 5);
         if(this.checkArrive(user)){
