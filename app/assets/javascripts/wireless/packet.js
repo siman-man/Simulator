@@ -45,7 +45,7 @@ var Packet = {
 			View.movePacket(packet, this.packet_speed);
 			if(this.arriveChecker(packet)){
 				Server.recievePacket(packet);
-				packet.graphics.clear();
+				WS.map.removeChild(packet);
 				delete WS.packet_list[id];
 			}
 		}

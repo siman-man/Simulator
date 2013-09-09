@@ -1,7 +1,5 @@
 var Log = {
 	create: function(time, host, dest, req, size){
-		var log = 'hello';
-		
 		$.ajax({
   		url: "/",
  			data: {
@@ -12,7 +10,5 @@ var Log = {
     		size: size
   		},
   	});
-
-		$("textarea#log").append(log);
 	},
 }

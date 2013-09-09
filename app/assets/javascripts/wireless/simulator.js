@@ -40,12 +40,11 @@
 
   handleTick: function() {
     Simulator.time++;
-    //if(Simulator.time % 100 == 0) Log.create(Simulator.getTime());
     Server.node_update();
     User.update();
     Car.update();
     Packet.update();
-    Graph.update();
+    //Graph.update();
     Simulator.map.update();
   },
 

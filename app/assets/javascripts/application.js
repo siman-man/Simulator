@@ -82,7 +82,7 @@ $(document).ready(function(){
   View.drawGrid();
   Simulator.init();
   Street.init();
-  Graph.init();
+  //Graph.init();
   //File.clean();
   canvas.addEventListener('mousedown', Simulator.onmousedown, false);
   canvas.addEventListener('mousemove', Simulator.onmousemove, false);
