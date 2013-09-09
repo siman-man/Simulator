@@ -13,8 +13,10 @@
   packet_id: 0,
   article_id: 0,
   server_id: 0,
-  user_id: 100000,
+  user_id: 0,
   time: 0,
+  per_frame: 30,
+  frame_time: 1000/30,
 
 
 	init: function(){
@@ -27,21 +29,45 @@
       }
     }
 
-    console.log(Search.find({x:0, y:0}, {x:5, y:5}));
+    User.create(8, 8);
+    Server.create(5, 5);
+    Server.create(25, 5);
 
     //Update stage will render next frame
-    createjs.Ticker.setFPS(30);
+    createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
   },
 
   handleTick: function() {
     Simulator.time++;
+    //if(Simulator.time % 100 == 0) Log.create(Simulator.getTime());
     Server.node_update();
     User.update();
     Car.update();
     Packet.update();
     Graph.update();
     Simulator.map.update();
+  },
+
+  getTime: function(time){
+    var mil = createjs.Ticker.getTime();
+    var sec = mil/1000 | 0;
+    mil = (mil % 1000) | 0;
+    if(mil < 10){
+      mil = "00" + mil;
+    }else if(mil < 100){
+      mil = "0" + mil;
+    }
+
+    var hour = sec/3600 | 0;
+    if(hour < 10) hour = "0" + hour;
+    sec %= 3600;
+    var min = sec/60 | 0;
+    if(min < 10) min = "0" + min;
+    sec %= 60;
+    if(sec < 10) sec = "0" + sec;
+
+    return([hour, min, sec, mil].join(':'));
   },
 
   onmousedown: function(e) {
@@ -56,10 +82,10 @@
       if(WS.field[coord.y][coord.x] === undefined){
         switch(draw_type){
           case 'server':
-            Server.create(x, y);
+            Server.create(coord.x, coord.y);
             break;
           case 'user':
-            User.createUser(coord.x, coord.y);
+            User.create(coord.x, coord.y);
             break;
           case 'road':
             Street.create(x, y, true);

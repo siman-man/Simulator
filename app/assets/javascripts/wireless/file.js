@@ -22,14 +22,14 @@ var File = {
 		eval(line);
 	},
 
-	write: function(text){
+	create: function(){
 		window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 		window.requestFileSystem(TEMPORARY, 1024*1024, function(fileSystem){
 
     	fileSystem.root.getFile('log.txt', {create: true, exclusive: false}, function(fileEntry){
   
     	fileEntry.createWriter(function(fileWriter){
-    		console.log(text);
+        var text = $("textarea#log").val();
     		var blob = new Blob([ text ], { "type" : "text/plain" });
     		fileWriter.write(blob);
     	
@@ -55,7 +55,6 @@ var File = {
   		fs.root.getFile('log.txt', {create: true}, function(fileEntry) {
     		fileEntry.remove(function() {
       		console.log('File removed.');
-      		File.write('A');
     		}, function(error){
     			console.log('Not file removed.');
     		});

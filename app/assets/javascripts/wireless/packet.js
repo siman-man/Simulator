@@ -15,6 +15,7 @@ var Packet = {
 	send: function(from, dest, data){
 		var packet = this.createPacket(from, dest);
 		packet.data = data;
+		packet.size = 1024
 		Simulator.packet_list[packet.id] = packet;
 		Simulator.map.addChild(packet);
 	},

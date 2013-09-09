@@ -1,0 +1,4 @@
+development:
+  agent: localhost:24224
+  tag: debug
+  debug_mode: true

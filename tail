@@ -1,0 +1,18 @@
+Usage: td-agent [options]
+    -s [DIR=/usr/local/etc/td-agent],
+        --setup                      install sample configuration file to the directory
+    -c, --config PATH                config file path (default: /usr/local/etc/td-agent/td-agent.conf)
+        --dry-run                    Check fluentd setup is correct or not
+    -p, --plugin DIR                 add plugin directory
+    -I PATH                          add library path
+    -r NAME                          load library
+    -d, --daemon PIDFILE             daemonize fluent process
+        --user USER                  change user
+        --group GROUP                change group
+    -o, --log PATH                   log file path
+    -i CONFIG_STRING,                inline config which is appended to the config file on-fly
+        --inline-config
+        --emit-error-log-interval SECONDS
+                                     suppress interval seconds of emit error logs
+    -v, --verbose                    increase verbose level (-v: debug, -vv: trace)
+    -q, --quiet                      decrease verbose level (-q: warn, -qq: error)

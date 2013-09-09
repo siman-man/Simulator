@@ -25,11 +25,11 @@ var Server = {
 
     server.drag = false;
     server.onPress = Library.mousePressHandler;
-    var coord = View.point2coord(x, y);
-    server.x = coord.x * View.gridSpan; server.y = coord.y * View.gridSpan;
+
+    server.x = x * View.gridSpan; server.y = y * View.gridSpan;
     server.tx_power = 0.280;
     var size = this.calcRnageSize(server);
-    server.communication_range = this.createCommunicationRangeCircle(server.x, server.y, "blue", size);
+    server.communication_range = this.createCommunicationRangeCircle( server.x, server.y, "blue", size);
     server.neighbor_server_list = {};
     server.neighbor_rssi_list = {};
     server.edge_list = {};
@@ -54,8 +54,7 @@ var Server = {
 
     server.article_list[article.id] = article;
     server.article_count++;
-
-    console.log(server.article_count);
+    Log.create(Simulator.getTime(), packet.from.id, "server"+packet.dest.id, "POST", packet.size)
   },
 
   addServer: function(node){

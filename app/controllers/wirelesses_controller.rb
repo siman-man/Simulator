@@ -1,10 +1,16 @@
 class WirelessesController < ApplicationController
+  include WirelessesHelper
+
   before_action :set_wireless, only: [:show, :edit, :update, :destroy]
 
   # GET /wirelesses
   # GET /wirelesses.json
   def index
-    @wirelesses = Wireless.all
+    if params[:time].presence
+      params.delete(:controller)
+      params.delete(:action)
+      create_log(params)
+    end
   end
 
   # GET /wirelesses/1
@@ -24,17 +30,6 @@ class WirelessesController < ApplicationController
   # POST /wirelesses
   # POST /wirelesses.json
   def create
-    @wireless = Wireless.new(wireless_params)
-
-    respond_to do |format|
-      if @wireless.save
-        format.html { redirect_to @wireless, notice: 'Wireless was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @wireless }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @wireless.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /wirelesses/1
@@ -62,6 +57,7 @@ class WirelessesController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_wireless
       @wireless = Wireless.find(params[:id])

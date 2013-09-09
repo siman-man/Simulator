@@ -1,7 +1,7 @@
 var User = {
   user_size: 6,
 
-  createUser: function(x, y, color_opt){
+  create: function(x, y, color_opt){
     var WS = Simulator;
     var color = color_opt || "blue";
     var user = new createjs.Bitmap('/assets/user.gif');
