@@ -1,26 +1,27 @@
   var Simulator = {
-	canvas: document.getElementById('canvas'),
-  canvas_width: window.canvas.width,
-  canvas_height: window.canvas.height,
-	map: new createjs.Stage(canvas), 
-	packet_list: {},
-	server_list: {},
-	user_list: {},
-  field: [],
-  connection_list: [],
-	selected_target: -1,
-  operation_flag: false,
-  press_flag: false,
-  packet_id: 0,
-  article_id: 0,
-  server_id: 0,
-  user_id: 0,
-  time: 0,
-  per_frame: 30,
-  frame_time: 1000/30,
+   canvas: document.getElementById('canvas'),
+   canvas_width: window.canvas.width,
+   canvas_height: window.canvas.height,
+   map: new createjs.Stage(canvas), 
+   packet_list: {},
+   server_list: {},
+   user_list: {},
+   field: [],
+   connection_list: [],
+   selected_target: -1,
+   operation_flag: false,
+   press_flag: false,
+   packet_id: 0,
+   article_id: 0,
+   server_id: 0,
+   user_id: 0,
+   time: 0,
+   per_frame: 30,
+   frame_time: 1000/30,
 
 
-	init: function(){
+   init: function(){
+    console.log(this.width);
     for(var y = 0; y < (this.canvas_height/30)+1; y++){
       this.field[y] = [];
       this.connection_list[y] = [];
@@ -103,11 +104,11 @@
     }else if(delete_type !== undefined && draw_object !== undefined){
       switch(delete_type){
         case 'server':
-          Server.remove( x, y );
-          break;
+        Server.remove( x, y );
+        break;
         case 'road':
-          Street.remove( x, y );
-          break;
+        Street.remove( x, y );
+        break;
         case 'home':
         Home.remove( x, y );
         break;
