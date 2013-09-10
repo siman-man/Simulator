@@ -11,6 +11,7 @@
   connection_list: [],
 	selected_target: -1,
   operation_flag: false,
+  press_flag: false,
   packet_id: 0,
   article_id: 0,
   server_id: 0,
@@ -74,80 +75,87 @@
     return([hour, min, sec, mil].join(':'));
   },
 
+  objectCheck: function(x, y, draw_type, delete_type, draw_object){
+    if(draw_type !== undefined && draw_object === undefined){
+      switch(draw_type){
+        case 'server':
+        Server.create( x, y );
+        break;
+        case 'user':
+        User.create( x, y );
+        break;
+        case 'road':
+        Street.create(x, y, true);
+        break;
+        case 'tree':
+        Tree.create( x, y );
+        break;
+        case 'home':
+        Home.create( x, y );
+        break;
+        case 'car':
+        Car.create( x, y );
+        break;
+        case 'office':
+        Office.create( x, y );
+        default:
+        break;
+      }
+    }else if(delete_type !== undefined && draw_object !== undefined){
+      switch(delete_type){
+        case 'road':
+          Street.remove( x, y );
+          break;
+        case 'home':
+        Home.remove( x, y );
+        break;
+        case 'tree':
+        Tree.remove( x, y );
+        break;
+        case 'office':
+        Office.remove( x, y );
+        break;
+      }
+    }else if(draw_type == 'car' && draw_object !== undefined && draw_object.type == 'road'){
+      Car.create( x, y );
+    }
+  },
+
   onmousedown: function(e) {
+    console.log("onmousedown =>");
     var WS = Simulator;
+
     if(!WS.operation_flag){
-      
       var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
       var y = e.clientY - canvas.offsetTop + document.body.scrollTop;
       var coord = View.point2coord(x, y);
 
       var draw_type = $("input[name='draw_object']:checked").val();
-      if(WS.field[coord.y][coord.x] === undefined){
-        switch(draw_type){
-          case 'server':
-            Server.create(coord.x, coord.y);
-            break;
-          case 'user':
-            User.create(coord.x, coord.y);
-            break;
-          case 'road':
-            Street.create(x, y, true);
-            break;
-          case 'tree':
-            Tree.create(coord.x, coord.y);
-            break;
-          case 'home':
-            Home.create(coord.x, coord.y);
-            break;
-          case 'car':
-            Car.create(coord.x, coord.y);
-            break;
-          case 'office':
-            Office.create(coord.x, coord.y);
-          default:
-            break;
-        }
-      }else{
-        var type = WS.field[coord.y][coord.x].type;
-        switch(type){
-          case 'home':
-            if(draw_type == 'home'){
-              Home.remove(coord.x, coord.y);
-            }
-            break;
-          case 'tree':
-            if(draw_type == 'tree'){
-              Tree.remove(coord.x, coord.y);
-            }
-          case 'office':
-            if(draw_type == 'office'){
-              Office.remove(coord.x, coord.y);
-            }
-            break;
-        }
-      }
+      var delete_type = $("input[name='delete_object']:checked").val();
+      var draw_object = WS.field[coord.y][coord.x]; 
 
-      WS.selected_target = -1;
+      Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }
-    WS.operation_flag = true;
+
+    WS.press_flag = true;
   },
 
   onmousemove: function(e) {
     var WS = Simulator;
-    if(WS.operation_flag){
+    if(WS.press_flag && !WS.operation_flag){
       var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
       var y = e.clientY - canvas.offsetTop + document.body.scrollTop;
+      var coord = View.point2coord(x, y);
 
       var draw_type = $("input[name='draw_object']:checked").val();
-      if(draw_type == 'road'){
-        Street.create(x, y, false);
-      }
+      var delete_type = $("input[name='delete_object']:checked").val();
+      var draw_object = WS.field[coord.y][coord.x]; 
+
+      Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }
   },
 
   onmouseup: function(e){
-    var WS = Simulator;
-    WS.operation_flag = false;
+    Simulator.press_flag = false;
   },
 }

@@ -4,7 +4,7 @@
 
 var Panel = {
 
-  drawClear: function(){
+  radioClear: function(){
     console.log('clear radio')
     $("input:radio").attr("checked",false); 
   },

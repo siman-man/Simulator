@@ -3,7 +3,7 @@
 		<header><h2 class="header_title">Control Panel</h2></header>
 
 		<div class="accordion">
-			<h3 id="draw_objects"><a href="#">オブジェクト作成</a></h3>
+			<h3 id="draw_objects" onclick="Panel.radioClear()"><a href="#">オブジェクト作成</a></h3>
 			<div id="draw_options" class="draw_tool">
 				<div id="draw_object" class="sub_options">
 					<label class="radio">
@@ -41,7 +41,7 @@
 				</div>
 			</div>
 
-			<h3 id="remove_object" onclick="Panel.drawClear()">オブジェクト削除</h3>
+			<h3 id="remove_object" onclick="Panel.radioClear()">オブジェクト削除</h3>
 			<div id="delete_options" class="delete_tool">
 				<div id="delete_object" class="sub_options">
 					<label class="radio">

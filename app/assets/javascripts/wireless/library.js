@@ -1,25 +1,21 @@
 var Library = {
   mousePressHandler: function(e) {
+    console.log("mousePressHandler =>");
     var node = e.target;
     var WS = Simulator;
     
-    node.drag = true;
     WS.operation_flag = true;
     node.offsetX = node.x - e.stageX;
     node.offsetY = node.y - e.stageY; 
   
     WS.selected_target = node.id;
-    if(node.ob_type == 'access_point'){
-      $("span#node_id").text(node.id);
-      $("div#master").slider('value', WS.server_list[node.id].tx_power);
-      $("span#tx_power").text(WS.server_list[node.id].tx_power);
-    }
-  
+
     e.onMouseMove = Library.mouseMoveHandler;
     e.onMouseUp = Library.mouseUpHandler;
   },
 
   mouseMoveHandler: function(e){
+    console.log("mouseMoveHandler =>");
     var node = e.target;
     var x = e.stageX + node.offsetX;
     var y = e.stageY + node.offsetY;
@@ -31,8 +27,8 @@ var Library = {
   },
 
   mouseUpHandler: function(e){
+    console.log("mouseUpHandler =>");
     var node = e.target;
-    node.drag = false;
-    console.log("Mouseup");
+    Simulator.operation_flag = false;
   }
 };

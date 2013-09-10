@@ -10,10 +10,25 @@ var Street = {
 	},
 
 	create: function(x, y, flag){
-		var coord = View.point2coord(x, y);
+		console.log("create road =>");
 
-		console.log(coord);
-		this.updateRoad(coord.x, coord.y, flag);
+		var type = this.selectRoadType(x, y);
+		var road = new createjs.Bitmap('/assets/road' + type +'.jpeg');
+		road.x = x * 30;
+		road.y = y * 30;
+		road.type = type;
+
+		Simulator.map.addChild(road);
+		this.street[y][x] = road;
+		Simulator.field[y][x] = { obj: road, type: 'road' };
+
+		this.update(x, y+1);
+		this.update(x, y-1);
+		this.update(x+1, y);
+		this.update(x-1, y);
+
+		Car.imageUpdate();
+		User.imageUpdate();
 	},
 
 	selectRoadType: function(x, y){
@@ -26,42 +41,12 @@ var Street = {
 		return parseInt( bit, 2 );
 	},
 
-	updateRoad: function(x, y, flag){
-		if(this.street[y][x] === undefined){
-			if(this.checkRange(x, y)){
-				var type = this.selectRoadType(x, y);
-				var road = new createjs.Bitmap('/assets/road' + type +'.jpeg');
-				road.x = x * 30;
-				road.y = y * 30;
-				road.type = type;
-
-				Simulator.map.addChild(road);
-				this.street[y][x] = road;
-
-				this.renewRoad(x, y+1);
-				this.renewRoad(x, y-1);
-				this.renewRoad(x+1, y);
-				this.renewRoad(x-1, y);
-			}
-		}else if(flag && this.checkRange(x, y)){
-			var road = this.street[y][x];
-			Simulator.map.removeChild(road);
-			delete this.street[y][x];
-
-			this.renewRoad(x, y+1);
-			this.renewRoad(x, y-1);
-			this.renewRoad(x+1, y);
-			this.renewRoad(x-1, y);
-		}
-	},
-
-	renewRoad: function(x, y){
-		Car.imageUpdate();
-		User.imageUpdate();
+	update: function( x, y ){
 		if(this.checkRange(x, y) && this.street[y][x] !== undefined){
 			var remove_road = this.street[y][x];
 			Simulator.map.removeChild(remove_road);
 			delete this.street[y][x];
+			Simulator.field[y][x] = undefined;
 
 			var type = this.selectRoadType(x, y);
 			var road = new createjs.Bitmap('/assets/road' + type + '.jpeg');
@@ -71,7 +56,23 @@ var Street = {
 
 			Simulator.map.addChild(road);
 			this.street[y][x] = road;
+			Simulator.field[y][x] = { obj: road, type: 'road' };
 		}
+	},
+
+	remove: function( x, y ){
+		var road = this.street[y][x];
+		Simulator.map.removeChild(road);
+		delete this.street[y][x];
+		Simulator.field[y][x] = undefined;
+
+		this.update(x, y+1);
+		this.update(x, y-1);
+		this.update(x+1, y);
+		this.update(x-1, y);
+
+		Car.imageUpdate();
+		User.imageUpdate();
 	},
 
 	checkRange: function(x, y){

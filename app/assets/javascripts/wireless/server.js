@@ -116,14 +116,6 @@ var Server = {
     }
   },
 
-  modeChange: function(){
-    if($("#auto_move").attr("checked")){
-      $("#auto_move").attr("checked", false)
-    }else{
-      $("#auto_move").attr("checked", true)
-    }
-  },
-
   update: function(node){
     var WS = Simulator;
 
@@ -141,44 +133,17 @@ var Server = {
         }
       }
     }
-
-    if( $("#auto_move").attr("checked") ){
-      Move.move_node(node);
-    }
-    this.drawNodes();
   },
 
-  updateNavBar: function(){
-    $('span#tx_power').text($('#master').slider('value') + 'mW');
+  remove: function(x, y){
+    var node = WS.field[y][x];
+    this.removeNeighborNode(node.id);
+    delete WS.server_list[node.id];
+    delete WS.field[y][x];
+    WS.map.removeChild(node);
   },
 
-  drawNodes: function(){
-    var node;
-    var WS = Simulator;
-    var target_num = WS.selected_target;
-
-    for(id in WS.server_list){
-      if(target_num == id){
-        node = WS.server_list[id];
-      }else{
-        node = WS.server_list[id];
-      }
-    }
-  },
-
-  remove_node: function(){
-    var WS = Simulator;
-
-    if( WS.selected_target != -1){
-      var node = WS.server_list[WS.selected_target];
-      this.remove_neighbor_node(WS.selected_target);
-      delete WS.server_list[WS.selected_target];
-      WS.map.removeChild(node);
-      WS.selected_target = -1;
-    }
-  },
-
-  remove_neighbor_node: function(remove_id){
+  removeNeighborNode: function(remove_id){
     var WS = Simulator;
     console.log(remove_id)
 
@@ -220,11 +185,11 @@ var Server = {
 
   // FreeSpaceモデル
   calcRssiFreeSpace: function(node, d){
-    var Pt = 0.281; // ノード構成時に指定した物理層による(WirelessPhyならば初期値0.281)
-    var Gt = 1.0;   // 送信アンテナのゲイン
-    var Gr = 1.0;   // 受信アンテナのゲイン
+    var Pt = 0.281;          // ノード構成時に指定した物理層による(WirelessPhyならば初期値0.281)
+    var Gt = 1.0;            // 送信アンテナのゲイン
+    var Gr = 1.0;            // 受信アンテナのゲイン
     var lambda = 300/2485.0; // 波長
-    var L = 1.0; // システムロス
+    var L = 1.0;             // システムロス
 
     var Pr = (Pt*Gt*Gr*Math.pow(lambda, 2))/(Math.pow(4*Math.PI, 2.0)*Math.pow(d, 2.0)*L);
     var rssi = 10 * log10(Pr/0.001) * 100;
@@ -255,7 +220,7 @@ var Server = {
     var L = 1.0;
   
     var Pr = 3.162277660168379e-10; // -65dBmを指定
-    //var Pr = 1e-12;
+
     var d = Math.sqrt(Math.sqrt((Pt*Gt*Gr*(ht*ht)*(hr*hr))/(Pr*L)));
     return d;
   },
