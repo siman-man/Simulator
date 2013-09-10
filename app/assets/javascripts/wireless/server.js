@@ -28,8 +28,7 @@ var Server = {
 
     server.x = x * View.gridSpan; server.y = y * View.gridSpan;
     server.tx_power = 0.280;
-    var size = this.calcRnageSize(server);
-    server.communication_range = this.createCommunicationRangeCircle( server.x, server.y, "blue", size);
+
     server.neighbor_server_list = {};
     server.neighbor_rssi_list = {};
     server.edge_list = {};
@@ -54,7 +53,7 @@ var Server = {
 
     server.article_list[article.id] = article;
     server.article_count++;
-    Log.create(Simulator.getTime(), packet.from.id, "server"+packet.dest.id, "POST", packet.size)
+    //Log.create(Simulator.getTime(), packet.from.id, "server"+packet.dest.id, "POST", packet.size)
   },
 
   addServer: function(node){
@@ -127,16 +126,22 @@ var Server = {
 
   update: function(node){
     var WS = Simulator;
-    for(id in node.neighbor_server_list){
-      var neighbor = node.neighbor_server_list[id];
-      var s1 = node.status.current;
-      var s2 = neighbor.status.current;
-      if(false && this.checkConnectionNeighbor(node, neighbor) && s1 == 'active' && s2 == 'active'){
-        this.draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
-      }else{
-        this.clear_edge(node, neighbor)
+
+    for(id in WS.server_list){
+      var node = WS.server_list[id];
+  
+      for(id in node.neighbor_server_list){
+        var neighbor = node.neighbor_server_list[id];
+        var s1 = node.status.current;
+        var s2 = neighbor.status.current;
+        if(false && this.checkConnectionNeighbor(node, neighbor) && s1 == 'active' && s2 == 'active'){
+          this.draw_edge(node, neighbor, node.edge_list[neighbor.id].color)
+        }else{
+          this.clear_edge(node, neighbor)
+        }
       }
     }
+
     if( $("#auto_move").attr("checked") ){
       Move.move_node(node);
     }
@@ -155,10 +160,6 @@ var Server = {
     for(id in WS.server_list){
       if(target_num == id){
         node = WS.server_list[id];
-        node.communication_range.graphics.clear();
-        if(node.status.current == 'active'){
-          node.communication_range = this.createCommunicationRangeCircle(node.x, node.y, "blue", 180);
-        }
       }else{
         node = WS.server_list[id];
       }
@@ -172,7 +173,6 @@ var Server = {
       var node = WS.server_list[WS.selected_target];
       this.remove_neighbor_node(WS.selected_target);
       delete WS.server_list[WS.selected_target];
-      WS.map.removeChild(node.communication_range);
       WS.map.removeChild(node);
       WS.selected_target = -1;
     }
@@ -212,18 +212,6 @@ var Server = {
     var line = node.edge_list[neighbor.id].graphics;
     line.clear();
     node.edge_list[neighbor.id].text.text = "";
-  },
-
-  clearCircle: function(node){
-    var range = node.communication_range.graphics;
-    range.clear();
-  },
-
-  node_update: function(){
-    var WS = Simulator;
-    for(id in WS.server_list){
-      this.update(WS.server_list[id]);
-    }  
   },
 
   calcDistance: function(x1, y1, x2, y2){

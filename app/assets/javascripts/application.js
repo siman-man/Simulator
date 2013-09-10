@@ -26,10 +26,6 @@ $(document).ready(function(){
     collapsible: true,
     heightStyle: "fill",
   });
-  $('.server_info').accordion({
-    collapsible: true,
-    heightStyle: "fill",
-  });
 
   $('.option_label').click(function() {
     $(this).prev().click();
@@ -39,42 +35,6 @@ $(document).ready(function(){
     top: $algo.offset().top + $algo.outerHeight() + 20
   });
   
-  $("div#server_status").change( function(){
-    var status = $("input[name='status']:checked").val();
-    var id = $("span#node_id").text();
-    var server = Simulator.server_list[id];
-    switch(status){
-      case 'active':
-        server.status.restart(server);
-        break;
-      case 'suspend':
-        server.status.suspend(server);
-        break;
-      case 'shutdown':
-        break;
-    }
-  });
-
-  var WS = Simulator;
-  $( "div#master" ).slider({
-    value: 0.0,
-    min: 0.0,
-    max: 1.0,
-    step: 0.005,
-    range: "min",
-    slide: function(event, ui){
-      $('span#tx_power').text($('#master').slider('value') + 'mW');
-      
-      if(Simulator.selected_target != -1){
-        var node = WS.server_list[WS.selected_target];
-        node.tx_power = $('#master').slider('value');
-        Server.clearCircle(WS.server_list[node.id]);
-        node.communication_range = Wireless.createCommunicationRangeCircle(node.x, node.y, "blue", Wireless.calcRnageSize(node));
-        WS.map.addChild(node.communication_range);
-      }
-    }
-  });
-
   $('#config').change(function() {
     File.read(this.files);
   });

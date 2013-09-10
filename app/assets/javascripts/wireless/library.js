@@ -28,10 +28,6 @@ var Library = {
 
     node.x = coord.x * View.gridSpan;
     node.y = coord.y * View.gridSpan;
-    if(node.ob_type == 'access_point'){
-      node.communication_range.x = node.x;
-      node.communication_range.y = node.y;
-    }
   },
 
   mouseUpHandler: function(e){

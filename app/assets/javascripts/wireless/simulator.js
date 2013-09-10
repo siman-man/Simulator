@@ -37,7 +37,7 @@
     //Server.create(25, 5);
 
     //console.log(Propagation.calc(0, 5, 5));
-    View.animation(Propagation.calc(0, 5, 5));
+    //View.animation(Propagation.calc(0, 5, 5));
 
     //Update stage will render next frame
     createjs.Ticker.setFPS(this.per_frame);
@@ -46,11 +46,10 @@
 
   handleTick: function() {
     Simulator.time++;
-    Server.node_update();
+    Server.update();
     User.update();
     Car.update();
     Packet.update();
-    //Graph.update();
     Simulator.map.update();
   },
 
