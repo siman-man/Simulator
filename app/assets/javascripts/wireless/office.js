@@ -12,7 +12,7 @@ var Office = {
 		office.type = 'office';
 
 		Simulator.map.addChild(office);
-		Simulator.field[y][x] = { obj: office, type: 'office', id: office.id };
+		Simulator.field[y][x] = { x: x, y: y, obj: office, type: 'office', cost: 100, pf: 3 };
 
 		this.office_list[office.id] = office;
 	},
@@ -22,7 +22,7 @@ var Office = {
 		var office = Simulator.field[y][x].obj;
 
 		Simulator.map.removeChild(office);
-		Simulator.field[y][x] = undefined;
+		Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 		delete this.office_list[office.id];
 	},
 }

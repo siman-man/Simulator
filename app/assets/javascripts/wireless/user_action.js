@@ -9,8 +9,8 @@ var UserAction = {
 			],
 
 			callbacks: {
-				onstop: function(event, from, to, user) { 
-					//$("div#articles").append('<p>hello ' + user.id + '</p>');
+				onstop: function(event, from, to, user) {
+					console.log('user stop =>'); 
 					var connected_list = User.findConnectedServer(user);
 
 					if(connected_list.length != 0){

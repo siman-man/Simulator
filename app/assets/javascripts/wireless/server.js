@@ -213,20 +213,6 @@ var Server = {
     return Math.round(rssi)/100;
   },
 
-  calcRnageSize: function(node){
-    var Pt = node.tx_power;
-    var Gt = 1.0;
-    var Gr = 1.0;
-    var ht = 1.0;
-    var hr = 1.0;
-    var L = 1.0;
-  
-    var Pr = 3.162277660168379e-10; // -65dBmを指定
-
-    var d = Math.sqrt(Math.sqrt((Pt*Gt*Gr*(ht*ht)*(hr*hr))/(Pr*L)));
-    return d;
-  },
-
   log10: function(x){
     return(Math.log(x) / Math.log(10));
   }

@@ -20,7 +20,7 @@ var Street = {
 
 		Simulator.map.addChild(road);
 		this.street[y][x] = road;
-		Simulator.field[y][x] = { obj: road, type: 'road' };
+		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 100, pf: 2 };
 
 		this.update(x, y+1);
 		this.update(x, y-1);
@@ -56,7 +56,7 @@ var Street = {
 
 			Simulator.map.addChild(road);
 			this.street[y][x] = road;
-			Simulator.field[y][x] = { obj: road, type: 'road' };
+			Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 100, pf: 2 };
 		}
 	},
 
@@ -64,7 +64,7 @@ var Street = {
 		var road = this.street[y][x];
 		Simulator.map.removeChild(road);
 		delete this.street[y][x];
-		Simulator.field[y][x] = undefined;
+		Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 
 		this.update(x, y+1);
 		this.update(x, y-1);

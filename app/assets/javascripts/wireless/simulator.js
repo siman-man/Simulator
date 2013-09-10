@@ -21,13 +21,12 @@
 
 
    init: function(){
-    console.log(this.width);
     for(var y = 0; y < (this.canvas_height/30)+1; y++){
       this.field[y] = [];
       this.connection_list[y] = [];
 
       for(var x = 0; x < (this.canvas_width/30)+1; x++){
-        this.field[y][x] = { obj: undefined, type: 'normal', cost: 1, pf: 1 };
+        this.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
         this.connection_list[y][x] = {};
       }
     }

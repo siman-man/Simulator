@@ -7,7 +7,6 @@ var View = {
 	propagation: [],
 
 	init: function(){
-		console.log(this.width, this.height);
  		for(var y = 0; y < (Simulator.canvas_height/30)+1; y++){
       this.propagation[y] = [];
 

@@ -12,7 +12,7 @@ var Home = {
 		home.type = 'home';
 
 		Simulator.map.addChild(home);
-		Simulator.field[y][x] = { obj: home, type: 'home', id: home.id };
+		Simulator.field[y][x] = { x: x, y: y, obj: home, type: 'home', cost: 100, pf: 2 };
 
 		this.home_list[home.id] = home;
 	},
@@ -22,7 +22,7 @@ var Home = {
 		var home = Simulator.field[y][x].obj;
 
 		Simulator.map.removeChild(home);
-		Simulator.field[y][x] = undefined;
+		Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 		delete this.home_list[home.id];
 	},
 }

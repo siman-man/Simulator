@@ -12,7 +12,7 @@ var Tree = {
 		tree.y = y * View.gridSpan;
 
 		Simulator.map.addChild(tree);
-		Simulator.field[y][x] = { obj: tree, type: 'tree', cost:3, pf: 3 };
+		Simulator.field[y][x] = { x: x, y: y, obj: tree, type: 'tree', cost: 100, pf: 3 };
 
 		this.tree_list[tree.id] = tree;
 	},
@@ -22,7 +22,7 @@ var Tree = {
 		var tree = Simulator.field[y][x].obj;
 
 		Simulator.map.removeChild(tree);
-		Simulator.field[y][x] = { obj: undefined, type: 'normal', cost: 1, pf: 1 };
+		Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 		delete this.tree_list[tree.id];
 	},
 }
