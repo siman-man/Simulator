@@ -39,7 +39,8 @@ $(document).ready(function(){
     File.read(this.files);
   });
 
-  View.drawGrid();
+  View.drawGrid()
+  View.init();
   Simulator.init();
   Street.init();
   canvas.addEventListener('mousedown', Simulator.onmousedown, false);

@@ -56,19 +56,19 @@ var Search = {
 		var neighbor_list = [];
 
 		if(x+1 < Simulator.canvas_width){
-			neighbor_list.push(Simulator.route[y][x+1]);
+			neighbor_list.push(Simulator.field[y][x+1]);
 		}
 
 		if(x-1 >= 0){
-			neighbor_list.push(Simulator.route[y][x-1]);
+			neighbor_list.push(Simulator.field[y][x-1]);
 		}
 
 		if(y+1 < Simulator.canvas_height){
-			neighbor_list.push(Simulator.route[y+1][x]);
+			neighbor_list.push(Simulator.field[y+1][x]);
 		}
 
 		if(y-1 >= 0){
-			neighbor_list.push(Simulator.route[y-1][x]);
+			neighbor_list.push(Simulator.field[y-1][x]);
 		}
 
 		return neighbor_list;

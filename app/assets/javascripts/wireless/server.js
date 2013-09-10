@@ -43,7 +43,7 @@ var Server = {
     this.addServer(server);
 
     WS.server_list[server.id] = server;
-    WS.field[y][x] = { obj: server, type: 'server', id: server.id };
+    WS.field[y][x] = { obj: server, type: 'server', cost: 9999, pf: 2 };
 
     return server;
   },

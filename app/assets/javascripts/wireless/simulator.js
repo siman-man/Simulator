@@ -7,7 +7,6 @@
 	server_list: {},
 	user_list: {},
   field: [],
-  route: [],
   connection_list: [],
 	selected_target: -1,
   operation_flag: false,
@@ -24,11 +23,10 @@
 	init: function(){
     for(var y = 0; y < (this.canvas_height/30)+1; y++){
       this.field[y] = [];
-      this.route[y] = [];
       this.connection_list[y] = [];
 
       for(var x = 0; x < (this.canvas_width/30)+1; x++){
-        this.route[y][x] = { x: x, y: y, type: 'normal', cost: 1, pf: 1};
+        this.field[y][x] = { obj: undefined, type: 'normal', cost: 1, pf: 1 };
         this.connection_list[y][x] = {};
       }
     }
@@ -38,7 +36,7 @@
     //Server.create(25, 5);
 
     //console.log(Propagation.calc(0, 5, 5));
-    //View.animation(Propagation.calc(0, 5, 5));
+    //View.animation(Propagation.calc(5, 5));
 
     //Update stage will render next frame
     createjs.Ticker.setFPS(this.per_frame);
@@ -80,6 +78,7 @@
       switch(draw_type){
         case 'server':
         Server.create( x, y );
+        View.animation(Propagation.calc(x, y));
         break;
         case 'user':
         User.create( x, y );
@@ -135,7 +134,7 @@
 
       var draw_type = $("input[name='draw_object']:checked").val();
       var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = WS.field[coord.y][coord.x]; 
+      var draw_object = WS.field[coord.y][coord.x].obj; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }
@@ -152,7 +151,7 @@
 
       var draw_type = $("input[name='draw_object']:checked").val();
       var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = WS.field[coord.y][coord.x]; 
+      var draw_object = WS.field[coord.y][coord.x].obj; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }

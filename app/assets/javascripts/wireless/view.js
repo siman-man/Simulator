@@ -3,6 +3,16 @@ var View = {
 	packet_size: 2,
 	gridSpan: 30,
 	Width: 1600,
+	propagation: [],
+
+	init: function(){
+ 		for(var y = 0; y < (Simulator.canvas_height/30)+1; y++){
+      this.propagation[y] = [];
+
+      for(var x = 0; x < (Simulator.canvas_width/30)+1; x++){
+      }
+    }
+	},
 
 	movePacket: function(packet, speed){
 		var dest = packet.dest;
@@ -60,14 +70,27 @@ var View = {
 		}
 	},
 
-	animation: function(node_list){
-		while(node_list.length > 0){
-			var node = node_list.shift();
+	animation: function(cell_list){
+		while(cell_list.length > 0){
+			var cell = cell_list.shift();
 			var shape = new createjs.Shape();
-			var x = node.x * this.gridSpan;
-			var y = node.y * this.gridSpan;
-      shape.graphics.beginFill('rgba(0,0,255,0.2)').drawRect(x, y, 30, 30);
+			var x = cell.x * this.gridSpan;
+			var y = cell.y * this.gridSpan;
+      shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x, y, 30, 30);
       Simulator.map.addChild(shape);
+      View.propagation[cell.y][cell.x] = shape;
 		}
+	},
+
+	clean: function(){
+		for(var y = 0; y < (Simulator.canvas_height/30)+1; y++){
+      for(var x = 0; x < (Simulator.canvas_width/30)+1; x++){
+      	if(this.propagation[y][x] !== undefined){
+      		var shape = this.propagation[y][x];
+      		Simulator.map.removeChild(shape);
+      		delete this.propagation[y][x];
+      	}
+      }
+    }
 	},
 }
