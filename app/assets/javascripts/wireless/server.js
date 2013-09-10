@@ -43,6 +43,7 @@ var Server = {
     this.addServer(server);
 
     WS.server_list[server.id] = server;
+    WS.field[y][x] = { obj: server, type: 'server', id: server.id };
 
     return server;
   },
@@ -136,11 +137,12 @@ var Server = {
   },
 
   remove: function(x, y){
-    var node = WS.field[y][x];
-    this.removeNeighborNode(node.id);
-    delete WS.server_list[node.id];
-    delete WS.field[y][x];
-    WS.map.removeChild(node);
+    console.log("remove server =>");
+    var server = Simulator.field[y][x].obj;
+    this.removeNeighborNode(server.id);
+    delete Simulator.server_list[server.id];
+    delete Simulator.field[y][x];
+    Simulator.map.removeChild(server);
   },
 
   removeNeighborNode: function(remove_id){

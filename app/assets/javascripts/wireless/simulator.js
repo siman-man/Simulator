@@ -103,6 +103,9 @@
       }
     }else if(delete_type !== undefined && draw_object !== undefined){
       switch(delete_type){
+        case 'server':
+          Server.remove( x, y );
+          break;
         case 'road':
           Street.remove( x, y );
           break;

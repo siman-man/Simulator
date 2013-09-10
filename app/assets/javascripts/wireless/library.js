@@ -1,17 +1,22 @@
 var Library = {
   mousePressHandler: function(e) {
     console.log("mousePressHandler =>");
-    var node = e.target;
-    var WS = Simulator;
-    
-    WS.operation_flag = true;
-    node.offsetX = node.x - e.stageX;
-    node.offsetY = node.y - e.stageY; 
-  
-    WS.selected_target = node.id;
+    var delete_type = $("input[name='delete_object']:checked").val();
 
-    e.onMouseMove = Library.mouseMoveHandler;
-    e.onMouseUp = Library.mouseUpHandler;
+    console.log(delete_type);
+    if(delete_type != "server"){
+      var node = e.target;
+      var WS = Simulator;
+
+      WS.operation_flag = true;
+      node.offsetX = node.x - e.stageX;
+      node.offsetY = node.y - e.stageY; 
+
+      WS.selected_target = node.id;
+
+      e.onMouseMove = Library.mouseMoveHandler;
+      e.onMouseUp = Library.mouseUpHandler;
+    }
   },
 
   mouseMoveHandler: function(e){
