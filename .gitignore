@@ -19,6 +19,7 @@ pickle-email-*.html
 public/uploads
 
 # Ignore junk file
+.DS_store
 **/*.swp
 *.swp
 **/*~

@@ -58,5 +58,16 @@ var View = {
 			default:
 				return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 };
 		}
-	}
+	},
+
+	animation: function(node_list){
+		while(node_list.length > 0){
+			var node = node_list.shift();
+			var shape = new createjs.Shape();
+			var x = node.x * this.gridSpan;
+			var y = node.y * this.gridSpan;
+      shape.graphics.beginFill('rgba(0,0,255,0.2)').drawRect(x, y, 30, 30);
+      Simulator.map.addChild(shape);
+		}
+	},
 }

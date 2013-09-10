@@ -8,6 +8,7 @@
 	user_list: {},
   field: [],
   route: [],
+  connection_list: [],
 	selected_target: -1,
   operation_flag: false,
   packet_id: 0,
@@ -20,18 +21,23 @@
 
 
 	init: function(){
-    for(var y = 0; y < this.canvas_height; y++){
+    for(var y = 0; y < (this.canvas_height/30)+1; y++){
       this.field[y] = [];
       this.route[y] = [];
+      this.connection_list[y] = [];
 
-      for(var x = 0; x < this.canvas_width; x++){
-        this.route[y][x] = { x: x, y: y, type: 'normal', cost: 1 };
+      for(var x = 0; x < (this.canvas_width/30)+1; x++){
+        this.route[y][x] = { x: x, y: y, type: 'normal', cost: 1, pf: 1};
+        this.connection_list[y][x] = {};
       }
     }
 
-    User.create(8, 8);
-    Server.create(5, 5);
-    Server.create(25, 5);
+    //User.create(8, 8);
+    //Server.create(5, 5);
+    //Server.create(25, 5);
+
+    //console.log(Propagation.calc(0, 5, 5));
+    View.animation(Propagation.calc(0, 5, 5));
 
     //Update stage will render next frame
     createjs.Ticker.setFPS(this.per_frame);
