@@ -44,7 +44,49 @@ var MoveModel = {
   },
 
   worker: function(user){
-    
+    switch(user.state.current){
+      case 'home':
+        if(user.office !== undefined){
+          var coord = View.point2coord(user.office.x, user.office.y);
+          this.setRoute(user, coord);
+          user.state.go_office();
+        }
+        break;
+      case 'commute':
+        this.moveToWayPoint(user, 5);
+        if(this.checkArrive(user)){
+          user.way_point = undefined;
+          Simulator.map.removeChild(Search.point);
+          Search.point = undefined;
+          user.state.working(user);
+        }
+        break;
+      case 'work':
+        console.log('working =>');
+        if(user.home !== undefined){
+          var coord = View.point2coord(user.home.x, user.home.y);
+          this.setRoute(user, coord);
+          user.state.go_home();
+        }
+        break;
+      case 'homecoming':
+        this.moveToWayPoint(user, 5);
+        if(this.checkArrive(user)){
+          user.way_point = undefined;
+          Simulator.map.removeChild(Search.point);
+          Search.point = undefined;
+          user.state.rest(user);
+        }
+        break;
+      default:
+      console.log('rest');
+    }
+  },
+
+  setRoute: function(user, to){
+    user.way_point = { x: to.x, y: to.y };
+    var coord = View.point2coord( user.x, user.y );
+    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: to.x, y: to.y});
   },
 
   directWayPoint: function(user){

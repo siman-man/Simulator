@@ -10,7 +10,7 @@ var Office = {
 		office.x = x * View.gridSpan; 
 		office.y = y * View.gridSpan;
 		office.type = 'office';
-		office.worker_list = this.hire();
+		office.worker_list = this.hire(office);
 
 		Simulator.map.addChild(office);
 		Simulator.field[y][x] = { x: x, y: y, obj: office, type: 'office', cost: 100, pf: 3 };
@@ -19,11 +19,14 @@ var Office = {
 	},
 
 	hire: function(office){
-		var worker_list = Library.sample(User.jobless_list(), 1));
+		var worker_list = Library.sample(User.jobless_list(), 1);
 	
 		for(var i in worker_list){
 			var worker = worker_list[i];
-			worker.office = office.id;
+			worker.office = office;
+			if(!Simulator.map.contains(worker)){
+				Simulator.map.addChild(worker);
+			}
 		}
 
 		return worker_list;

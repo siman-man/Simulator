@@ -22,6 +22,7 @@ var Home = {
 
 		for(var i in home.residents){
 			var resident = home.residents[i];
+			resident.home = home;
 			Simulator.map.removeChild(resident);
 		}
 

@@ -26,15 +26,19 @@ var UserAction = {
 		return new StateMachine.create({
 			initial: 'home',
 			events: [
-				{ name: 'go_office',  from: 'home',  to: 'go_office' },
-				{ name: 'working', from: 'go_office', to: 'work'    },
-				{ name: 'go_home',  from: 'work',    to: 'go_home' },
-				{ name: 'rest', from: 'go_home', to: 'home' },
+				{ name: 'go_office',  from: 'home',  to: 'commute' },
+				{ name: 'working', from: 'commute', to: 'work'    },
+				{ name: 'go_home',  from: 'work',    to: 'homecoming' },
+				{ name: 'rest', from: 'homecoming', to: 'home' },
 			],
 
 			callbacks: {
-				ongo_office: function(event, from, to, user) {
+				oncommute: function(event, from, to, user) {
 					console.log('user go office =>'); 
+				},
+
+				onwork: function(event, from, to, user){
+					console.log('user working =>');
 				},
 
 				ongo_home: function(event, from, to, user){

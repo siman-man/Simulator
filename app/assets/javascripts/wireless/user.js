@@ -60,7 +60,6 @@ var User = {
   moveUser: function(user){
     switch(user.type){
       case 'worker':
-        console.log('worker =>');
         MoveModel.worker(user);
         break;
       default:
@@ -110,7 +109,6 @@ var User = {
     var list = [];
     for(var i in this.user_list){
       var user = this.user_list[i];
-      console.log(user.office);
       if(user.type == 'worker' && user.office === undefined){
         list.push(user);
       }
