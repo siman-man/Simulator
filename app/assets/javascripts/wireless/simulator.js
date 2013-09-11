@@ -29,9 +29,6 @@
       }
     }
 
-    //console.log(Propagation.calc(0, 5, 5));
-    //View.animation(Propagation.calc(5, 5));
-
     //Update stage will render next frame
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
