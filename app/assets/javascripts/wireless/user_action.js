@@ -21,4 +21,26 @@ var UserAction = {
 			},
 		});
 	},
+
+	worker: function(user){
+		return new StateMachine.create({
+			initial: 'home',
+			events: [
+				{ name: 'go_office',  from: 'home',  to: 'go_office' },
+				{ name: 'working', from: 'go_office', to: 'work'    },
+				{ name: 'go_home',  from: 'work',    to: 'go_home' },
+				{ name: 'rest', from: 'go_home', to: 'home' },
+			],
+
+			callbacks: {
+				ongo_office: function(event, from, to, user) {
+					console.log('user go office =>'); 
+				},
+
+				ongo_home: function(event, from, to, user){
+					console.log('user go home =>');
+				}
+			},
+		});
+	},
 }

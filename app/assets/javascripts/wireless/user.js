@@ -1,9 +1,9 @@
 var User = {
   user_size: 6,
 
-  create: function( x, y ){
+  create: function( x, y, type ){
     var user = new createjs.Bitmap('/assets/user.gif');
-    user.ob_type = "user"
+    user.type = type;
     user.id = Simulator.user_id;
     Simulator.user_id++;
     user.connection = new createjs.Shape();
@@ -14,7 +14,8 @@ var User = {
     user.x = x * View.gridSpan;
     user.y = y * View.gridSpan;
 
-    user.state = UserAction.init(user);
+    //user.state = UserAction.init(user);
+    user.state = UserAction.worker(user);
 
     Simulator.map.addChild(user);
     Simulator.map.addChild(user.connection);
@@ -56,9 +57,16 @@ var User = {
   moveUser: function(){
   	for(var id in Simulator.user_list){
   		var user = Simulator.user_list[id];
-  		//Move.randomWalk(user, 'user');
-      MoveModel.randomWayPoint(user);
-      //MoveModel.sampleMove(user);
+
+      switch(user.type){
+        case 'worker':
+          console.log('worker =>');
+          MoveModel.worker(user);
+          break;
+        default:
+          MoveModel.randomWayPoint(user);
+          break;
+      }
   	}
   },
 

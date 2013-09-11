@@ -5,10 +5,24 @@ var MoveModel = {
 
     if(user.way_point) this.moveToWayPoint(user, 5);
     if(this.checkArrive(user)){
-      user.way_point = null;
+      user.way_point = undefined;
       Simulator.map.removeChild(Search.point);
       Search.point = undefined;
     }
+  },
+
+  home2office: function(user, home, office){
+    if(user.state.current != 'travel2work') return undefined;
+
+    user.way_point = { x: office.x, y: office.y };
+    user.route_list = Search.find({ x: home.x, y: home.y }, user.way_point);
+  },
+
+  office2home: function(user, office, home){
+    if(user.state.current != 'go_home') return undefined;
+
+    user.way_point = { x: home.x, y: home.y };
+    user.route_list = Search.find({ x: office.x, y: office.y }, user.way_point);
   },
 
   sampleMove: function(user){
@@ -18,7 +32,7 @@ var MoveModel = {
       if(user.way_point){ 
         this.moveToWayPoint(user, 5);
         if(this.checkArrive(user)){
-          user.way_point = null;
+          user.way_point = undefined;
           user.state.rest(user);
           user.stop_count = this.createStopCount();
         }

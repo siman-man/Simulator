@@ -31,10 +31,6 @@
       }
     }
 
-    //User.create(8, 8);
-    //Server.create(5, 5);
-    //Server.create(25, 5);
-
     //console.log(Propagation.calc(0, 5, 5));
     //View.animation(Propagation.calc(5, 5));
 
@@ -53,7 +49,8 @@
   },
 
   getTime: function(time){
-    var mil = createjs.Ticker.getTime();
+    //var mil = createjs.Ticker.getTime();
+    var mil = Simulator.time * 1000;
     var sec = mil/1000 | 0;
     mil = (mil % 1000) | 0;
     if(mil < 10){
@@ -81,7 +78,7 @@
         View.animation(Propagation.calc(x, y));
         break;
         case 'user':
-        User.create( x, y );
+        User.create( x, y, 'worker' );
         break;
         case 'road':
         Street.create(x, y, true);
