@@ -40,11 +40,11 @@ var Library = {
   sample: function(array, num){
     var new_array = [];
     var check_list = {};
-    var size = array.size;
+    var size = array.length;
 
     for(var i = 0; i < num; i++){
       var index = Math.random() * size | 0;
-      while(check_list[index] === undefined){
+      while(check_list[index] !== undefined){
         index = Math.random() * size | 0;
       }
       new_array.push(array[index]);

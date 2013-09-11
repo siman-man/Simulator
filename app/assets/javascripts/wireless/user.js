@@ -1,11 +1,13 @@
 var User = {
   user_size: 6,
+  user_id: 0,
+  user_list: [],
 
   create: function( x, y, type ){
     var user = new createjs.Bitmap('/assets/user.gif');
     user.type = type;
-    user.id = Simulator.user_id;
-    Simulator.user_id++;
+    user.id = this.user_id;
+    this.user_id++;
     user.connection = new createjs.Shape();
     user.circuit = [];
     user.route_list = [];
@@ -20,7 +22,7 @@ var User = {
     Simulator.map.addChild(user);
     Simulator.map.addChild(user.connection);
 
-    Simulator.user_list[user.id] = user;
+    this.user_list[user.id] = user;
 
     return user;
   },
@@ -28,9 +30,9 @@ var User = {
   update: function(){
     var max_rssi, rssi;
 
-    for(var id in Simulator.user_list){
+    for(var id in this.user_list){
       max_rssi = -120;
-      var user = Simulator.user_list[id];
+      var user = this.user_list[id];
       if(Simulator.map.contains(user)){
         this.moveUser(user);
         for(var i in Simulator.server_list){
@@ -48,8 +50,8 @@ var User = {
   },
 
   imageUpdate: function(){
-    for(var id in Simulator.user_list){
-      var user = Simulator.user_list[id];
+    for(var id in this.user_list){
+      var user = this.user_list[id];
       Simulator.map.removeChild(user);
       Simulator.map.addChild(user);
     }
@@ -108,8 +110,9 @@ var User = {
     var list = [];
     for(var i in this.user_list){
       var user = this.user_list[i];
+      console.log(user.office);
       if(user.type == 'worker' && user.office === undefined){
-        list.push(i);
+        list.push(user);
       }
     }
 
