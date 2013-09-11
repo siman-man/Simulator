@@ -26,24 +26,25 @@ var User = {
   },
 
   update: function(){
- 		var max_rssi, rssi;
-  	var WS = Simulator;
-  	
-    this.moveUser();
-    for(var id in WS.user_list){
-  		max_rssi = -120;
-    	var user = WS.user_list[id];
-    	for(var i in WS.server_list){
-    		var node = WS.server_list[i];
-    		rssi = this.checkConnectionAccessPoint(user, node)
-    		if(rssi > max_rssi){
-      		this.drawEdge(user, node, "orange");
-      		max_rssi = rssi;
-    		}else if(max_rssi == -120){
-      		this.clear_edge(user, node)
-    		}
-    	}
-  	}
+    var max_rssi, rssi;
+
+    for(var id in Simulator.user_list){
+      max_rssi = -120;
+      var user = Simulator.user_list[id];
+      if(Simulator.map.contains(user)){
+        this.moveUser(user);
+        for(var i in Simulator.server_list){
+          var node = Simulator.server_list[i];
+          rssi = this.checkConnectionAccessPoint(user, node)
+          if(rssi > max_rssi){
+            this.drawEdge(user, node, "orange");
+            max_rssi = rssi;
+          }else if(max_rssi == -120){
+            this.clear_edge(user, node)
+          }
+        }
+      }
+    }
   },
 
   imageUpdate: function(){
@@ -54,20 +55,16 @@ var User = {
     }
   },
 
-  moveUser: function(){
-  	for(var id in Simulator.user_list){
-  		var user = Simulator.user_list[id];
-
-      switch(user.type){
-        case 'worker':
-          console.log('worker =>');
-          MoveModel.worker(user);
-          break;
-        default:
-          MoveModel.randomWayPoint(user);
-          break;
-      }
-  	}
+  moveUser: function(user){
+    switch(user.type){
+      case 'worker':
+        console.log('worker =>');
+        MoveModel.worker(user);
+        break;
+      default:
+        MoveModel.randomWayPoint(user);
+        break;
+    }
   },
 
   findConnectedServer: function(user){

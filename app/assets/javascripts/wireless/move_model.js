@@ -43,6 +43,10 @@ var MoveModel = {
     }
   },
 
+  worker: function(user){
+    
+  },
+
   directWayPoint: function(user){
     var x = Math.random() * View.width/2 | 0;
     var y = Math.random() * View.height/2 | 0;
