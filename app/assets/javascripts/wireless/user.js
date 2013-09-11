@@ -103,4 +103,16 @@ var User = {
   	var line = user.connection.graphics;
   	line.clear();
 	},
+
+  jobless_list: function(){
+    var list = [];
+    for(var i in this.user_list){
+      var user = this.user_list[i];
+      if(user.type == 'worker' && user.office === undefined){
+        list.push(i);
+      }
+    }
+
+    return list;
+  },
 };
