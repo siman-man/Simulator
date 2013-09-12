@@ -14,11 +14,7 @@ var Panel = {
 			$(this).prev().click();
 		});
 
-		$('#config').change(function() {
-			File.read(this.files);
-		});
 		$('#button2').attr('disabled', 'disabled');
-		$('#button3').attr('disabled', 'disabled');
 
 		$('#button1').click(function(){
 			if(Simulator.state.current == 'init'){
@@ -48,6 +44,10 @@ var Panel = {
 				Simulator.clear();
 			}
 		});
+
+		$('#file-input').change(function() {
+      $('#cover').html($(this).val());
+  	});
 	},
 
   radioClear: function(){

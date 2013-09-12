@@ -15,6 +15,8 @@
 //= require twitter/bootstrap
 //= require turbolinks
 //= require jquery.ui.all
+//= require jquery.remotipart
+//= require jquery.iframe-transport.js
 //= require_tree .
 
 
