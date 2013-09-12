@@ -14,10 +14,6 @@ var Panel = {
 			$(this).prev().click();
 		});
 
-		$('#play_panel').css({
-			top: $algo.offset().top + $algo.outerHeight() + 20
-		});
-
 		$('#config').change(function() {
 			File.read(this.files);
 		});

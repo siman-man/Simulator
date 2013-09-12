@@ -32,14 +32,18 @@
     //Update stage will render next frame
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
+    createjs.Ticker.setPaused(true);
+    Simulator.map.update();
   },
 
-  handleTick: function() {
-    Simulator.time++;
-    Server.update();
-    User.update();
-    Car.update();
-    Packet.update();
+  handleTick: function(event) {
+    if(!createjs.Ticker.getPaused()){
+      Simulator.time++;
+      Server.update();
+      User.update();
+      Car.update();
+      Packet.update();
+    }
     Simulator.map.update();
   },
 
