@@ -18,6 +18,27 @@ var Panel = {
 			File.read(this.files);
 		});
 		$('#button2').attr('disabled', 'disabled');
+		$('#button3').attr('disabled', 'disabled');
+
+		$('#button1').click(function(){
+			if(Simulator.state.current == 'init'){
+				$('#button1').attr('disabled', 'disabled');
+				$("#button2").removeAttr('disabled');
+				Simulator.state.start();
+			}
+		});
+
+		$('#button2').click(function(){
+			if(Simulator.state.current == 'run'){
+				$("#button3").removeAttr('disabled');
+				$('#button2').text('再開');
+				Simulator.state.pause();
+			}else if(Simulator.state.current == 'stop'){
+				$('#button3').attr('disabled', 'disabled');
+				$('#button2').text('停止');
+				Simulator.state.restart();
+			}
+		});
 	},
 
   radioClear: function(){

@@ -1,24 +1,23 @@
-  var Simulator = {
-   canvas: document.getElementById('canvas'),
-   canvas_width: window.canvas.width,
-   canvas_height: window.canvas.height,
-   map: new createjs.Stage(canvas), 
-   packet_list: {},
-   server_list: {},
-   field: [],
-   connection_list: [],
-   selected_target: -1,
-   operation_flag: false,
-   press_flag: false,
-   packet_id: 0,
-   article_id: 0,
-   server_id: 0,
-   time: 0,
-   per_frame: 30,
-   frame_time: 1000/30,
+var Simulator = {
+  canvas: document.getElementById('canvas'),
+  canvas_width: window.canvas.width,
+  canvas_height: window.canvas.height,
+  map: new createjs.Stage(canvas), 
+  packet_list: {},
+  server_list: {},
+  field: [],
+  connection_list: [],
+  selected_target: -1,
+  operation_flag: false,
+  press_flag: false,
+  packet_id: 0,
+  article_id: 0,
+  server_id: 0,
+  time: 0,
+  per_frame: 30,
+  frame_time: 1000/30,
 
-
-   init: function(){
+  init: function(){
     for(var y = 0; y < (this.canvas_height/30)+1; y++){
       this.field[y] = [];
       this.connection_list[y] = [];
@@ -31,16 +30,15 @@
 
     this.state = FSM.simulator();
 
-    //Update stage will render next frame
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
-    createjs.Ticker.setPaused(true);
     Simulator.map.update();
   },
 
   handleTick: function(event) {
-    if(!createjs.Ticker.getPaused()){
+    if(Simulator.state.current == 'run'){
       Simulator.time++;
+      console.log('frame: ' + Simulator.time);
       Server.update();
       User.update();
       Car.update();

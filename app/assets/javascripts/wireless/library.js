@@ -38,6 +38,9 @@ var Library = {
   },
 
   sample: function(array, num){
+    
+    if(array.length == 0) return [];
+
     var new_array = [];
     var check_list = {};
     var size = array.length;

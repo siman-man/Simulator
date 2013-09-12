@@ -21,6 +21,7 @@ var Office = {
 	hire: function(office){
 		var worker_list = Library.sample(User.jobless_list(), 1);
 	
+		console.log(worker_list);
 		for(var i in worker_list){
 			var worker = worker_list[i];
 			worker.office = office;

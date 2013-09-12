@@ -19,8 +19,6 @@
 
 
 $(document).ready(function(){
-  var $algo = $('#algorithm_panel');
-
   Panel.init();
   View.drawGrid()
   View.init();
