@@ -16,7 +16,6 @@ var User = {
     user.x = x * View.gridSpan;
     user.y = y * View.gridSpan;
 
-    //user.state = UserAction.init(user);
     user.state = FSM.worker(user);
 
     Simulator.map.addChild(user);
@@ -35,8 +34,8 @@ var User = {
       var user = this.user_list[id];
       if(Simulator.map.contains(user)){
         this.moveUser(user);
-        for(var i in Simulator.server_list){
-          var node = Simulator.server_list[i];
+        for(var i in Server.server_list){
+          var node = Server.server_list[i];
           rssi = this.checkConnectionAccessPoint(user, node)
           if(rssi > max_rssi){
             this.drawEdge(user, node, "orange");
@@ -47,6 +46,23 @@ var User = {
         }
       }
     }
+  },
+
+  clear: function(){
+    for(var i in this.user_list){
+      var user = this.user_list[i];
+      this.remove(user);
+    }
+    this.user_id = 0;
+    this.user_list = {};
+  },
+
+  remove: function(user){
+    console.log("remove user =>");
+    var coord = View.point2coord( user.x, user.y );
+
+    delete this.user_list[user.id];
+    Simulator.map.removeChild(user);
   },
 
   imageUpdate: function(){
@@ -71,8 +87,8 @@ var User = {
   findConnectedServer: function(user){
     var connected_list = [];
     var rssi;
-    for(var id in Simulator.server_list){
-      rssi = this.checkConnectionAccessPoint(user, Simulator.server_list[id])
+    for(var id in Server.server_list){
+      rssi = this.checkConnectionAccessPoint(user, Server.server_list[id])
       
       if(rssi != -200){
         connected_list.push( {id: id, rssi: rssi} );

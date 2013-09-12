@@ -18,7 +18,6 @@ var Panel = {
 			File.read(this.files);
 		});
 		$('#button2').attr('disabled', 'disabled');
-		$('#button3').attr('disabled', 'disabled');
 
 		$('#button1').click(function(){
 			if(Simulator.state.current == 'init'){
@@ -37,6 +36,13 @@ var Panel = {
 				$('#button3').attr('disabled', 'disabled');
 				$('#button2').text('停止');
 				Simulator.state.restart();
+			}
+		});
+
+		$('#button3').click(function(){
+			if(Simulator.state.current != 'run'){
+				$('#button2').attr('disabled', 'disabled');
+				Simulator.clear();
 			}
 		});
 	},

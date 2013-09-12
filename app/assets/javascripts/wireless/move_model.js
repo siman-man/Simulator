@@ -112,7 +112,7 @@ var MoveModel = {
 
   createCircuit: function(){
     var circuit = [];
-    for(var i in Simulator.server_list){
+    for(var i in this.server_list){
       circuit.push(i);
     }
     this.shuffle(circuit);
@@ -126,8 +126,8 @@ var MoveModel = {
     if(user.circuit.length == 0) return undefined;
 
     var id = user.circuit.shift();
-    var x = Simulator.server_list[id].x;
-    var y = Simulator.server_list[id].y;
+    var x = this.server_list[id].x;
+    var y = this.server_list[id].y;
     return {x: x, y: y};
   },
 

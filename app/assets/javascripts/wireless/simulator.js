@@ -4,7 +4,6 @@ var Simulator = {
   canvas_height: window.canvas.height,
   map: new createjs.Stage(canvas), 
   packet_list: {},
-  server_list: {},
   field: [],
   connection_list: [],
   selected_target: -1,
@@ -12,7 +11,6 @@ var Simulator = {
   press_flag: false,
   packet_id: 0,
   article_id: 0,
-  server_id: 0,
   time: 0,
   per_frame: 30,
   frame_time: 1000/30,
@@ -33,6 +31,19 @@ var Simulator = {
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
     Simulator.map.update();
+  },
+
+  clear: function(){
+    Simulator.time = 0;
+    Server.clear();
+    Simulator.map.removeAllChildren();
+    createjs.Ticker.removeEventListener("tick", this.handleTick);
+    
+    Panel.init();
+    View.drawGrid()
+    View.init();
+    Simulator.init();
+    Street.init();  
   },
 
   handleTick: function(event) {
@@ -99,8 +110,10 @@ var Simulator = {
     }else if(delete_type !== undefined && draw_object !== undefined){
       switch(delete_type){
         case 'server':
-        Server.remove( x, y );
+        Server.remove( draw_object );
         break;
+        case 'user':
+        User.remove( draw_object );
         case 'road':
         Street.remove( x, y );
         break;
