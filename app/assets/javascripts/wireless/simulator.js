@@ -138,21 +138,20 @@ var Simulator = {
 
   onmousedown: function(e) {
     console.log("onmousedown =>");
-    var WS = Simulator;
 
-    if(!WS.operation_flag){
+    if(!Simulator.operation_flag && Simulator.state.current != 'run'){
       var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
       var y = e.clientY - canvas.offsetTop + document.body.scrollTop;
       var coord = View.point2coord(x, y);
 
       var draw_type = $("input[name='draw_object']:checked").val();
       var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = WS.field[coord.y][coord.x]; 
+      var draw_object = Simulator.field[coord.y][coord.x]; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }
 
-    WS.press_flag = true;
+    Simulator.press_flag = true;
   },
 
   onmousemove: function(e) {
