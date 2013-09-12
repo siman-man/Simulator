@@ -17,7 +17,7 @@ var User = {
     user.y = y * View.gridSpan;
 
     //user.state = UserAction.init(user);
-    user.state = UserAction.worker(user);
+    user.state = FSM.worker(user);
 
     Simulator.map.addChild(user);
     Simulator.map.addChild(user.connection);

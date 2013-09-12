@@ -1,22 +1,25 @@
-var UserAction = { 
-	init: function(user){
+var FSM = {
+	simulator: function(user){
 		return new StateMachine.create({
-			initial: 'move',
+			initial: 'init',
 			events: [
-				{ name: 'rest',  from: 'move',  to: 'stop' },
-				{ name: 'walk', from: 'stop', to: 'move'    },
-				{ name: 'disappear',  from: ['move', 'rest'],    to: 'delete' },
+				{ name: 'start',  from: 'init',  to: 'run' },
+				{ name: 'pause', from: 'run', to: 'stop'    },
+				{ name: 'restart',  from: 'stop',    to: 'run' },
+				{ name: 'reset', from: ['stop', 'run'], to: 'init' },
 			],
 
 			callbacks: {
-				onstop: function(event, from, to, user) {
-					console.log('user stop =>'); 
-					var connected_list = User.findConnectedServer(user);
+				onstart: function(event, from, to, user) {
+					console.log('start simulation =>'); 
+				},
 
-					if(connected_list.length != 0){
-						var article = Article.createArticle(user);
-						Packet.send(user, Simulator.server_list[connected_list[0].id], article);
-					}
+				onpause: function(event, from, to, user){
+					console.log('pause simulation =>');
+				},
+
+				onrestart: function(event, from, to, user){
+					console.log('restart simulation =>');
 				}
 			},
 		});

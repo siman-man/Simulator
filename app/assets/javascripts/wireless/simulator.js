@@ -29,6 +29,8 @@
       }
     }
 
+    this.state = FSM.simulator();
+
     //Update stage will render next frame
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
