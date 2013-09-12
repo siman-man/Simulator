@@ -32,12 +32,26 @@ var Home = {
 		this.home_list[home.id] = home;
 	},
 
-	remove: function(x, y){
+	clear: function(){
+		for(var i in this.home_list){
+			var home = this.home_list[i];
+			this.remove(home);
+		}
+		this.home_id = 0;
+		this.home_list = {};
+	},
+
+	remove: function( home ){
 		console.log('home remove');
-		var home = Simulator.field[y][x].obj;
+		var coord = View.point2coord( home.x, home.y );
+
+		for(var i in home.residents){
+			var resident = home.residents[i];
+			resident.home = undefined;
+		}
 
 		Simulator.map.removeChild(home);
-		Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+		Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 		delete this.home_list[home.id];
 	},
 }

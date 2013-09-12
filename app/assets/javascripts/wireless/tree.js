@@ -17,12 +17,21 @@ var Tree = {
 		this.tree_list[tree.id] = tree;
 	},
 
-	remove: function(x, y){
+	clear: function(){
+		for(var i in this.tree_list){
+			var tree = this.tree_list[i];
+			this.remove(tree);
+		}
+		this.tree_id = 0;
+		this.tree_list = {};
+	},
+
+	remove: function( tree ){
 		console.log('tree remove');
-		var tree = Simulator.field[y][x].obj;
+		var coord = View.point2coord( tree.x, tree.y );
 
 		Simulator.map.removeChild(tree);
-		Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+		Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 		delete this.tree_list[tree.id];
 	},
 }

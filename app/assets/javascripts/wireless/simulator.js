@@ -35,7 +35,11 @@ var Simulator = {
 
   clear: function(){
     Simulator.time = 0;
+    Home.clear();
+    Tree.clear();
+    Office.clear();
     Server.clear();
+    User.clear();
     Simulator.map.removeAllChildren();
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     
@@ -115,16 +119,16 @@ var Simulator = {
         case 'user':
         User.remove( draw_object );
         case 'road':
-        Street.remove( x, y );
+        Street.remove( draw_object );
         break;
         case 'home':
-        Home.remove( x, y );
+        Home.remove( draw_object );
         break;
         case 'tree':
-        Tree.remove( x, y );
+        Tree.remove( draw_object );
         break;
         case 'office':
-        Office.remove( x, y );
+        Office.remove( draw_object );
         break;
       }
     }else if(draw_type == 'car' && draw_object !== undefined && draw_object.type == 'road'){

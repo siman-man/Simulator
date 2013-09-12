@@ -158,7 +158,6 @@ var Server = {
 
   removeNeighborNode: function(remove_id){
     var WS = Simulator;
-    console.log(remove_id)
 
     for(id in this.server_list){
       if(id != remove_id){

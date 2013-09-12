@@ -60,6 +60,16 @@ var Street = {
 		}
 	},
 
+	clear: function(){
+		for(var y = 0; y < View.height; y++){
+			for(var x = 0; x < View.width; x++){
+				if(this.street[y][x] !== undefined){
+					this.remove( x, y );
+				}
+			}
+		}
+	}
+
 	remove: function( x, y ){
 		var road = this.street[y][x];
 		Simulator.map.removeChild(road);
