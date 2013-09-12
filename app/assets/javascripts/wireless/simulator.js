@@ -35,6 +35,7 @@ var Simulator = {
 
   clear: function(){
     Simulator.time = 0;
+    Street.clear();
     Home.clear();
     Tree.clear();
     Office.clear();
@@ -53,7 +54,6 @@ var Simulator = {
   handleTick: function(event) {
     if(Simulator.state.current == 'run'){
       Simulator.time++;
-      console.log('frame: ' + Simulator.time);
       Server.update();
       User.update();
       Car.update();
@@ -85,7 +85,7 @@ var Simulator = {
   },
 
   objectCheck: function(x, y, draw_type, delete_type, draw_object){
-    if(draw_type !== undefined && draw_object === undefined){
+    if(draw_type !== undefined && draw_object.obj === undefined){
       switch(draw_type){
         case 'server':
         Server.create( x, y );
@@ -111,27 +111,27 @@ var Simulator = {
         default:
         break;
       }
-    }else if(delete_type !== undefined && draw_object !== undefined){
+    }else if(delete_type !== undefined && draw_object.obj !== undefined){
       switch(delete_type){
         case 'server':
-        Server.remove( draw_object );
+        Server.remove( draw_object.obj );
         break;
         case 'user':
-        User.remove( draw_object );
+        User.remove( draw_object.obj );
         case 'road':
-        Street.remove( draw_object );
+        Street.remove( draw_object.obj );
         break;
         case 'home':
-        Home.remove( draw_object );
+        Home.remove( draw_object.obj );
         break;
         case 'tree':
-        Tree.remove( draw_object );
+        Tree.remove( draw_object.obj );
         break;
         case 'office':
-        Office.remove( draw_object );
+        Office.remove( draw_object.obj );
         break;
       }
-    }else if(draw_type == 'car' && draw_object !== undefined && draw_object.type == 'road'){
+    }else if(draw_type == 'car' && draw_object.type == 'road'){
       Car.create( x, y );
     }
   },
@@ -147,7 +147,7 @@ var Simulator = {
 
       var draw_type = $("input[name='draw_object']:checked").val();
       var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = WS.field[coord.y][coord.x].obj; 
+      var draw_object = WS.field[coord.y][coord.x]; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }
@@ -164,7 +164,7 @@ var Simulator = {
 
       var draw_type = $("input[name='draw_object']:checked").val();
       var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = WS.field[coord.y][coord.x].obj; 
+      var draw_object = WS.field[coord.y][coord.x]; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }
