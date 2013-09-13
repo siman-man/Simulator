@@ -24,6 +24,7 @@ $(document).ready(function(){
   Panel.init();
   View.drawGrid()
   View.init();
+  Network.init();
   Simulator.init();
   Street.init();
   canvas.addEventListener('mousedown', Simulator.onmousedown, false);
