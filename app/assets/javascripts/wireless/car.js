@@ -14,17 +14,14 @@ var Car = {
 		car.direct = 0;
 
 		Simulator.map.addChild(car);
-		Simulator.field[y][x] = { obj: car, type: 'car', id: car.id };
 
 		this.car_list[car.id] = car;
 	},
 
-	remove: function(x, y){
+	remove: function( car ){
 		console.log('car remove');
-		var car = Simulator.field[y][x].obj;
 
 		Simulator.map.removeChild(car);
-		Simulator.field[y][x] = undefined;
 		delete this.car_list[car.id];
 	},
 
@@ -48,60 +45,39 @@ var Car = {
 		var coord = View.point2coordCar(car.x, car.y, car.direct);
 		var road;
 
-		Simulator.field[coord.y][coord.x] = undefined;
-
 		switch(direct){
 			case 0:
-				road = Street.street[coord.y][coord.x+1];
-				if(road !== undefined){
+				obj = Simulator.field[coord.y][coord.x+1];
+				if(obj && obj.type == 'road'){
 					car.x += this.speed;
-				}else if(Street.street[coord.y+1][coord.x]){
-					car.direct = 1;
-				}else if(Street.street[coord.y-1][coord.x]){
-					car.direct = 3;
 				}else{
 					car.direct = (direct+1)%4;
 				}
 				break;
 			case 1:
-				road = Street.street[coord.y+1][coord.x];
-				if(road){
+				obj = Simulator.field[coord.y+1][coord.x];
+				if(obj && obj.type == 'road'){
 					car.y += this.speed;
-				}else if(Street.street[coord.y][coord.x+1]){
-					car.direct = 0;
-				}else if(Street.street[coord.y][coord.x-1]){
-					car.direct = 2;
 				}else{
 					car.direct = (direct+1)%4;
 				}
 				break;
 			case 2:
-				road = Street.street[coord.y][coord.x-1];
-				if(road !== undefined){
+				obj = Simulator.field[coord.y][coord.x-1];
+				if(obj && obj.type == 'road'){
 					car.x -= this.speed;
-				}else if(Street.street[coord.y+1][coord.x]){
-					car.direct = 1;
-				}else if(Street.street[coord.y-1][coord.x]){
-					car.direct = 3;
 				}else{
 					car.direct = (direct+1)%4;
 				}
 				break;
 			case 3:
-				road = (coord.y-1 >= 0)? Street.street[coord.y-1][coord.x] : undefined;
-				if(road !== undefined){
+				obj = (coord.y-1 >= 0)? Simulator.field[coord.y-1][coord.x] : undefined;
+				if(obj && obj.type == 'road'){
 					car.y -= this.speed;
-				}else if(Street.street[coord.y][coord.x+1]){
-					car.direct = 0;
-				}else if(Street.street[coord.y][coord.x-1]){
-					car.direct = 2;
 				}else{
 					car.direct = (direct+1)%4;
 				}
 				break;
 		}
-
-		coord = View.point2coordCar(car.x, car.y, car.direct);
-		Simulator.field[coord.y][coord.x] = { obj: car, type: 'car', id: car.id };
 	},
 }

@@ -34,10 +34,6 @@
             <input type="radio" name="draw_object" value="office">
          		office
           </label>
-					<label class="radio">
-            <input type="radio" name="draw_object" value="nothing">
-           	nothing
-          </label>
 				</div>
 			</div>
 
@@ -72,19 +68,29 @@
             <input type="radio" name="delete_object" value="office">
          		office
           </label>
-					<label class="radio">
-            <input type="radio" name="delete_object" value="nothing">
-           	nothing
-          </label>
 				</div>
 			</div>
 		
 			<h3>設定ファイル読み込み</h3>
 			<div id="config" class="sub_options">
-				<input type="file" id="config"></input>
+        <%= form_tag(simulator_path, { remote: true, multipart: true } ) do %>
+          <input type="file" id="file-input" name="file" style="display: none;">
+          <div class="input-prepend">
+            <a class="btn" onclick="$('#file-input').click();"><i class="icon-folder-open"></i></a>
+            <span id="cover" class="input-medium uneditable-input">select file</span>
+          </div>
+
+          <%= submit_tag("送信", { class: "btn" }) %>
+        <% end %>
 			</div>
 		</div><!-- .accordion -->
 	</div>
+
+  <div id="play_panel" class="panel right_panel">
+    <button id="button1" class="btn">開始</button>
+    <button id="button2" class="btn">停止</button>
+    <button id="button3" class="btn">リセット</button>
+  </div>
 
 
 	<canvas id='canvas' width="1620" height="810" style="background-color:#efefef;"></canvas> 

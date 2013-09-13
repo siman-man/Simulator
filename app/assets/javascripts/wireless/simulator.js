@@ -1,24 +1,19 @@
-  var Simulator = {
-	canvas: document.getElementById('canvas'),
+var Simulator = {
+  canvas: document.getElementById('canvas'),
   canvas_width: window.canvas.width,
   canvas_height: window.canvas.height,
-	map: new createjs.Stage(canvas), 
-	packet_list: {},
-	server_list: {},
-	user_list: {},
+  map: new createjs.Stage(canvas), 
+  packet_list: {},
   field: [],
   connection_list: [],
-	selected_target: -1,
+  selected_target: -1,
   operation_flag: false,
   press_flag: false,
   packet_id: 0,
   article_id: 0,
-  server_id: 0,
-  user_id: 0,
   time: 0,
   per_frame: 30,
   frame_time: 1000/30,
-
 
 	init: function(){
     for(var y = 0, height = (this.canvas_height/30)+1; y < height; y++){
@@ -31,29 +26,45 @@
       }
     }
 
-    //User.create(8, 8);
-    //Server.create(5, 5);
-    //Server.create(25, 5);
+    this.state = FSM.simulator();
 
-    //console.log(Propagation.calc(0, 5, 5));
-    //View.animation(Propagation.calc(5, 5));
-
-    //Update stage will render next frame
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
+    Simulator.map.update();
   },
 
-  handleTick: function() {
-    Simulator.time++;
-    Server.update();
-    User.update();
-    Car.update();
-    Packet.update();
+  clear: function(){
+    Simulator.time = 0;
+    Street.clear();
+    Home.clear();
+    Tree.clear();
+    Office.clear();
+    Server.clear();
+    User.clear();
+    Simulator.map.removeAllChildren();
+    createjs.Ticker.removeEventListener("tick", this.handleTick);
+    
+    Panel.init();
+    View.drawGrid()
+    View.init();
+    Simulator.init();
+    Street.init();  
+  },
+
+  handleTick: function(event) {
+    if(Simulator.state.current == 'run'){
+      Simulator.time++;
+      Server.update();
+      User.update();
+      Car.update();
+      Packet.update();
+    }
     Simulator.map.update();
   },
 
   getTime: function(time){
-    var mil = createjs.Ticker.getTime();
+    //var mil = createjs.Ticker.getTime();
+    var mil = Simulator.time * 1000;
     var sec = mil/1000 | 0;
     mil = (mil % 1000) | 0;
     if(mil < 10){
@@ -74,14 +85,14 @@
   },
 
   objectCheck: function(x, y, draw_type, delete_type, draw_object){
-    if(draw_type !== undefined && draw_object === undefined){
+    if(draw_type !== undefined && draw_object.obj === undefined){
       switch(draw_type){
         case 'server':
         Server.create( x, y );
         View.animation(Propagation.calc(x, y));
         break;
         case 'user':
-        User.create( x, y );
+        User.create( x, y, 'worker' );
         break;
         case 'road':
         Street.create(x, y, true);
@@ -100,46 +111,47 @@
         default:
         break;
       }
-    }else if(delete_type !== undefined && draw_object !== undefined){
+    }else if(delete_type !== undefined && draw_object.obj !== undefined){
       switch(delete_type){
         case 'server':
-          Server.remove( x, y );
-          break;
+        Server.remove( draw_object.obj );
+        break;
+        case 'user':
+        User.remove( draw_object.obj );
         case 'road':
-          Street.remove( x, y );
-          break;
+        Street.remove( draw_object.obj );
+        break;
         case 'home':
-        Home.remove( x, y );
+        Home.remove( draw_object.obj );
         break;
         case 'tree':
-        Tree.remove( x, y );
+        Tree.remove( draw_object.obj );
         break;
         case 'office':
-        Office.remove( x, y );
+        Office.remove( draw_object.obj );
         break;
       }
-    }else if(draw_type == 'car' && draw_object !== undefined && draw_object.type == 'road'){
+    }else if(draw_type == 'car' && draw_object.type == 'road'){
       Car.create( x, y );
     }
   },
 
   onmousedown: function(e) {
     console.log("onmousedown =>");
-    var WS = Simulator;
 
-    if(!WS.operation_flag){
+    if(!Simulator.operation_flag && Simulator.state.current != 'run'){
       var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
       var y = e.clientY - canvas.offsetTop + document.body.scrollTop;
       var coord = View.point2coord(x, y);
 
       var draw_type = $("input[name='draw_object']:checked").val();
       var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = WS.field[coord.y][coord.x].obj; 
+      var draw_object = Simulator.field[coord.y][coord.x]; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }
 
-    WS.press_flag = true;
+    Simulator.press_flag = true;
   },
 
   onmousemove: function(e) {
@@ -151,7 +163,7 @@
 
       var draw_type = $("input[name='draw_object']:checked").val();
       var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = WS.field[coord.y][coord.x].obj; 
+      var draw_object = WS.field[coord.y][coord.x]; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }

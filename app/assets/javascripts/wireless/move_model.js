@@ -1,12 +1,28 @@
 var MoveModel = {
 
   randomWayPoint: function(user){
-    console.log(user.state.current)
-
-  	user.way_point = user.way_point || this.directWayPoint();
+  	user.way_point = user.way_point || this.directWayPoint(user);
 
     if(user.way_point) this.moveToWayPoint(user, 5);
-    if(this.checkArrive(user)) user.way_point = null;
+    if(this.checkArrive(user)){
+      user.way_point = undefined;
+      Simulator.map.removeChild(Search.point);
+      Search.point = undefined;
+    }
+  },
+
+  home2office: function(user, home, office){
+    if(user.state.current != 'travel2work') return undefined;
+
+    user.way_point = { x: office.x, y: office.y };
+    user.route_list = Search.find({ x: home.x, y: home.y }, user.way_point);
+  },
+
+  office2home: function(user, office, home){
+    if(user.state.current != 'go_home') return undefined;
+
+    user.way_point = { x: home.x, y: home.y };
+    user.route_list = Search.find({ x: office.x, y: office.y }, user.way_point);
   },
 
   sampleMove: function(user){
@@ -16,7 +32,7 @@ var MoveModel = {
       if(user.way_point){ 
         this.moveToWayPoint(user, 5);
         if(this.checkArrive(user)){
-          user.way_point = null;
+          user.way_point = undefined;
           user.state.rest(user);
           user.stop_count = this.createStopCount();
         }
@@ -27,21 +43,59 @@ var MoveModel = {
     }
   },
 
-  travelWork: function(user){
-
+  worker: function(user){
+    switch(user.state.current){
+      case 'home':
+        if(user.office !== undefined){
+          var coord = View.point2coord(user.office.x, user.office.y);
+          this.setRoute(user, coord);
+          user.state.go_office();
+        }
+        break;
+      case 'commute':
+        this.moveToWayPoint(user, 5);
+        if(this.checkArrive(user)){
+          user.way_point = undefined;
+          Simulator.map.removeChild(Search.point);
+          Search.point = undefined;
+          user.state.working(user);
+        }
+        break;
+      case 'work':
+        console.log('working =>');
+        if(user.home !== undefined){
+          var coord = View.point2coord(user.home.x, user.home.y);
+          this.setRoute(user, coord);
+          user.state.go_home();
+        }
+        break;
+      case 'homecoming':
+        this.moveToWayPoint(user, 5);
+        if(this.checkArrive(user)){
+          user.way_point = undefined;
+          Simulator.map.removeChild(Search.point);
+          Search.point = undefined;
+          user.state.rest(user);
+        }
+        break;
+      default:
+      console.log('rest');
+    }
   },
 
-  directWayPoint: function(){
-    var x = Math.random() * Simulator.canvas_width * 1.1;
-    var y = Math.random() * Simulator.canvas_height * 1.1;
+  setRoute: function(user, to){
+    user.way_point = { x: to.x, y: to.y };
+    var coord = View.point2coord( user.x, user.y );
+    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: to.x, y: to.y});
+  },
+
+  directWayPoint: function(user){
+    var x = Math.random() * View.width/2 | 0;
+    var y = Math.random() * View.height/2 | 0;
+    var coord = View.point2coord( user.x, user.y );
+
+    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});
     return {x: x, y: y};
-  },
-
-  jitter: function(jitter){
-    var jitter = jitter || 100;
-    var value = Math.random() * jitter;
-
-    return (0.5 < Math.random())? -1 * value : value;
   },
 
   shuffle: function(array){
@@ -58,7 +112,7 @@ var MoveModel = {
 
   createCircuit: function(){
     var circuit = [];
-    for(var i in Simulator.server_list){
+    for(var i in this.server_list){
       circuit.push(i);
     }
     this.shuffle(circuit);
@@ -72,24 +126,31 @@ var MoveModel = {
     if(user.circuit.length == 0) return undefined;
 
     var id = user.circuit.shift();
-    var x = Simulator.server_list[id].x + this.jitter();
-    var y = Simulator.server_list[id].y + this.jitter();
+    var x = this.server_list[id].x;
+    var y = this.server_list[id].y;
     return {x: x, y: y};
   },
 
   moveToWayPoint: function(user, speed){
-    var dx = user.way_point.x - user.x;
-    var dy = user.way_point.y - user.y;
+    var point = user.route_list[0];
+    var dx = point.x - user.x;
+    var dy = point.y - user.y;
     var radian = Math.atan2(dy, dx);
 
-    user.x += Math.cos(radian) * speed;
-    user.y += Math.sin(radian) * speed;
+    if(dx > 0) user.x += speed;
+    if(dy > 0) user.y += speed;
+    if(dx < 0) user.x -= speed;
+    if(dy < 0) user.y -= speed;
+
+    if(user.x == point.x && user.y == point.y){
+      user.route_list.shift();
+    }
   },
 
   checkArrive: function(user){
-    var dx = user.x - user.way_point.x;
-    var dy = user.y - user.way_point.y;
-    return ( dx * dx + dy * dy <= 16 )? true : false;
+    var dx = user.x - user.way_point.x * View.gridSpan;
+    var dy = user.y - user.way_point.y * View.gridSpan;
+    return ( dx == 0 && dy == 0 )? true : false;
   },
 
   createStopCount: function(){

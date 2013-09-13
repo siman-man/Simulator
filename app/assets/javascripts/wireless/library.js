@@ -35,5 +35,25 @@ var Library = {
     console.log("mouseUpHandler =>");
     var node = e.target;
     Simulator.operation_flag = false;
-  }
+  },
+
+  sample: function(array, num){
+    
+    if(array.length == 0) return [];
+
+    var new_array = [];
+    var check_list = {};
+    var size = array.length;
+
+    for(var i = 0; i < num; i++){
+      var index = Math.random() * size | 0;
+      while(check_list[index] !== undefined){
+        index = Math.random() * size | 0;
+      }
+      new_array.push(array[index]);
+      check_list[index] = true;
+    }
+
+    return new_array;
+  },
 };

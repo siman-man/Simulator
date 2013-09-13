@@ -1,26 +1,27 @@
 var Street = {
 	street: [],
-	road_type: [],
+	road_id: 0,
+	road_list: {},
 
 	init: function(){
 		for(var i = 0; i < Simulator.canvas_height; i++){
 			this.street[i] = [];
-			this.road_type[i] = [];
 		}
 	},
 
-	create: function(x, y, flag){
+	create: function(x, y){
 		console.log("create road =>");
 
 		var type = this.selectRoadType(x, y);
 		var road = new createjs.Bitmap('/assets/road' + type +'.jpeg');
+		road.id = this.road_id;
+		this.road_id++;
 		road.x = x * 30;
 		road.y = y * 30;
 		road.type = type;
 
 		Simulator.map.addChild(road);
-		this.street[y][x] = road;
-		Simulator.field[y][x] = { obj: road, type: 'road' };
+		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 100, pf: 2 };
 
 		this.update(x, y+1);
 		this.update(x, y-1);
@@ -32,21 +33,20 @@ var Street = {
 	},
 
 	selectRoadType: function(x, y){
-		var bit = '';
-		bit += (x-1 < 0 || this.street[y][x-1] === undefined)? '0' : '1';
-		bit += (this.street[y][x+1] === undefined)? '0' : '1';
-		bit += (this.street[y+1][x] === undefined)? '0' : '1';
-		bit += (y-1 < 0 || this.street[y-1][x] === undefined)? '0' : '1';
+		var value = 0;
+		value = value | ((x-1 >= 0 && Simulator.field[y][x-1].type == 'road')? 8 : 0);
+		value = value | ((x+1 < View.width && Simulator.field[y][x+1].type == 'road')? 4 : 0);
+		value = value | ((y+1 < View.height && Simulator.field[y+1][x].type == 'road')? 2 : 0);
+		value = value | ((y-1 >= 0 && Simulator.field[y-1][x].type == 'road')? 1 : 0);
 		
-		return parseInt( bit, 2 );
+		return value;
 	},
 
 	update: function( x, y ){
-		if(this.checkRange(x, y) && this.street[y][x] !== undefined){
-			var remove_road = this.street[y][x];
+		if(this.checkRange(x, y) && Simulator.field[y][x].type == 'road'){
+			var remove_road = Simulator.field[y][x].obj;
 			Simulator.map.removeChild(remove_road);
-			delete this.street[y][x];
-			Simulator.field[y][x] = undefined;
+			delete Simulator.field[y][x];
 
 			var type = this.selectRoadType(x, y);
 			var road = new createjs.Bitmap('/assets/road' + type + '.jpeg');
@@ -55,27 +55,38 @@ var Street = {
 			road.y = y * 30;
 
 			Simulator.map.addChild(road);
-			this.street[y][x] = road;
-			Simulator.field[y][x] = { obj: road, type: 'road' };
+			Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 100, pf: 2 };
 		}
 	},
 
-	remove: function( x, y ){
-		var road = this.street[y][x];
-		Simulator.map.removeChild(road);
-		delete this.street[y][x];
-		Simulator.field[y][x] = undefined;
+	clear: function(){
+		for(var y = 0; y < View.height; y++){
+			for(var x = 0; x < View.width; x++){
+				if(Simulator.field[y][x].type == 'road'){
+					Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+				}
+			}
+		}
+		this.road_id = 0;
+		this.road_list = {};
+	},
 
-		this.update(x, y+1);
-		this.update(x, y-1);
-		this.update(x+1, y);
-		this.update(x-1, y);
+	remove: function( road ){
+		var coord = View.point2coord( road.x, road.y );
+		Simulator.map.removeChild(road);
+		delete this.road_list[road.id];
+		Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+
+		this.update(coord.x, coord.y+1);
+		this.update(coord.x, coord.y-1);
+		this.update(coord.x+1, coord.y);
+		this.update(coord.x-1, coord.y);
 
 		Car.imageUpdate();
 		User.imageUpdate();
 	},
 
 	checkRange: function(x, y){
-		return (0 <= x && x <= 1600/View.gridSpan && 0 <= y && y <= 800/View.gridSpan);
+		return (0 <= x && x < View.width && 0 <= y && y < View.height);
 	}
 }

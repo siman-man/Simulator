@@ -1,10 +1,9 @@
 Simulator::Application.routes.draw do
-  resources :wirelesses
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
+  match 'simulator' => "wirelesses#index", :via => [:get, :post]
   root to: 'wirelesses#index'
 
   # Example of regular route:

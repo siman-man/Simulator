@@ -2,6 +2,8 @@ var Server = {
   node_size: 12,
   error_rssi: -150,
   node_speed: 5,
+  server_id: 0,
+  server_list: {},
 
   createCommunicationRangeCircle: function(x, y, color_opt, size_opt){
     var range = new createjs.Shape();
@@ -16,12 +18,20 @@ var Server = {
     return range;
   },
 
+  clear: function(){
+    for(var i in this.server_list){
+      var server = this.server_list[i];
+      this.remove(server);
+    }
+    this.server_id = 0;
+    this.server_list = {};
+  },
+
   create: function(x, y){
-    var WS = Simulator;
     var server = new createjs.Bitmap('/assets/server.jpeg');
     server.ob_type = "access_point"
-    server.id = WS.server_id;
-    WS.server_id++;
+    server.id = this.server_id;
+    this.server_id++;
 
     server.drag = false;
     server.onPress = Library.mousePressHandler;
@@ -29,12 +39,12 @@ var Server = {
     server.x = x * View.gridSpan; server.y = y * View.gridSpan;
     server.tx_power = 0.280;
 
-    server.neighbor_server_list = {};
+    server.neighbor_list = {};
     server.neighbor_rssi_list = {};
     server.edge_list = {};
     server.article_list = {};
     server.article_count = 0;
-    WS.map.addChild(server);
+    Simulator.map.addChild(server);
 
     server.status = ServerStatus.init();
 
@@ -42,14 +52,14 @@ var Server = {
     this.addNeighborServer(server);
     this.addServer(server);
 
-    WS.server_list[server.id] = server;
-    WS.field[y][x] = { obj: server, type: 'server', cost: 9999, pf: 2 };
+    this.server_list[server.id] = server;
+    Simulator.field[y][x] = { obj: server, type: 'server', cost: 9999, pf: 2 };
 
     return server;
   },
 
   recievePacket: function(packet){
-    var server = Simulator.server_list[packet.dest.id];
+    var server = Server.server_list[packet.dest.id];
     var article = packet.data;
 
     server.article_list[article.id] = article;
@@ -59,17 +69,17 @@ var Server = {
 
   addServer: function(node){
     var WS = Simulator;
-    for(id in WS.server_list){
-      WS.server_list[id].neighbor_server_list[node.id] = node;
+    for(id in this.server_list){
+      this.server_list[id].neighbor_list[node.id] = node;
       var line = new createjs.Shape();
       line.color = "green";
       line.text = new createjs.Text("", "14px Arial", "#ff7700");
-      line.text.x = (WS.server_list[id].x + node.x) * 0.5;
-      line.text.y = (WS.server_list[id].y + node.y) * 0.5;
+      line.text.x = (this.server_list[id].x + node.x) * 0.5;
+      line.text.y = (this.server_list[id].y + node.y) * 0.5;
       line.textAlign = "left";
       line.text.textBaseLine = "middle";
       WS.map.addChild(line.text);
-      WS.server_list[id].edge_list[node.id] = line;
+      this.server_list[id].edge_list[node.id] = line;
       WS.map.addChild(line);
     }
   },
@@ -77,13 +87,13 @@ var Server = {
   // nodeのneighborをserver_listから取得して追加を行う
   addNeighborServer: function(node){
     var WS = Simulator;
-    for(id in WS.server_list){
-      node.neighbor_server_list[id] = WS.server_list[id];
+    for(id in this.server_list){
+      node.neighbor_list[id] = this.server_list[id];
       var line = new createjs.Shape();
       line.text = new createjs.Text("", "14px Arial", "#ff7700");
       line.textAlign = "left";
-      line.text.x = (WS.server_list[id].x + node.x) * 0.5;
-      line.text.y = (WS.server_list[id].y + node.y) * 0.5;
+      line.text.x = (this.server_list[id].x + node.x) * 0.5;
+      line.text.y = (this.server_list[id].y + node.y) * 0.5;
       line.text.textBaseLine = "middle";
       WS.map.addChild(line.text);
       node.edge_list[id] = line;
@@ -120,11 +130,11 @@ var Server = {
   update: function(node){
     var WS = Simulator;
 
-    for(id in WS.server_list){
-      var node = WS.server_list[id];
+    for(id in this.server_list){
+      var node = this.server_list[id];
   
-      for(id in node.neighbor_server_list){
-        var neighbor = node.neighbor_server_list[id];
+      for(id in node.neighbor_list){
+        var neighbor = node.neighbor_list[id];
         var s1 = node.status.current;
         var s2 = neighbor.status.current;
         if(false && this.checkConnectionNeighbor(node, neighbor) && s1 == 'active' && s2 == 'active'){
@@ -136,28 +146,28 @@ var Server = {
     }
   },
 
-  remove: function(x, y){
+  remove: function(server){
     console.log("remove server =>");
-    var server = Simulator.field[y][x].obj;
+    var coord = View.point2coord(server.x, server.y);
+    
     this.removeNeighborNode(server.id);
-    delete Simulator.server_list[server.id];
-    delete Simulator.field[y][x];
+    delete this.server_list[server.id];
+    delete Simulator.field[coord.y][coord.x];
     Simulator.map.removeChild(server);
   },
 
   removeNeighborNode: function(remove_id){
     var WS = Simulator;
-    console.log(remove_id)
 
-    for(id in WS.server_list){
+    for(id in this.server_list){
       if(id != remove_id){
-        WS.map.removeChild(WS.server_list[remove_id].edge_list[id].text);
-        WS.map.removeChild(WS.server_list[remove_id].edge_list[id]);
-        WS.map.removeChild(WS.server_list[id].edge_list[remove_id].text);
-        WS.map.removeChild(WS.server_list[id].edge_list[remove_id]);
-        delete WS.server_list[id].edge_list[remove_id];
-        delete WS.server_list[remove_id].edge_list[id];
-        delete WS.server_list[id].neighbor_server_list[remove_id];
+        WS.map.removeChild(this.server_list[remove_id].edge_list[id].text);
+        WS.map.removeChild(this.server_list[remove_id].edge_list[id]);
+        WS.map.removeChild(this.server_list[id].edge_list[remove_id].text);
+        WS.map.removeChild(this.server_list[id].edge_list[remove_id]);
+        delete this.server_list[id].edge_list[remove_id];
+        delete this.server_list[remove_id].edge_list[id];
+        delete this.server_list[id].neighbor_list[remove_id];
       }
     }
   },
@@ -167,8 +177,8 @@ var Server = {
     var line = node.edge_list[neighbor.id].graphics;
     line.clear();
     var text = node.edge_list[neighbor.id].text;
-    text.x = (WS.server_list[neighbor.id].x + node.x) * 0.5 - 10;
-    text.y = (WS.server_list[neighbor.id].y + node.y) * 0.5;
+    text.x = (this.server_list[neighbor.id].x + node.x) * 0.5 - 10;
+    text.y = (this.server_list[neighbor.id].y + node.y) * 0.5;
     var color = color_opt || "green";
     line.beginStroke(color);
     line.moveTo(node.x, node.y);
@@ -211,20 +221,6 @@ var Server = {
     var Pr = (Pt*Gt*Gr*(ht*ht)*(hr*hr))/Math.pow(d, 4)*L;
     var rssi = 10 * this.log10(Pr/0.001) * 100;
     return Math.round(rssi)/100;
-  },
-
-  calcRnageSize: function(node){
-    var Pt = node.tx_power;
-    var Gt = 1.0;
-    var Gr = 1.0;
-    var ht = 1.0;
-    var hr = 1.0;
-    var L = 1.0;
-  
-    var Pr = 3.162277660168379e-10; // -65dBmを指定
-
-    var d = Math.sqrt(Math.sqrt((Pt*Gt*Gr*(ht*ht)*(hr*hr))/(Pr*L)));
-    return d;
   },
 
   log10: function(x){

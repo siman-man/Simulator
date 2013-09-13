@@ -2,7 +2,8 @@ var View = {
 	packet_color: "yellow",
 	packet_size: 2,
 	gridSpan: 30,
-	Width: 1600,
+	width: Simulator.canvas_width/30|0+1,
+	height: Simulator.canvas_height/30|0+1,
 	propagation: [],
 
 	init: function(){
