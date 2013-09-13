@@ -7,7 +7,7 @@ var Server = {
     var range = new createjs.Shape(),
         color = color_opt || "blue",
         size  = size_opt || "180";
-        
+
     range.x = x;
     range.y = y;
     range.alpha = 0.05;
