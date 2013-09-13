@@ -4,6 +4,7 @@ var User = {
 
   create: function( x, y, type ){
     var user = new createjs.Bitmap('/assets/user.gif');
+    
     user.type = type;
     user.id = this.user_id;
     this.user_id++;
@@ -26,16 +27,19 @@ var User = {
   },
 
   update: function(){
-    var max_rssi, rssi;
+    var max_rssi, rssi, i, node, id, user;
 
-    for(var id in this.user_list){
+    for( id in this.user_list ){
       max_rssi = -120;
-      var user = this.user_list[id];
+      user = this.user_list[id];
+      
       if(Simulator.map.contains(user)){
         this.moveUser(user);
-        for(var i in Server.server_list){
-          var node = Server.server_list[i];
+        
+        for( i in Server.server_list ){
+          node = Server.server_list[i];
           rssi = this.checkConnectionAccessPoint(user, node)
+          
           if(rssi > max_rssi){
             this.drawEdge(user, node, "orange");
             max_rssi = rssi;
@@ -48,10 +52,13 @@ var User = {
   },
 
   clear: function(){
-    for(var i in this.user_list){
-      var user = this.user_list[i];
+    var i, user;
+    
+    for( i in this.user_list ){
+      user = this.user_list[i];
       this.remove(user);
     }
+
     this.user_id = 0;
     this.user_list = {};
   },
@@ -65,8 +72,9 @@ var User = {
   },
 
   imageUpdate: function(){
-    for(var id in this.user_list){
-      var user = this.user_list[id];
+    var user, id;
+    for( id in this.user_list ){
+      user = this.user_list[id];
       Simulator.map.removeChild(user);
       Simulator.map.addChild(user);
     }
@@ -84,9 +92,10 @@ var User = {
   },
 
   findConnectedServer: function(user){
-    var connected_list = [];
-    var rssi;
-    for(var id in Server.server_list){
+    var connected_list = [],
+        rssi, id;
+
+    for( id in Server.server_list ){
       rssi = this.checkConnectionAccessPoint(user, Server.server_list[id])
       
       if(rssi != -200){
@@ -98,21 +107,20 @@ var User = {
   },
 
   checkConnectionAccessPoint: function(user, server){
-  	var WS = Simulator;
-  	var dist = Server.calcDistance(user.x, user.y, server.x, server.y);
-  	var rssi1 = Server.calcRssiTwoRay(server, dist);       // 自分から相手に届くRSSIの値
+  	var dist = Server.calcDistance(user.x, user.y, server.x, server.y),
+  	    rssi1 = Server.calcRssiTwoRay(server, dist);       // 自分から相手に届くRSSIの値
 
   	return (rssi1 >= -65)? rssi1 : -200;
 	},
 
 	drawEdge: function(user, node, color_opt){
-		var WS = Simulator;
-  	var line = user.connection.graphics;
-  	line.clear();
-  	var color = color_opt || "orange";
+  	var line = user.connection.graphics,
+        color = color_opt || "orange";
+  	
+    line.clear();
   	line.setStrokeStyle(3).beginStroke(color);
-  	line.moveTo(user.x + 15, user.y + 15);
-  	line.lineTo(node.x + 15, node.y + 15);
+  	line.moveTo(user.x + View.gridSpan/2, user.y + View.gridSpan/2);
+  	line.lineTo(node.x + View.gridSpan/2, node.y + View.gridSpan/2);
 	},
 
 	clear_edge: function(user){
@@ -121,10 +129,12 @@ var User = {
 	},
 
   jobless_list: function(){
-    var list = [];
-    for(var i in this.user_list){
-      var user = this.user_list[i];
-      if(user.type == 'worker' && user.office === undefined){
+    var list = [],
+        i, user;
+
+    for( i in this.user_list ){
+      user = this.user_list[i];
+      if(user.type === 'worker' && user.office === undefined){
         list.push(user);
       }
     }
