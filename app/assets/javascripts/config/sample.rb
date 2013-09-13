@@ -3,6 +3,8 @@ WebSimulator.define do
     t.pos(x: 3, y: 4)
   end
 
+  create(:server){|t| t.pos( x: 5, y: 5 )}
+
   10.times do |index|
     create :user do |t|
       t.pos(x: 10+index, y: 10)

@@ -89,7 +89,6 @@ var Simulator = {
       switch(draw_type){
         case 'server':
           Server.create( x, y );
-          View.animation(Propagation.calc(x, y));
           break;
         case 'user':
           User.create( x, y, 'worker' );
