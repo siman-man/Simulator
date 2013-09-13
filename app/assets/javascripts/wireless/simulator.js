@@ -21,11 +21,11 @@
 
 
 	init: function(){
-    for(var y = 0; y < (this.canvas_height/30)+1; y++){
+    for(var y = 0, height = (this.canvas_height/30)+1; y < height; y++){
       this.field[y] = [];
       this.connection_list[y] = [];
 
-      for(var x = 0; x < (this.canvas_width/30)+1; x++){
+      for(var x = 0, wdith = (this.canvas_width)/30)+1; x < width; x++){
         this.field[y][x] = { obj: undefined, type: 'normal', cost: 1, pf: 1 };
         this.connection_list[y][x] = {};
       }
