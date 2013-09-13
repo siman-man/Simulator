@@ -27,25 +27,28 @@ var View = {
 	},
 
 	drawGrid: function(){
-		var span = this.gridSpan;
-		var WS = Simulator;
+		var span = this.gridSpan, 
+				vline,
+				hline, 
+				color,
+				i;
 
-		for(var i = 0; i <= 1600; i += span){
-			var vline = new createjs.Shape();
-			var color = "brack";
+		for(i = 0; i <= Simulator.canvas_height; i += span){
+			vline = new createjs.Shape();
+			color = "brack";
 			vline.graphics.beginStroke(color);
-			vline.graphics.moveTo(i, 0);
-			vline.graphics.lineTo(i, WS.canvas_height * 2);
-			WS.map.addChild(vline);
+			vline.graphics.moveTo(0, i);
+			vline.graphics.lineTo(Simulator.canvas_width * 2, i);
+			Simulator.map.addChild(vline);
 		}
 
-		for(var i = 0; i <= 800; i += span){
-			var hline = new createjs.Shape();
-			var color = "brack";
+		for(i = 0; i <= Simulator.canvas_width; i += span){
+			hline = new createjs.Shape();
+			color = "brack";
 			hline.graphics.beginStroke(color);
-			hline.graphics.moveTo(0, i);
-			hline.graphics.lineTo(WS.canvas_width*2, i);
-			WS.map.addChild(hline);
+			hline.graphics.moveTo(i, 0);
+			hline.graphics.lineTo(i, Simulator.canvas_height*2);
+			Simulator.map.addChild(hline);
 		}
 	},
 
@@ -54,8 +57,8 @@ var View = {
 	},
 
 	point2coordCar: function( px, py, direct){
-		var rest_x = px%this.gridSpan;
-		var rest_y = py%this.gridSpan;
+		var rest_x = px%this.gridSpan,
+		    rest_y = py%this.gridSpan;
 
 		if(rest_x == 0 && rest_y == 0){
 			return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 };
@@ -72,11 +75,12 @@ var View = {
 	},
 
 	animation: function(cell_list){
+		var cell, shape, x, y;
 		while(cell_list.length > 0){
-			var cell = cell_list.shift();
-			var shape = new createjs.Shape();
-			var x = cell.x * this.gridSpan;
-			var y = cell.y * this.gridSpan;
+			cell = cell_list.shift();
+			shape = new createjs.Shape();
+			x = cell.x * this.gridSpan;
+			y = cell.y * this.gridSpan;
       shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x, y, 30, 30);
       Simulator.map.addChild(shape);
       View.propagation[cell.y][cell.x] = shape;
@@ -84,10 +88,11 @@ var View = {
 	},
 
 	clean: function(){
-		for(var y = 0; y < (Simulator.canvas_height/30)+1; y++){
-      for(var x = 0; x < (Simulator.canvas_width/30)+1; x++){
+		var x, y, shape;
+		for(y = 0; y < this.height; y++){
+      for(x = 0; x < this.width; x++){
       	if(this.propagation[y][x] !== undefined){
-      		var shape = this.propagation[y][x];
+      		shape = this.propagation[y][x];
       		Simulator.map.removeChild(shape);
       		delete this.propagation[y][x];
       	}

@@ -1,5 +1,4 @@
 var User = {
-  user_size: 6,
   user_id: 0,
   user_list: [],
 

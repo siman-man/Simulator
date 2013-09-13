@@ -1,14 +1,13 @@
 var Server = {
-  node_size: 12,
   error_rssi: -150,
-  node_speed: 5,
   server_id: 0,
   server_list: {},
 
   createCommunicationRangeCircle: function(x, y, color_opt, size_opt){
-    var range = new createjs.Shape();
-    var color = color_opt || "blue";
-    var size  = size_opt || "180";
+    var range = new createjs.Shape(),
+        color = color_opt || "blue",
+        size  = size_opt || "180";
+        
     range.x = x;
     range.y = y;
     range.alpha = 0.05;
@@ -53,7 +52,7 @@ var Server = {
     this.addServer(server);
 
     this.server_list[server.id] = server;
-    Simulator.field[y][x] = { obj: server, type: 'server', cost: 9999, pf: 2 };
+    Simulator.field[y][x] = { x: x, y: y, obj: server, type: 'server', cost: 9999, pf: 2 };
 
     return server;
   },

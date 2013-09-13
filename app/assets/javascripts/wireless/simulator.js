@@ -16,11 +16,11 @@ var Simulator = {
   frame_time: 1000/30,
 
   init: function(){
-    for(var y = 0; y < (this.canvas_height/30)+1; y++){
+    for(var y = 0; y < View.height; y++){
       this.field[y] = [];
       this.connection_list[y] = [];
 
-      for(var x = 0; x < (this.canvas_width/30)+1; x++){
+      for(var x = 0; x < View.width; x++){
         this.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
         this.connection_list[y][x] = {};
       }
@@ -88,28 +88,28 @@ var Simulator = {
     if(draw_type !== undefined && draw_object.obj === undefined){
       switch(draw_type){
         case 'server':
-        Server.create( x, y );
-        View.animation(Propagation.calc(x, y));
-        break;
+          Server.create( x, y );
+          View.animation(Propagation.calc(x, y));
+          break;
         case 'user':
-        User.create( x, y, 'worker' );
-        break;
+          User.create( x, y, 'worker' );
+          break;
         case 'road':
-        Street.create(x, y, true);
-        break;
+          Street.create(x, y, true);
+          break;
         case 'tree':
-        Tree.create( x, y );
-        break;
+          Tree.create( x, y );
+          break;
         case 'home':
-        Home.create( x, y );
-        break;
+          Home.create( x, y );
+          break;
         case 'car':
-        Car.create( x, y );
-        break;
+          Car.create( x, y );
+          break;
         case 'office':
-        Office.create( x, y );
+          Office.create( x, y );
         default:
-        break;
+          break;
       }
     }else if(delete_type !== undefined && draw_object.obj !== undefined){
       switch(delete_type){
