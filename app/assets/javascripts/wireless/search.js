@@ -3,41 +3,42 @@ var Search = {
 	search_list: [],
 
 	find: function(from, to){
-		var close_list = [];
-		var route = [];
-		var check_list = [];
+		var close_list = [],
+				route = [],
+				check_list = [],
+				shape = new createjs.Shape(),
+    		sx = to.x * View.gridSpan,
+    		sy = to.y * View.gridSpan,
+    		open_list = [ { x: from.x, y: from.y, cost: 0, dist: 0 } ],
+    		i, j, px, py,
+    		cell, neighbor_list, neighbor,
+    		h, s, c, elem;
 
-		var shape = new createjs.Shape();
-    var sx = to.x * View.gridSpan;
-    var sy = to.y * View.gridSpan;
     shape.graphics.beginFill('rgba(255,0,0,0.3)').drawRect(sx, sy, 30, 30);
     Simulator.map.addChild(shape);
     this.point = shape;
 		
-		for(var i = 0; i < View.height; i++){
+		for( i = 0; i < View.height; i++){
 			close_list[i] = [];
 			check_list[i] = [];
-			for(var j = 0; j < View.width; j++){
+			for( j = 0; j < View.width; j++){
 				close_list[i][j] = false;
 				check_list[i][j] = false;
 			}
 		}
 
-		if(from == undefined || to == undefined) return [];
+		if(from === undefined || to === undefined) return [];
 
-		var open_list = [ { x: from.x, y: from.y, cost: 0, dist: 0 } ];
-		
 		console.log('start path search');
 
 		while(open_list.length > 0){
-			var cell = open_list.shift();
+			cell = open_list.shift();
 			close_list[cell.y][cell.x] = cell;
 			check_list[cell.y][cell.x] = true;
 
 			if(cell.x == to.x && cell.y == to.y){
-				var direct = 0;
-				var px = cell.x;
-				var py = cell.y;
+				px = cell.x;
+				py = cell.y;
 
 				while(cell.x != from.x || cell.y != from.y){
 					route.unshift({ x: cell.x * View.gridSpan, y: cell.y * View.gridSpan });
@@ -46,16 +47,16 @@ var Search = {
 				break;
 			}
 
-			var neighbor_list = this.getNeighbor(cell.x, cell.y);
+			neighbor_list = this.getNeighbor(cell.x, cell.y);
 
-			for(var i in neighbor_list){
-				var neighbor = neighbor_list[i];
+			for( i in neighbor_list ){
+				neighbor = neighbor_list[i];
 
 				if(!check_list[neighbor.y][neighbor.x]){
-					var h = Math.abs(neighbor.x - to.x) + Math.abs(neighbor.y - to.y);
-					var c = cell.cost + neighbor.cost;
-					var s = c+h;
-					var elem = { x: neighbor.x, y: neighbor.y, cost: c, dist: s, parent: { x: cell.x, y: cell.y } };
+					h = Math.abs(neighbor.x - to.x) + Math.abs(neighbor.y - to.y);
+					c = cell.cost + neighbor.cost;
+					s = c+h;
+					elem = { x: neighbor.x, y: neighbor.y, cost: c, dist: s, parent: { x: cell.x, y: cell.y } };
 					open_list.push(elem);
 					check_list[neighbor.y][neighbor.x] = true;
 				}

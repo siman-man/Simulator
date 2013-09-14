@@ -106,7 +106,6 @@ var Server = {
   checkConnectionNeighbor: function(my, neighbor){
     var dist = this.calcDistance(my.x, my.y, neighbor.x, neighbor.y),
         rssi1 = this.calcRssiTwoRay(my, dist),       // 自分から相手に届くRSSIの値
-    //var rssi2 = calcRssiTwoRay(neighbor, dist); // 相手から自分に届くRSSIの値
         rssi2 = neighbor.neighbor_rssi_list[my.id];
   
     my.neighbor_rssi_list[neighbor.id] = (rssi1 >= -90)? rssi1 : this.error_rssi;

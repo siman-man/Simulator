@@ -5,6 +5,7 @@ var Tree = {
 	create: function(x, y){
 		console.log('tree created');
 		var tree = new createjs.Bitmap('/assets/tree.gif');
+
 		tree.id = this.tree_id;
 		this.tree_id++;
 		tree.type = 'tree';
@@ -18,8 +19,10 @@ var Tree = {
 	},
 
 	clear: function(){
-		for(var i in this.tree_list){
-			var tree = this.tree_list[i];
+		var i, tree;
+
+		for( i in this.tree_list ){
+			tree = this.tree_list[i];
 			this.remove(tree);
 		}
 		this.tree_id = 0;

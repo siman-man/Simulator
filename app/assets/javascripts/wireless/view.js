@@ -7,20 +7,20 @@ var View = {
 	propagation: [],
 
 	init: function(){
- 		for(var y = 0; y < (Simulator.canvas_height/30)+1; y++){
+		var x, y;
+ 		for( y = 0; y < this.height; y++ ){
       this.propagation[y] = [];
 
-      for(var x = 0; x < (Simulator.canvas_width/30)+1; x++){
+      for(x = 0; x < this.width; x++){
       }
     }
 	},
 
 	movePacket: function(packet, speed){
-		var dest = packet.dest;
-
-		var dx = (dest.x) - packet.x;
-		var dy = (dest.y) - packet.y;
-		var radian = Math.atan2(dy, dx);
+		var dest = packet.dest,
+				dx = (dest.x) - packet.x,
+				dy = (dest.y) - packet.y,
+				radian = Math.atan2(dy, dx);
 
 		packet.x += Math.cos(radian) * speed;
 		packet.y += Math.sin(radian) * speed;

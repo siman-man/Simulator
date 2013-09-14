@@ -107,6 +107,7 @@ var MoveModel = {
 
   shuffle: function(array){
     var t, j, k, i, size;
+    
     for(i = 0, size = array.length; i < size; i++){
       j = Math.random() * size | 0;
       t = array[j];

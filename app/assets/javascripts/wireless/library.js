@@ -1,18 +1,18 @@
 var Library = {
   mousePressHandler: function(e) {
     console.log("mousePressHandler =>");
-    var delete_type = $("input[name='delete_object']:checked").val();
+
+    var delete_type = $("input[name='delete_object']:checked").val(),
+        node = e.target;
 
     console.log(delete_type);
     if(delete_type != "server"){
-      var node = e.target;
-      var WS = Simulator;
 
-      WS.operation_flag = true;
+      Simulator.operation_flag = true;
       node.offsetX = node.x - e.stageX;
       node.offsetY = node.y - e.stageY; 
 
-      WS.selected_target = node.id;
+      Simulator.selected_target = node.id;
 
       e.onMouseMove = Library.mouseMoveHandler;
       e.onMouseUp = Library.mouseUpHandler;
@@ -21,11 +21,11 @@ var Library = {
 
   mouseMoveHandler: function(e){
     console.log("mouseMoveHandler =>");
-    var node = e.target;
-    var x = e.stageX + node.offsetX;
-    var y = e.stageY + node.offsetY;
 
-    var coord = View.point2coord(x, y);
+    var node = e.target,
+        x = e.stageX + node.offsetX,
+        y = e.stageY + node.offsetY,
+        coord = View.point2coord(x, y);
 
     node.x = coord.x * View.gridSpan;
     node.y = coord.y * View.gridSpan;
@@ -34,19 +34,21 @@ var Library = {
   mouseUpHandler: function(e){
     console.log("mouseUpHandler =>");
     var node = e.target;
+
     Simulator.operation_flag = false;
   },
 
   sample: function(array, num){
     
-    if(array.length == 0) return [];
+    if(array.length === 0) return [];
 
-    var new_array = [];
-    var check_list = {};
-    var size = array.length;
+    var new_array = [],
+        check_list = {},
+        size = array.length,
+        i, index;
 
-    for(var i = 0; i < num; i++){
-      var index = Math.random() * size | 0;
+    for( i = 0; i < num; i++){
+      index = Math.random() * size | 0;
       while(check_list[index] !== undefined){
         index = Math.random() * size | 0;
       }

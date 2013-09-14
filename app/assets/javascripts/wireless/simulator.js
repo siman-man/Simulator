@@ -16,11 +16,13 @@ var Simulator = {
   frame_time: 1000/30,
 
   init: function(){
-    for(var y = 0; y < View.height; y++){
+    var x, y;
+
+    for( y = 0; y < View.height; y++ ){
       this.field[y] = [];
       this.connection_list[y] = [];
 
-      for(var x = 0; x < View.width; x++){
+      for( x = 0; x < View.width; x++ ){
         this.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
         this.connection_list[y][x] = {};
       }
@@ -63,9 +65,10 @@ var Simulator = {
   },
 
   getTime: function(time){
-    //var mil = createjs.Ticker.getTime();
     var mil = Simulator.time * 1000;
-    var sec = mil/1000 | 0;
+        sec = mil/1000 | 0,
+        hour, min;
+
     mil = (mil % 1000) | 0;
     if(mil < 10){
       mil = "00" + mil;
@@ -73,10 +76,11 @@ var Simulator = {
       mil = "0" + mil;
     }
 
-    var hour = sec/3600 | 0;
+    hour = sec/3600 | 0;
     if(hour < 10) hour = "0" + hour;
     sec %= 3600;
-    var min = sec/60 | 0;
+    
+    min = sec/60 | 0;
     if(min < 10) min = "0" + min;
     sec %= 60;
     if(sec < 10) sec = "0" + sec;
@@ -91,7 +95,7 @@ var Simulator = {
           Server.create( x, y );
           break;
         case 'user':
-          User.create( x, y, 'worker' );
+          User.create( x, y, 'normal' );
           break;
         case 'road':
           Street.create(x, y, true);
@@ -139,13 +143,12 @@ var Simulator = {
     console.log("onmousedown =>");
 
     if(!Simulator.operation_flag && Simulator.state.current != 'run'){
-      var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
-      var y = e.clientY - canvas.offsetTop + document.body.scrollTop;
-      var coord = View.point2coord(x, y);
-
-      var draw_type = $("input[name='draw_object']:checked").val();
-      var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = Simulator.field[coord.y][coord.x]; 
+      var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
+          y = e.clientY - canvas.offsetTop + document.body.scrollTop,
+          coord = View.point2coord(x, y),
+          draw_type = $("input[name='draw_object']:checked").val(),
+          delete_type = $("input[name='delete_object']:checked").val(),
+          draw_object = Simulator.field[coord.y][coord.x]; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }
@@ -154,15 +157,13 @@ var Simulator = {
   },
 
   onmousemove: function(e) {
-    var WS = Simulator;
-    if(WS.press_flag && !WS.operation_flag){
-      var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft;
-      var y = e.clientY - canvas.offsetTop + document.body.scrollTop;
-      var coord = View.point2coord(x, y);
-
-      var draw_type = $("input[name='draw_object']:checked").val();
-      var delete_type = $("input[name='delete_object']:checked").val();
-      var draw_object = WS.field[coord.y][coord.x]; 
+    if(Simulator.press_flag && !Simulator.operation_flag){
+      var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
+          y = e.clientY - canvas.offsetTop + document.body.scrollTop,
+          coord = View.point2coord(x, y),
+          draw_type = $("input[name='draw_object']:checked").val(),
+          delete_type = $("input[name='delete_object']:checked").val(),
+          draw_object = WS.field[coord.y][coord.x]; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }

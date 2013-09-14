@@ -3,9 +3,11 @@ var Home = {
 	home_list: {},
 
 	create: function(x, y, num){
-		var user_num = num || 1;
 		console.log('home created');
-		var home = new createjs.Bitmap('/assets/home.gif');
+		var user_num = num || 1,
+				home = new createjs.Bitmap('/assets/home.gif'),
+				resident, i;
+
 		home.id = this.home_id;
 		this.home_id++;
 		home.x = x * View.gridSpan; 
@@ -20,8 +22,8 @@ var Home = {
 				break;
 		}
 
-		for(var i in home.residents){
-			var resident = home.residents[i];
+		for( i in home.residents ){
+			resident = home.residents[i];
 			resident.home = home;
 			Simulator.map.removeChild(resident);
 		}
@@ -33,8 +35,10 @@ var Home = {
 	},
 
 	clear: function(){
-		for(var i in this.home_list){
-			var home = this.home_list[i];
+		var i, home;
+
+		for( i in this.home_list ){
+			home = this.home_list[i];
 			this.remove(home);
 		}
 		this.home_id = 0;
@@ -43,10 +47,11 @@ var Home = {
 
 	remove: function( home ){
 		console.log('home remove');
-		var coord = View.point2coord( home.x, home.y );
+		var coord = View.point2coord( home.x, home.y ),
+				i, resident;
 
-		for(var i in home.residents){
-			var resident = home.residents[i];
+		for( i in home.residents ){
+			resident = home.residents[i];
 			resident.home = undefined;
 		}
 

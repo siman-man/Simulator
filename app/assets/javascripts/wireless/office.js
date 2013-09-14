@@ -19,8 +19,10 @@ var Office = {
 	},
 
 	clear: function(){
-		for(var i in this.office_list){
-      var office = this.office_list[i];
+		var i, office;
+
+		for( i in this.office_list ){
+      office = this.office_list[i];
       this.remove(office);
     }
     this.office_id = 0;
@@ -28,11 +30,11 @@ var Office = {
 	},
 
 	hire: function(office){
-		var worker_list = Library.sample(User.jobless_list(), 1);
+		var worker_list = Library.sample(User.jobless_list(), 1),
+				i, worker;
 	
-		console.log(worker_list);
-		for(var i in worker_list){
-			var worker = worker_list[i];
+		for( i in worker_list){
+			worker = worker_list[i];
 			worker.office = office;
 			if(!Simulator.map.contains(worker)){
 				Simulator.map.addChild(worker);
@@ -45,10 +47,11 @@ var Office = {
 	remove: function(office){
 		console.log('office remove');
 
-		var coord = View.point2coord( office.x, office.y );
+		var coord = View.point2coord( office.x, office.y ),
+				i, worker;
 
-		for(var i in office.worker_list){
-			var worker = office.worker_list[i];
+		for( i in office.worker_list ){
+			worker = office.worker_list[i];
 			worker.office = undefined;
 		}
 

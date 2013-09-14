@@ -50,4 +50,24 @@ var FSM = {
 			},
 		});
 	},
+
+	normal: function(user){
+		return new StateMachine.create({
+			initial: 'stand',
+			events: [
+				{ name: 'walking',  from: 'stand',  to: 'walk' },
+				{ name: 'stop', from: 'walk', to: 'stand' },
+			],
+
+			callbacks: {
+				onwalk: function(event, from, to, user) {
+					console.log('user working =>'); 
+				},
+
+				onstand: function(event, from, to, user){
+					console.log('user stand =>');
+				}
+			},
+		});
+	},
 }

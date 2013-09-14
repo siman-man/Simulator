@@ -26,24 +26,28 @@ var Car = {
 	},
 
 	update: function(){
-		for(var id in this.car_list){
-			var car = this.car_list[id];
+		var id, car;
+
+		for( id in this.car_list ){
+			car = this.car_list[id];
 			this.move(car);
 		}
 	},
 
 	imageUpdate: function(){
-		for(var id in this.car_list){
-			var car = this.car_list[id];
+		var id, car;
+
+		for( id in this.car_list ){
+			car = this.car_list[id];
 			Simulator.map.removeChild(car);
 			Simulator.map.addChild(car);
 		}
 	},
 
 	move: function(car){
-		var direct = car.direct;
-		var coord = View.point2coordCar(car.x, car.y, car.direct);
-		var road;
+		var direct = car.direct,
+				coord = View.point2coordCar(car.x, car.y, car.direct),
+				road;
 
 		switch(direct){
 			case 0:

@@ -12,8 +12,9 @@ var Street = {
 	create: function(x, y){
 		console.log("create road =>");
 
-		var type = this.selectRoadType(x, y);
-		var road = new createjs.Bitmap('/assets/road' + type +'.jpeg');
+		var type = this.selectRoadType(x, y),
+				road = new createjs.Bitmap('/assets/road' + type +'.jpeg');
+		
 		road.id = this.road_id;
 		this.road_id++;
 		road.x = x * 30;
@@ -44,12 +45,11 @@ var Street = {
 
 	update: function( x, y ){
 		if(this.checkRange(x, y) && Simulator.field[y][x].type == 'road'){
-			var remove_road = Simulator.field[y][x].obj;
-			Simulator.map.removeChild(remove_road);
+			Simulator.map.removeChild(Simulator.field[y][x].obj);
 			delete Simulator.field[y][x];
 
-			var type = this.selectRoadType(x, y);
-			var road = new createjs.Bitmap('/assets/road' + type + '.jpeg');
+			var type = this.selectRoadType(x, y),
+					road = new createjs.Bitmap('/assets/road' + type + '.jpeg');
 
 			road.x = x * 30;
 			road.y = y * 30;
@@ -60,8 +60,10 @@ var Street = {
 	},
 
 	clear: function(){
-		for(var y = 0; y < View.height; y++){
-			for(var x = 0; x < View.width; x++){
+		var x, y;
+
+		for( y = 0; y < View.height; y++ ){
+			for( x = 0; x < View.width; x++ ){
 				if(Simulator.field[y][x].type == 'road'){
 					Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 				}
