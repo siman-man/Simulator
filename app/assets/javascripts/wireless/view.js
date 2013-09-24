@@ -1,9 +1,10 @@
+var gridSize = 30;
+
 var View = {
 	packet_color: "yellow",
 	packet_size: 2,
-	gridSpan: 30,
-	width: Simulator.canvas_width/30|0+1,
-	height: Simulator.canvas_height/30|0+1,
+	width: Simulator.canvas_width/gridSize|0+1,
+	height: Simulator.canvas_height/gridSize|0+1,
 	propagation: [],
 
 	init: function(){
@@ -27,7 +28,7 @@ var View = {
 	},
 
 	drawGrid: function(){
-		var span = this.gridSpan, 
+		var span = gridSize, 
 				vline,
 				hline, 
 				color,
@@ -53,24 +54,24 @@ var View = {
 	},
 
 	point2coord: function( px, py ){
-		return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 };
+		return { x: px/gridSize|0, y: py/gridSize|0 };
 	},
 
 	point2coordCar: function( px, py, direct){
-		var rest_x = px%this.gridSpan,
-		    rest_y = py%this.gridSpan;
+		var rest_x = px%gridSize,
+		    rest_y = py%gridSize;
 
 		if(rest_x == 0 && rest_y == 0){
-			return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 };
+			return { x: px/gridSize|0, y: py/gridSize|0 };
 		}
 
 		switch(direct){
 			case 2:
-				return { x: (px/this.gridSpan|0) + 1, y: py/this.gridSpan|0 };
+				return { x: (px/gridSize|0) + 1, y: py/gridSize|0 };
 			case 3:
-				return { x: px/this.gridSpan|0, y: (py/this.gridSpan|0) + 1 };
+				return { x: px/gridSize|0, y: (py/gridSize|0) + 1 };
 			default:
-				return { x: px/this.gridSpan|0, y: py/this.gridSpan|0 };
+				return { x: px/gridSize|0, y: py/gridSize|0 };
 		}
 	},
 
@@ -79,9 +80,9 @@ var View = {
 		while(cell_list.length > 0){
 			cell = cell_list.shift();
 			shape = new createjs.Shape();
-			x = cell.x * this.gridSpan;
-			y = cell.y * this.gridSpan;
-      shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x, y, 30, 30);
+			x = cell.x * gridSize;
+			y = cell.y * gridSize;
+      shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x, y, gridSize, gridSize);
       Simulator.map.addChild(shape);
       View.propagation[cell.y][cell.x] = shape;
 		}

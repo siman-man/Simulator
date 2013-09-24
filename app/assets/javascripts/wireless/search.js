@@ -7,14 +7,14 @@ var Search = {
 				route = [],
 				check_list = [],
 				shape = new createjs.Shape(),
-    		sx = to.x * View.gridSpan,
-    		sy = to.y * View.gridSpan,
+    		sx = to.x * gridSize,
+    		sy = to.y * gridSize,
     		open_list = [ { x: from.x, y: from.y, cost: 0, dist: 0 } ],
     		i, j, px, py,
     		cell, neighbor_list, neighbor,
     		h, s, c, elem;
 
-    shape.graphics.beginFill('rgba(255,0,0,0.3)').drawRect(sx, sy, 30, 30);
+    shape.graphics.beginFill('rgba(255,0,0,0.3)').drawRect(sx, sy, gridSize, gridSize);
     Simulator.map.addChild(shape);
     this.point = shape;
 		
@@ -41,7 +41,7 @@ var Search = {
 				py = cell.y;
 
 				while(cell.x != from.x || cell.y != from.y){
-					route.unshift({ x: cell.x * View.gridSpan, y: cell.y * View.gridSpan });
+					route.unshift({ x: cell.x * gridSize, y: cell.y * gridSize });
 					cell = close_list[cell.parent.y][cell.parent.x];
 				}
 				break;

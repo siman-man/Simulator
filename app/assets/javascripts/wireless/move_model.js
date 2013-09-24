@@ -158,8 +158,8 @@ var MoveModel = {
   },
 
   checkArrive: function(user){
-    var dx = user.x - user.way_point.x * View.gridSpan,
-        dy = user.y - user.way_point.y * View.gridSpan;
+    var dx = user.x - user.way_point.x * gridSize,
+        dy = user.y - user.way_point.y * gridSize;
     
     return ( dx === 0 && dy === 0 )? true : false;
   },

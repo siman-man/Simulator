@@ -27,8 +27,8 @@ var Library = {
         y = e.stageY + node.offsetY,
         coord = View.point2coord(x, y);
 
-    node.x = coord.x * View.gridSpan;
-    node.y = coord.y * View.gridSpan;
+    node.x = coord.x * gridSize;
+    node.y = coord.y * gridSize;
   },
 
   mouseUpHandler: function(e){

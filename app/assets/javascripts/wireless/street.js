@@ -17,8 +17,8 @@ var Street = {
 		
 		road.id = this.road_id;
 		this.road_id++;
-		road.x = x * 30;
-		road.y = y * 30;
+		road.x = x * gridSize;
+		road.y = y * gridSize;
 		road.type = type;
 
 		Simulator.map.addChild(road);

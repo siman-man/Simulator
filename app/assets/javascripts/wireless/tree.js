@@ -9,8 +9,8 @@ var Tree = {
 		tree.id = this.tree_id;
 		this.tree_id++;
 		tree.type = 'tree';
-		tree.x = x * View.gridSpan; 
-		tree.y = y * View.gridSpan;
+		tree.x = x * gridSize; 
+		tree.y = y * gridSize;
 
 		Simulator.map.addChild(tree);
 		Simulator.field[y][x] = { x: x, y: y, obj: tree, type: 'tree', cost: 100, pf: 3 };

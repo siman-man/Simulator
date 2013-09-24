@@ -29,7 +29,12 @@ var Server = {
   },
 
   create: function(x, y){
-    var server = new createjs.Bitmap('/assets/server.jpeg');
+    //var server = new createjs.Bitmap('/assets/server.jpeg');
+    var server = new createjs.Shape();
+    server.x = x * gridSize;
+    server.y = y * gridSize;
+
+    server.graphics.beginFill('rgba(255,0,0,0.8)').drawRect(0, 0, gridSize, gridSize);
     server.ob_type = "access_point"
     server.id = this.server_id;
     this.server_id++;
@@ -37,7 +42,6 @@ var Server = {
     server.drag = false;
     server.onPress = Library.mousePressHandler;
 
-    server.x = x * View.gridSpan; server.y = y * View.gridSpan;
     server.tx_power = 0.280;
 
     server.neighbor_list = {};

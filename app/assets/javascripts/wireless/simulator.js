@@ -12,8 +12,7 @@ var Simulator = {
   packet_id: 0,
   article_id: 0,
   time: 0,
-  per_frame: 30,
-  frame_time: 1000/30,
+  per_frame: 60,
 
   init: function(){
     var x, y;
@@ -163,7 +162,7 @@ var Simulator = {
           coord = View.point2coord(x, y),
           draw_type = $("input[name='draw_object']:checked").val(),
           delete_type = $("input[name='delete_object']:checked").val(),
-          draw_object = WS.field[coord.y][coord.x]; 
+          draw_object = Simulator.field[coord.y][coord.x]; 
 
       Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
     }

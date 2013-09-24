@@ -4,6 +4,8 @@ var User = {
 
   create: function( x, y, type ){
     var user = new createjs.Bitmap('/assets/user.gif');
+    var user = new createjs.Shape();
+    user.graphics.beginFill('rgba(0,0,0,1.0)').drawRect(0, 0, gridSize, gridSize);
     
     user.type = type;
     user.id = this.user_id;
@@ -13,8 +15,8 @@ var User = {
     user.route_list = [];
 
     user.onPress = Library.mousePressHandler;
-    user.x = x * View.gridSpan;
-    user.y = y * View.gridSpan;
+    user.x = x * gridSize;
+    user.y = y * gridSize;
 
     user.state = FSM.normal(user);
 
@@ -119,8 +121,8 @@ var User = {
   	
     line.clear();
   	line.setStrokeStyle(3).beginStroke(color);
-  	line.moveTo(user.x + View.gridSpan/2, user.y + View.gridSpan/2);
-  	line.lineTo(node.x + View.gridSpan/2, node.y + View.gridSpan/2);
+  	line.moveTo(user.x + gridSize/2, user.y + gridSize/2);
+  	line.lineTo(node.x + gridSize/2, node.y + gridSize/2);
 	},
 
 	clear_edge: function(user){

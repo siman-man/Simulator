@@ -10,8 +10,8 @@ var Home = {
 
 		home.id = this.home_id;
 		this.home_id++;
-		home.x = x * View.gridSpan; 
-		home.y = y * View.gridSpan;
+		home.x = x * gridSize; 
+		home.y = y * gridSize;
 		home.type = 'home';
 		home.residents = [];
 
