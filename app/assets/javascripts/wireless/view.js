@@ -3,6 +3,7 @@ var gridSize = 30;
 var View = {
 	packet_color: "yellow",
 	packet_size: 2,
+	gridSize: gridSize,
 	width: Simulator.canvas_width/gridSize|0+1,
 	height: Simulator.canvas_height/gridSize|0+1,
 	propagation: [],

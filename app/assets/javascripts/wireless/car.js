@@ -5,11 +5,12 @@ var Car = {
 
 	create: function(x, y){
 		console.log('car created');
-		var car = new createjs.Bitmap('/assets/car.gif');
+		var car = new createjs.Shape();
+		car.graphics.beginFill('rgba(0,0,255,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
 		car.id = this.car_id;
 		this.car_id++;
-		car.x = x * View.gridSpan; 
-		car.y = y * View.gridSpan;
+		car.x = x * gridSize; 
+		car.y = y * gridSize;
 		car.type = 'car';
 		car.direct = 0;
 

@@ -3,9 +3,9 @@ var User = {
   user_list: [],
 
   create: function( x, y, type ){
-    var user = new createjs.Bitmap('/assets/user.gif');
+    //var user = new createjs.Bitmap('/assets/user.gif');
     var user = new createjs.Shape();
-    user.graphics.beginFill('rgba(0,0,0,1.0)').drawRect(0, 0, gridSize, gridSize);
+    user.graphics.beginFill('rgba(0,0,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
     user.type = type;
     user.id = this.user_id;
@@ -15,10 +15,15 @@ var User = {
     user.route_list = [];
 
     user.onPress = Library.mousePressHandler;
-    user.x = x * gridSize;
-    user.y = y * gridSize;
+    user.x = x * View.gridSize;
+    user.y = y * View.gridSize;
 
-    user.state = FSM.normal(user);
+    if(type == 'worker'){
+      user.state = FSM.worker(user);
+    }else{
+      user.state = FSM.normal(user);
+    }
+    
 
     Simulator.map.addChild(user);
     Simulator.map.addChild(user.connection);
@@ -121,8 +126,8 @@ var User = {
   	
     line.clear();
   	line.setStrokeStyle(3).beginStroke(color);
-  	line.moveTo(user.x + gridSize/2, user.y + gridSize/2);
-  	line.lineTo(node.x + gridSize/2, node.y + gridSize/2);
+  	line.moveTo(user.x + View.gridSize/2, user.y + View.gridSize/2);
+  	line.lineTo(node.x + View.gridSize/2, node.y + View.gridSize/2);
 	},
 
 	clear_edge: function(user){

@@ -31,10 +31,10 @@ var Server = {
   create: function(x, y){
     //var server = new createjs.Bitmap('/assets/server.jpeg');
     var server = new createjs.Shape();
-    server.x = x * gridSize;
-    server.y = y * gridSize;
+    server.x = x * View.gridSize;
+    server.y = y * View.gridSize;
 
-    server.graphics.beginFill('rgba(255,0,0,0.8)').drawRect(0, 0, gridSize, gridSize);
+    server.graphics.beginFill('rgba(255,0,0,0.8)').drawRect(0, 0, View.gridSize, View.gridSize);
     server.ob_type = "access_point"
     server.id = this.server_id;
     this.server_id++;

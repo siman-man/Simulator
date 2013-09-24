@@ -5,9 +5,10 @@ var Home = {
 	create: function(x, y, num){
 		console.log('home created');
 		var user_num = num || 1,
-				home = new createjs.Bitmap('/assets/home.gif'),
+				home = new createjs.Shape(),
 				resident, i;
 
+		home.graphics.beginFill('rgba(96,123,139,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
 		home.id = this.home_id;
 		this.home_id++;
 		home.x = x * gridSize; 

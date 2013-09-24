@@ -4,11 +4,13 @@ var Office = {
 
 	create: function(x, y){
 		console.log('office created');
-		var office = new createjs.Bitmap('/assets/office.gif');
+		var office = new createjs.Shape();
+		office.graphics.beginFill('rgba(255,165,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+		
 		office.id = this.office_id;
 		this.office_id++;
-		office.x = x * View.gridSpan; 
-		office.y = y * View.gridSpan;
+		office.x = x * gridSize; 
+		office.y = y * gridSize;
 		office.type = 'office';
 		office.worker_list = this.hire(office);
 

@@ -13,7 +13,9 @@ var Street = {
 		console.log("create road =>");
 
 		var type = this.selectRoadType(x, y),
-				road = new createjs.Bitmap('/assets/road' + type +'.jpeg');
+				road = new createjs.Shape();
+
+		road.graphics.beginFill('rgba(211,211,211,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
 		
 		road.id = this.road_id;
 		this.road_id++;
@@ -24,10 +26,10 @@ var Street = {
 		Simulator.map.addChild(road);
 		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 100, pf: 2 };
 
-		this.update(x, y+1);
-		this.update(x, y-1);
-		this.update(x+1, y);
-		this.update(x-1, y);
+		//this.update(x, y+1);
+		//this.update(x, y-1);
+		//this.update(x+1, y);
+		//this.update(x-1, y);
 
 		Car.imageUpdate();
 		User.imageUpdate();
@@ -79,10 +81,12 @@ var Street = {
 		delete this.road_list[road.id];
 		Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 
+		/*
 		this.update(coord.x, coord.y+1);
 		this.update(coord.x, coord.y-1);
 		this.update(coord.x+1, coord.y);
 		this.update(coord.x-1, coord.y);
+		*/
 
 		Car.imageUpdate();
 		User.imageUpdate();
