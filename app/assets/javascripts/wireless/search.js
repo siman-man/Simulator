@@ -6,10 +6,10 @@ var Search = {
 		var close_list = [],
 				route = [],
 				check_list = [],
+				queue = new PriorityQueue(),
 				shape = new createjs.Shape(),
     		sx = to.x * View.gridSize,
     		sy = to.y * View.gridSize,
-    		open_list = [ { x: from.x, y: from.y, cost: 0, dist: 0 } ],
     		i, j, px, py,
     		cell, neighbor_list, neighbor,
     		h, s, c, elem;
@@ -32,10 +32,11 @@ var Search = {
 			return [];
 		}
 
+		queue.push( { x: from.x, y: from.y, cost: 0, dist: 0 } );
 		console.log('start path search');
 
-		while(open_list.length > 0){
-			cell = open_list.shift();
+		while( queue.size() > 0){
+			cell = queue.pop();
 			close_list[cell.y][cell.x] = cell;
 			check_list[cell.y][cell.x] = true;
 
@@ -60,14 +61,10 @@ var Search = {
 					c = cell.cost + neighbor.cost;
 					s = c+h;
 					elem = { x: neighbor.x, y: neighbor.y, cost: c, dist: s, parent: { x: cell.x, y: cell.y } };
-					open_list.push(elem);
+					queue.push(elem);
 					check_list[neighbor.y][neighbor.x] = true;
 				}
 			}
-			
-			open_list.sort(function(a, b){
-				return (a.dist > b.dist)? 1 : -1;
-			});
 		}
 
 		return route;
