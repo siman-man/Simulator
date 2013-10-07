@@ -54,6 +54,7 @@ var Simulator = {
   handleTick: function(event) {
     if(Simulator.state.current == 'run'){
       Simulator.time++;
+      Simulator.updateTime();
       Server.update();
       User.update();
       Car.update();
@@ -62,8 +63,8 @@ var Simulator = {
     Simulator.map.update();
   },
 
-  getTime: function(time){
-    var mil = Simulator.time * 1000;
+  updateTime: function(time){
+    var mil = Simulator.time * 1000/Simulator.per_frame,
         sec = mil/1000 | 0,
         hour, min;
 
@@ -83,7 +84,7 @@ var Simulator = {
     sec %= 60;
     if(sec < 10) sec = "0" + sec;
 
-    return([hour, min, sec, mil].join(':'));
+    $("span#time").html([hour, min, sec, mil].join(':'));
   },
 
   objectCheck: function(x, y, draw_type, delete_type, draw_object){
