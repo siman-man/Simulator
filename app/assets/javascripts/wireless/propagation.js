@@ -1,5 +1,7 @@
 var Propagation = {
-	limit: 3,
+	limit: 6,
+  dx: [-1,0,1,-1,1,-1,0,1,],
+  dy: [-1,-1,-1,0,0,1,1,1],
 
 	calc: function(x, y){
 		var board = [],

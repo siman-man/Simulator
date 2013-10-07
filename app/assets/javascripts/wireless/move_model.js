@@ -102,6 +102,11 @@ var MoveModel = {
 
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});
 
+    if(user.route_list.length == 0){
+      console.log('reload')
+      user.route_list.push({x: coord.x * View.gridSize, y: coord.y * View.gridSize});
+    }
+
     return {x: x, y: y};
   },
 

@@ -45,7 +45,6 @@ var Simulator = {
     Simulator.map.removeAllChildren();
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     
-    Panel.init();
     View.drawGrid()
     View.init();
     Simulator.init();

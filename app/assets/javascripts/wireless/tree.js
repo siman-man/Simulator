@@ -9,7 +9,8 @@ var Tree = {
 		tree.x = x * gridSize; 
 		tree.y = y * gridSize;
 
-    tree.graphics.beginFill('rgba(46,139,87,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+    //tree.graphics.beginFill('rgba(46,139,87,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+    tree.graphics.beginFill('rgba(0,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
 
 		tree.id = this.tree_id;
 		this.tree_id++;

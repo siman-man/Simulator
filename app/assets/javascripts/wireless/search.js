@@ -14,8 +14,8 @@ var Search = {
     		cell, neighbor_list, neighbor,
     		h, s, c, elem;
 
-    shape.graphics.beginFill('rgba(255,0,0,0.3)').drawRect(sx, sy, View.gridSize, View.gridSize);
-    Simulator.map.addChild(shape);
+    //shape.graphics.beginFill('rgba(255,0,0,0.3)').drawRect(sx, sy, View.gridSize, View.gridSize);
+    //Simulator.map.addChild(shape);
     this.point = shape;
 		
 		for( i = 0; i < View.height; i++){
@@ -27,7 +27,10 @@ var Search = {
 			}
 		}
 
-		if(from === undefined || to === undefined) return [];
+		if(from === undefined || to === undefined){
+			console.log('error');
+			return [];
+		}
 
 		console.log('start path search');
 

@@ -20,7 +20,11 @@ var FSM = {
 
 				onrestart: function(event, from, to, user){
 					console.log('restart simulation =>');
-				}
+				},
+
+				onreset: function(event, from, to){
+					console.log('reset simulation =>');
+				},
 			},
 		});
 	},

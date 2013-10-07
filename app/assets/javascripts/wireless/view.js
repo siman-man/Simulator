@@ -37,8 +37,7 @@ var View = {
 
 		for(i = 0; i <= Simulator.canvas_height; i += span){
 			vline = new createjs.Shape();
-			color = "brack";
-			vline.graphics.beginStroke(color);
+			vline.graphics.beginStroke("rgba(0,0,0,0.9)");
 			vline.graphics.moveTo(0, i);
 			vline.graphics.lineTo(Simulator.canvas_width * 2, i);
 			Simulator.map.addChild(vline);
@@ -46,8 +45,7 @@ var View = {
 
 		for(i = 0; i <= Simulator.canvas_width; i += span){
 			hline = new createjs.Shape();
-			color = "brack";
-			hline.graphics.beginStroke(color);
+			hline.graphics.beginStroke("rgba(0,0,0,0.9)");
 			hline.graphics.moveTo(i, 0);
 			hline.graphics.lineTo(i, Simulator.canvas_height*2);
 			Simulator.map.addChild(hline);
