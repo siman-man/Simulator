@@ -1,7 +1,7 @@
 var Propagation = {
-	limit: 6,
-  dx: [-1,0,1,-1,1,-1,0,1,],
-  dy: [-1,-1,-1,0,0,1,1,1],
+	limit: 3,
+  dx: [ 1, 0,-1, 0, 1, 1,-1,-1],
+  dy: [ 0, 1, 0,-1,-1, 1, 1,-1],
 
 	calc: function(x, y){
 		var board = [],
@@ -25,33 +25,16 @@ var Propagation = {
     	node = check_list.shift();
     	animation.push({ x: node.x, y: node.y});
 
-    	if(node.x+1 < View.width && node.cost + field[node.y][node.x+1].pf < board[node.y][node.x+1].cost ){
-    		board[node.y][node.x+1].cost = node.cost + field[node.y][node.x+1].pf;
-    		if( board[node.y][node.x+1].cost <= this.limit ){
-    			check_list.push({ x: node.x+1, y: node.y, cost: board[node.y][node.x+1].cost});
-    		}
-    	}
-
-    	if(node.x-1 >= 0 && node.cost + field[node.y][node.x-1].pf < board[node.y][node.x-1].cost ){
-    		board[node.y][node.x-1].cost = node.cost + field[node.y][node.x-1].pf;
-    		if( board[node.y][node.x-1].cost <= this.limit ){
-    			check_list.push({ x: node.x-1, y: node.y, cost: board[node.y][node.x-1].cost});
-    		}
-    	}
-
-    	if(node.y+1 < View.height && node.cost + field[node.y+1][node.x].pf < board[node.y+1][node.x].cost ){
-    		board[node.y+1][node.x].cost = node.cost + field[node.y+1][node.x].pf;
-    		if( board[node.y+1][node.x].cost <= this.limit ){
-    			check_list.push({ x: node.x, y: node.y+1, cost: board[node.y+1][node.x].cost});
-    		}
-    	}
-
-    	if(node.y-1 >= 0 && node.cost + field[node.y-1][node.x].pf < board[node.y-1][node.x].cost ){
-    		board[node.y-1][node.x].cost = node.cost + field[node.y-1][node.x].pf;
-    		if( board[node.y-1][node.x].cost <= this.limit ){
-    			check_list.push({ x: node.x, y: node.y-1, cost: board[node.y-1][node.x].cost});
-    		}
-    	}
+      for(var i = 0; i < 4; i++){
+        var y = node.y + this.dy[i];
+        var x = node.x + this.dx[i];
+        if( View.isInside( y, x ) && node.cost + field[y][x].pf < board[y][x].cost ){
+          board[y][x].cost = node.cost + field[y][x].pf;
+          if( board[y][x].cost <= this.limit ){
+            check_list.push({ x: x, y: y, cost: board[y][x].cost })
+          }
+        } 
+      }
 
     	check_list.sort(function(a, b){
     		return (a.cost > b.cost)? 1 : -1; 

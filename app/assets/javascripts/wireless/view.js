@@ -74,6 +74,10 @@ var View = {
 		}
 	},
 
+	isInside: function( y, x ){
+		return ( 0 <= y && y < View.height && 0 <= x && x < View.width );
+	},
+
 	animation: function(cell_list){
 		var cell, shape, x, y;
 		while(cell_list.length > 0){
