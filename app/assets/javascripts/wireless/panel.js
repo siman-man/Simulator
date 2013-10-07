@@ -38,9 +38,10 @@ var Panel = {
 		});
 
 		$('#button3').click(function(){
-			if(Simulator.state.current != 'run'){
-				$("#button1").removeAttr('disabled');
+			if(Simulator.state.current == 'stop'){
 				$('#button2').attr('disabled', 'disabled');
+				$('#button2').text('停止');
+				$("#button1").removeAttr('disabled');
 				Simulator.clear();
 			}
 		});
