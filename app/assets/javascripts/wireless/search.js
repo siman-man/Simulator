@@ -1,6 +1,8 @@
 var Search = {
 	point: undefined,
 	search_list: [],
+	dx: [ 1, 0,-1, 0, 1, 1,-1,-1],
+  dy: [ 0, 1, 0,-1,-1, 1, 1,-1],
 
 	find: function(from, to){
 		var close_list = [],
@@ -69,22 +71,16 @@ var Search = {
 	},
 
 	getNeighbor: function( x, y ){
-		var neighbor_list = [];
+		var neighbor_list = [],
+				nx, ny, i;
 
-		if(View.isInside( y, x ) < View.width){
-			neighbor_list.push(Simulator.field[y][x+1]);
-		}
-
-		if(x-1 >= 0){
-			neighbor_list.push(Simulator.field[y][x-1]);
-		}
-
-		if(y+1 < View.height){
-			neighbor_list.push(Simulator.field[y+1][x]);
-		}
-
-		if(y-1 >= 0){
-			neighbor_list.push(Simulator.field[y-1][x]);
+		for( i = 0; i < 4; i++){
+			ny = y + this.dy[i];
+			nx = x + this.dx[i];
+			
+			if( View.isInside( ny, nx )){
+				neighbor_list.push( Simulator.field[ny][nx] );
+			}
 		}
 
 		return neighbor_list;

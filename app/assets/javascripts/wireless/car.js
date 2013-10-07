@@ -1,7 +1,7 @@
 var Car = {
 	car_id: 0,
 	car_list: {},
-	speed: 7.5,
+	speed: 6,
 
 	create: function(x, y){
 		console.log('car created');
