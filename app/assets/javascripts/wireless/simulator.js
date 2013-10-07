@@ -64,7 +64,7 @@ var Simulator = {
   },
 
   updateTime: function(time){
-    var mil = Simulator.time * 1000/Simulator.per_frame,
+    var mil = Simulator.time * 1000/30,
         sec = mil/1000 | 0,
         hour, min;
 

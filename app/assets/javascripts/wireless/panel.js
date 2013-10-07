@@ -42,6 +42,7 @@ var Panel = {
 				$('#button2').attr('disabled', 'disabled');
 				$('#button2').text('停止');
 				$("#button1").removeAttr('disabled');
+				$("span#time").html("00:00:00:000");
 				Simulator.clear();
 			}
 		});

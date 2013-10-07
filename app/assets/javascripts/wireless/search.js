@@ -14,8 +14,6 @@ var Search = {
     		cell, neighbor_list, neighbor,
     		h, s, c, elem;
 
-    //shape.graphics.beginFill('rgba(255,0,0,0.3)').drawRect(sx, sy, View.gridSize, View.gridSize);
-    //Simulator.map.addChild(shape);
     this.point = shape;
 		
 		for( i = 0; i < View.height; i++){
@@ -73,7 +71,7 @@ var Search = {
 	getNeighbor: function( x, y ){
 		var neighbor_list = [];
 
-		if(x+1 < View.width){
+		if(View.isInside( y, x ) < View.width){
 			neighbor_list.push(Simulator.field[y][x+1]);
 		}
 
