@@ -5,7 +5,6 @@ var Library = {
     var delete_type = $("input[name='delete_object']:checked").val(),
         node = e.target;
 
-    console.log(delete_type);
     if(delete_type != "server"){
 
       Simulator.operation_flag = true;

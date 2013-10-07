@@ -87,9 +87,9 @@ var Simulator = {
     $("span#time").html([hour, min, sec, mil].join(':'));
   },
 
-  objectCheck: function(x, y, draw_type, delete_type, draw_object){
-    if(draw_type !== undefined && draw_object.obj === undefined){
-      switch(draw_type){
+  objectCheck: function(x, y, object_type, operation_type, draw_object){
+    if(operation_type == 0 && draw_object.obj === undefined){
+      switch(object_type){
         case 'server':
           Server.create( x, y );
           break;
@@ -113,8 +113,8 @@ var Simulator = {
         default:
           break;
       }
-    }else if(delete_type !== undefined && draw_object.obj !== undefined){
-      switch(delete_type){
+    }else if(operation_type == 2 && draw_object.obj !== undefined){
+      switch(object_type){
         case 'server':
         Server.remove( draw_object.obj );
         break;
@@ -133,8 +133,12 @@ var Simulator = {
         Office.remove( draw_object.obj );
         break;
       }
-    }else if(draw_type == 'car' && draw_object.type == 'road'){
-      Car.create( x, y );
+    }else if(draw_object.obj !== undefined){
+      switch(object_type){
+        case 'car':
+        Car.create( x, y );
+        break;
+      }
     }
   },
 
@@ -145,11 +149,13 @@ var Simulator = {
       var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
           y = e.clientY - canvas.offsetTop + document.body.scrollTop,
           coord = View.point2coord(x, y),
-          draw_type = $("input[name='draw_object']:checked").val(),
-          delete_type = $("input[name='delete_object']:checked").val(),
+          operation_type = e.button,
+          object_type = $("input[name='draw_object']:checked").val(),
           draw_object = Simulator.field[coord.y][coord.x]; 
 
-      Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
+          console.log(operation_type);
+
+      Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
     }
 
     Simulator.press_flag = true;
@@ -160,11 +166,11 @@ var Simulator = {
       var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
           y = e.clientY - canvas.offsetTop + document.body.scrollTop,
           coord = View.point2coord(x, y),
-          draw_type = $("input[name='draw_object']:checked").val(),
-          delete_type = $("input[name='delete_object']:checked").val(),
+          operation_type = e.button,
+          object_type = $("input[name='draw_object']:checked").val(),
           draw_object = Simulator.field[coord.y][coord.x]; 
 
-      Simulator.objectCheck( coord.x, coord.y, draw_type, delete_type, draw_object);
+      Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
     }
   },
 
