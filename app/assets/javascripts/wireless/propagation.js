@@ -1,5 +1,5 @@
 var Propagation = {
-	limit: 10,
+	limit: 5,
   dx: [ 1, 0,-1, 0, 1, 1,-1,-1],
   dy: [ 0, 1, 0,-1,-1, 1, 1,-1],
 
@@ -25,7 +25,7 @@ var Propagation = {
       node = queue.pop();
     	animation.push({ x: node.x, y: node.y});
 
-      for(var i = 0; i < 4; i++){
+      for(var i = 0; i < 8; i++){
         var y = node.y + this.dy[i];
         var x = node.x + this.dx[i];
         if( View.isInside( y, x ) && node.cost + field[y][x].pf < board[y][x].cost ){
@@ -36,8 +36,6 @@ var Propagation = {
         } 
       }
     }
-
-    animation.shift();
 
     return animation;
 	},

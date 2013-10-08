@@ -27,6 +27,7 @@ var User = {
 
     Simulator.map.addChild(user);
     Simulator.map.addChild(user.connection);
+    View.animation(Propagation.calc(x, y));
 
     this.user_list[user.id] = user;
 

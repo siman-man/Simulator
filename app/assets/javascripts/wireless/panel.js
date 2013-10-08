@@ -38,7 +38,7 @@ var Panel = {
 		});
 
 		$('#button3').click(function(){
-			if(Simulator.state.current == 'stop'){
+			if(Simulator.state.current != 'run'){
 				$('#button2').attr('disabled', 'disabled');
 				$('#button2').text('停止');
 				$("#button1").removeAttr('disabled');

@@ -1,4 +1,4 @@
-var gridSize = 25;
+var gridSize = 30;
 
 var View = {
 	packet_color: "yellow",
@@ -82,12 +82,15 @@ var View = {
 		var cell, shape, x, y;
 		while(cell_list.length > 0){
 			cell = cell_list.shift();
-			shape = new createjs.Shape();
-			x = cell.x * gridSize;
-			y = cell.y * gridSize;
-      shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x, y, gridSize, gridSize);
-      Simulator.map.addChild(shape);
-      View.propagation[cell.y][cell.x] = shape;
+			
+			if( View.propagation[cell.y][cell.x] === undefined){
+				shape = new createjs.Shape();
+				x = cell.x * gridSize;
+				y = cell.y * gridSize;
+      	shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x, y, gridSize, gridSize);
+      	Simulator.map.addChild(shape);
+      	View.propagation[cell.y][cell.x] = shape;
+    	}
 		}
 	},
 
