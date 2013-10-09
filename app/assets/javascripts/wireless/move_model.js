@@ -1,10 +1,11 @@
 var MoveModel = {
+  user_speed: 3,
 
   randomWayPoint: function(user){
   	user.way_point = user.way_point || this.directWayPoint(user);
 
     if(user.way_point){
-      this.moveToWayPoint(user, 5);
+      this.moveToWayPoint(user, this.user_speed);
     }
 
     if(this.checkArrive(user)){
