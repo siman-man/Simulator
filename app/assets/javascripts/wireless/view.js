@@ -7,15 +7,37 @@ var View = {
 	width: Simulator.canvas_width/gridSize|0+1,
 	height: Simulator.canvas_height/gridSize|0+1,
 	propagation: [],
+	lines: [],
 
 	init: function(){
 		var x, y;
+
  		for( y = 0; y < this.height; y++ ){
       this.propagation[y] = [];
 
       for(x = 0; x < this.width; x++){
+      	shape = new createjs.Shape();
+      	shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
+      	View.propagation[y][x] = { obj: shape, flag: false };
       }
     }
+	},
+
+	update: function(){
+		var x, y, flag, obj;
+
+		for( y = 0; y < View.height; y++ ){
+			for( x = 0; x < View.width; x++ ){
+				flag = View.propagation[y][x].flag;
+				obj = View.propagation[y][x].obj;
+				if( flag && Simulator.field[y][x].obj === undefined && !Simulator.map.contains( obj )){
+					Simulator.map.addChild(obj);
+				}else if( !flag && Simulator.state.current != 'stop' && Simulator.map.contains( obj )){
+					Simulator.map.removeChild(obj);
+				}
+				View.propagation[y][x].flag = false;
+			}
+		}
 	},
 
 	movePacket: function(packet, speed){
@@ -41,6 +63,7 @@ var View = {
 			vline.graphics.moveTo(0, i);
 			vline.graphics.lineTo(Simulator.canvas_width * 2, i);
 			Simulator.map.addChild(vline);
+			this.lines.push(vline);
 		}
 
 		for(i = 0; i <= Simulator.canvas_width; i += span){
@@ -49,6 +72,16 @@ var View = {
 			hline.graphics.moveTo(i, 0);
 			hline.graphics.lineTo(i, Simulator.canvas_height*2);
 			Simulator.map.addChild(hline);
+			this.lines.push(hline);
+		}
+	},
+
+	clearGrid: function(){
+		var line, i;
+		for( i in View.lines ){
+			line = View.lines[i];
+			Simulator.map.removeChild(line);
+			delete line;
 		}
 	},
 
@@ -76,22 +109,6 @@ var View = {
 
 	isInside: function( y, x ){
 		return ( 0 <= y && y < View.height && 0 <= x && x < View.width );
-	},
-
-	animation: function(cell_list){
-		var cell, shape, x, y;
-		while(cell_list.length > 0){
-			cell = cell_list.shift();
-			
-			if( View.propagation[cell.y][cell.x] === undefined){
-				shape = new createjs.Shape();
-				x = cell.x * gridSize;
-				y = cell.y * gridSize;
-      	shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x, y, gridSize, gridSize);
-      	Simulator.map.addChild(shape);
-      	View.propagation[cell.y][cell.x] = shape;
-    	}
-		}
 	},
 
 	clean: function(){

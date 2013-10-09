@@ -18,25 +18,6 @@ var Library = {
     }
   },
 
-  mouseMoveHandler: function(e){
-    console.log("mouseMoveHandler =>");
-
-    var node = e.target,
-        x = e.stageX + node.offsetX,
-        y = e.stageY + node.offsetY,
-        coord = View.point2coord(x, y);
-
-    node.x = coord.x * gridSize;
-    node.y = coord.y * gridSize;
-  },
-
-  mouseUpHandler: function(e){
-    console.log("mouseUpHandler =>");
-    var node = e.target;
-
-    Simulator.operation_flag = false;
-  },
-
   sample: function(array, num){
     
     if(array.length === 0) return [];

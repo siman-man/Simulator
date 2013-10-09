@@ -28,14 +28,24 @@ var Server = {
     this.server_list = {};
   },
 
-  create: function(x, y){
+  create: function(x, y, type){
     //var server = new createjs.Bitmap('/assets/server.jpeg');
     var server = new createjs.Shape();
     server.x = x * View.gridSize;
     server.y = y * View.gridSize;
 
-    server.graphics.beginFill('rgba(255,0,0,0.8)').drawRect(0, 0, View.gridSize, View.gridSize);
-    server.ob_type = "access_point"
+    switch(type){
+      case 'start':
+      server.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+      break;
+      case 'end':
+      server.graphics.beginFill('rgba(0,0,128,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+      break;
+      default:
+      server.graphics.beginFill('rgba(255,0,0,0.8)').drawRect(0, 0, View.gridSize, View.gridSize);
+    }
+    
+    server.ob_type = type || 'normal';
     server.id = this.server_id;
     this.server_id++;
 
@@ -59,7 +69,8 @@ var Server = {
 
     this.server_list[server.id] = server;
     Simulator.field[y][x] = { x: x, y: y, obj: server, type: 'server', cost: 9999, pf: 2 };
-    View.animation(Propagation.calc(x, y));
+    Propagation.calc(x, y);
+    View.update();
 
     return server;
   },
@@ -136,6 +147,8 @@ var Server = {
 
     for( id1 in this.server_list ){
       node = this.server_list[id1];
+      var coord = View.point2coord( node.x, node.y );
+      Propagation.calc( coord.x, coord.y );
   
       for( id2 in node.neighbor_list ){
         neighbor = node.neighbor_list[id2];

@@ -5,12 +5,12 @@ var User = {
   create: function( x, y, type ){
     //var user = new createjs.Bitmap('/assets/user.gif');
     var user = new createjs.Shape();
-    user.graphics.beginFill('rgba(0,0,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
+    user.graphics.beginFill('rgba(255,59,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
     user.type = type;
     user.id = this.user_id;
     this.user_id++;
-    user.connection = new createjs.Shape();
+    user.contact_list = [];
     user.circuit = [];
     user.route_list = [];
 
@@ -23,47 +23,63 @@ var User = {
     }else{
       user.state = FSM.normal(user);
     }
-    
+
+    Propagation.calc(x, y);
+    View.update();
 
     Simulator.map.addChild(user);
-    Simulator.map.addChild(user.connection);
-    View.animation(Propagation.calc(x, y));
+    Simulator.user_map[y][x] = { x: x, y: y, obj: user, type: 'user', cost: 1, pf: 1 };
 
     this.user_list[user.id] = user;
 
     return user;
   },
 
-  update: function(){
-    var max_rssi, rssi, i, node, id, user;
+  move: function(){
+    var user,
+        id;
 
     for( id in this.user_list ){
-      max_rssi = -120;
       user = this.user_list[id];
-      
+      coord = View.point2coord( user.x, user.y );
+      Simulator.user_map[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+      this.moveUser(user);
+      coord = View.point2coord( user.x, user.y );
+      Simulator.user_map[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: user, type: 'user', cost: 1, pf: 1 };
+    }
+  },
+
+  scan: function(){
+    var user,
+        id,
+        coord;
+
+    for( id in this.user_list ){
+      user = this.user_list[id];
+
       if(Simulator.map.contains(user)){
-        this.moveUser(user);
-        
-        for( i in Server.server_list ){
-          node = Server.server_list[i];
-          rssi = this.checkConnectionAccessPoint(user, node)
-          
-          if(rssi > max_rssi){
-            this.drawEdge(user, node, "orange");
-            max_rssi = rssi;
-          }else if(max_rssi == -120){
-            this.clear_edge(user, node)
-          }
+        User.clear_edge(user);       
+        coord = View.point2coord( user.x, user.y );
+        contact_list = Propagation.calc(coord.x, coord.y);
+
+        for( i in contact_list ){
+          node = contact_list[i].obj;
+          this.drawEdge(user, node, "orange");  
+        }
+        for( i in user.contact_list ){
+          Simulator.map.addChild( user.contact_list[i] );
         }
       }
     }
   },
 
   clear: function(){
-    var i, user;
+    var i, user, coord;
     
     for( i in this.user_list ){
       user = this.user_list[i];
+      coord = View.point2coord( user.x, user.y );
+      Simulator.user_map[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
       this.remove(user);
     }
 
@@ -122,18 +138,23 @@ var User = {
 	},
 
 	drawEdge: function(user, node, color_opt){
-  	var line = user.connection.graphics,
+  	var line = new createjs.Shape(),
         color = color_opt || "orange";
   	
-    line.clear();
-  	line.setStrokeStyle(3).beginStroke(color);
-  	line.moveTo(user.x + View.gridSize/2, user.y + View.gridSize/2);
-  	line.lineTo(node.x + View.gridSize/2, node.y + View.gridSize/2);
+  	line.graphics.setStrokeStyle(3).beginStroke(color);
+  	line.graphics.moveTo(user.x + View.gridSize/2, user.y + View.gridSize/2);
+  	line.graphics.lineTo(node.x + View.gridSize/2, node.y + View.gridSize/2);
+
+    user.contact_list.push(line);
 	},
 
 	clear_edge: function(user){
-  	var line = user.connection.graphics;
-  	line.clear();
+    var line, i;
+    for( i in user.contact_list){
+      line = user.contact_list[i];
+      Simulator.map.removeChild(line);
+    }
+    user.contact_list = [];
 	},
 
   jobless_list: function(){
