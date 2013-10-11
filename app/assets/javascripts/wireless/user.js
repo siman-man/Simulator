@@ -1,6 +1,5 @@
 var User = {
-  user_id: 0,
-  user_list: [],
+  user_list: {},
 
   create: function( x, y, type ){
     //var user = new createjs.Bitmap('/assets/user.gif');
@@ -8,13 +7,12 @@ var User = {
     user.graphics.beginFill('rgba(255,59,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
     user.type = type;
-    user.id = this.user_id;
-    this.user_id++;
-    user.contact_list = [];
+    user.eid = Simulator.eid;
+    Simulator.eid++;
+    user.contact_list = {};
     user.circuit = [];
     user.route_list = [];
 
-    user.onPress = Library.mousePressHandler;
     user.x = x * View.gridSize;
     user.y = y * View.gridSize;
 
@@ -28,7 +26,7 @@ var User = {
     View.update();
 
     Simulator.map.addChild(user);
-    Simulator.user_map[y][x] = { x: x, y: y, obj: user, type: 'user', cost: 1, pf: 1 };
+    Simulator.user_map[y][x].push({ x: x, y: y, obj: user, type: 'user', cost: 1, pf: 1 });
 
     this.user_list[user.id] = user;
 
@@ -37,15 +35,16 @@ var User = {
 
   move: function(){
     var user,
-        id;
+        id,
+        key;
 
     for( id in this.user_list ){
       user = this.user_list[id];
-      coord = View.point2coord( user.x, user.y );
-      Simulator.user_map[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
       this.moveUser(user);
       coord = View.point2coord( user.x, user.y );
-      Simulator.user_map[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: user, type: 'user', cost: 1, pf: 1 };
+      key = Simulator.point2key( coord.x, coord.y );
+      Simulator.node_list[key] = Simulator.node_map[key] || {};
+      Simulator.node_list[key][user.eid] = { x: coord.x, y: coord.y, obj: user, type: 'user', cost: 1, pf: 1 };
     }
   },
 
@@ -78,12 +77,9 @@ var User = {
     
     for( i in this.user_list ){
       user = this.user_list[i];
-      coord = View.point2coord( user.x, user.y );
-      Simulator.user_map[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
       this.remove(user);
     }
 
-    this.user_id = 0;
     this.user_list = {};
   },
 
@@ -91,8 +87,8 @@ var User = {
     console.log("remove user =>");
     var coord = View.point2coord( user.x, user.y );
 
-    delete this.user_list[user.id];
     Simulator.map.removeChild(user);
+    delete this.user_list[user.id];
   },
 
   imageUpdate: function(){
@@ -145,7 +141,7 @@ var User = {
   	line.graphics.moveTo(user.x + View.gridSize/2, user.y + View.gridSize/2);
   	line.graphics.lineTo(node.x + View.gridSize/2, node.y + View.gridSize/2);
 
-    user.contact_list.push(line);
+    View.connection_line.push(line);
 	},
 
 	clear_edge: function(user){

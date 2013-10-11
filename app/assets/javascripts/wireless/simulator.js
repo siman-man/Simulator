@@ -4,37 +4,38 @@ var Simulator = {
   canvas_height: window.canvas.height,
   map: new createjs.Stage(canvas), 
   packet_list: {},
+  node_map: {},
   field: [],
-  user_map: [],
-  connection_list: [],
+  key_map: [],
   selected_target: -1,
   target: undefined,
   operation_flag: false,
   press_flag: false,
   packet_id: 0,
   article_id: 0,
+  eid: 0,
   time: 0,
   per_frame: 60,
 
   init: function(){
-    var x, y;
+    var x, y, key;
 
     for( y = 0; y < View.height; y++ ){
       this.field[y] = [];
-      this.user_map[y] = [];
-      this.connection_list[y] = [];
+      this.key_map[y] = [];
 
       for( x = 0; x < View.width; x++ ){
         this.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
-        this.user_map[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
-        this.connection_list[y][x] = {};
+        key = Simulator.point2key( x, y );
+        this.key_map[y][x] = key;
+        this.node_map[key] = {};
       }
     }
 
     this.state = FSM.simulator();
 
-    Server.create( 10, 10, 'start');
-    Server.create( 20, 10, 'end');
+    Node.create( 10, 10, 'start');
+    Node.create( 20, 10, 'end');
 
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
@@ -42,15 +43,16 @@ var Simulator = {
   },
 
   clear: function(){
+    createjs.Ticker.removeEventListener("tick", this.handleTick);
+    Simulator.map.removeAllChildren();
+
     Simulator.time = 0;
+    Simulator.node_list = {};
     Street.clear();
     Home.clear();
     Tree.clear();
     Office.clear();
-    Server.clear();
-    User.clear();
-    Simulator.map.removeAllChildren();
-    createjs.Ticker.removeEventListener("tick", this.handleTick);
+    Node.clear();
     
     View.drawGrid()
     View.init();
@@ -62,22 +64,31 @@ var Simulator = {
     if(Simulator.state.current == 'run'){
       Simulator.time++;
       Simulator.updateTime();
+      View.clear();
       Server.update();
       Simulator.moveUpdate();
       Simulator.scanUpdate();
-      Car.update();
-      Packet.update();
+      Simulator.communicationUpdate();
       View.update();
     }
     Simulator.map.update();
   },
 
   moveUpdate: function(){
-    User.move();
+    Node.move();
+    Car.update();
   },
 
   scanUpdate: function(){
-    User.scan();
+    Node.scan();
+  },
+
+  communicationUpdate: function(){
+
+  },
+
+  point2key: function( x, y ){
+    return 'x' + String(x) + 'y' + String(y);
   },
 
   updateTime: function(time){
@@ -105,14 +116,16 @@ var Simulator = {
   },
 
   objectCheck: function(x, y, object_type, operation_type, draw_object){
+    var key;
     if(operation_type == 0 && draw_object.obj === undefined){
       switch(object_type){
         case 'server':
-          Server.create( x, y );
+          Node.create( x, y, 'server' );
           break;
         case 'user':
-          if( Simulator.user_map[y][x].type == 'normal'){
-            User.create( x, y, 'normal' );
+          key = Simulator.key_map[y][x];
+          if( Simulator.node_map[key] ){
+            Node.create( x, y, 'user', { type: 'normal' });
           }
           break;
         case 'road':

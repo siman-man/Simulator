@@ -1,6 +1,5 @@
 var Server = {
   error_rssi: -150,
-  server_id: 0,
   server_list: {},
 
   createCommunicationRangeCircle: function(x, y, color_opt, size_opt){
@@ -24,13 +23,14 @@ var Server = {
       server = this.server_list[i];
       this.remove(server);
     }
-    this.server_id = 0;
+
     this.server_list = {};
   },
 
   create: function(x, y, type){
     //var server = new createjs.Bitmap('/assets/server.jpeg');
-    var server = new createjs.Shape();
+    var server = new createjs.Shape(),
+        key;
     server.x = x * View.gridSize;
     server.y = y * View.gridSize;
 
@@ -46,8 +46,8 @@ var Server = {
     }
     
     server.ob_type = type || 'normal';
-    server.id = this.server_id;
-    this.server_id++;
+    server.eid = Simulator.eid;
+    Simulator.eid++;
 
     server.drag = false;
     server.onPress = Library.mousePressHandler;
@@ -68,7 +68,8 @@ var Server = {
     this.addServer(server);
 
     this.server_list[server.id] = server;
-    Simulator.field[y][x] = { x: x, y: y, obj: server, type: 'server', cost: 9999, pf: 2 };
+    key = Simulator.point2key( x, y );
+    Simulator.node_list[key][server.eid] = { x: x, y: y, obj: server, type: 'server' };
     Propagation.calc(x, y);
     View.update();
 

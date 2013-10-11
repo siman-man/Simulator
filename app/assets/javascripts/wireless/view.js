@@ -7,7 +7,8 @@ var View = {
 	width: Simulator.canvas_width/gridSize|0+1,
 	height: Simulator.canvas_height/gridSize|0+1,
 	propagation: [],
-	lines: [],
+	grid_lines: [],
+	connection_line: [],
 
 	init: function(){
 		var x, y;
@@ -50,6 +51,24 @@ var View = {
 		packet.y += Math.sin(radian) * speed;
 	},
 
+	drawConnectionLine: function(){
+		var i, line;
+		for( i in View.connection_line ){
+			line = View.connection_line[i];
+			Simulator.map.addChild(line);
+		}
+	},
+
+	clearConnectionLine: function(){
+		var i, line;
+		for( i in View.connection_line ){
+			line = View.connection_line[i];
+			Simulator.map.removeChild(line);
+		}
+
+		View.connection_line = [];
+	},
+
 	drawGrid: function(){
 		var span = gridSize, 
 				vline,
@@ -63,7 +82,7 @@ var View = {
 			vline.graphics.moveTo(0, i);
 			vline.graphics.lineTo(Simulator.canvas_width * 2, i);
 			Simulator.map.addChild(vline);
-			this.lines.push(vline);
+			this.grid_lines.push(vline);
 		}
 
 		for(i = 0; i <= Simulator.canvas_width; i += span){
@@ -72,13 +91,17 @@ var View = {
 			hline.graphics.moveTo(i, 0);
 			hline.graphics.lineTo(i, Simulator.canvas_height*2);
 			Simulator.map.addChild(hline);
-			this.lines.push(hline);
+			this.grid_lines.push(hline);
 		}
+	},
+
+	clear: function(){
+		View.clearConnectionLine();
 	},
 
 	clearGrid: function(){
 		var line, i;
-		for( i in View.lines ){
+		for( i in View.grid_lines ){
 			line = View.lines[i];
 			Simulator.map.removeChild(line);
 			delete line;

@@ -1,3 +1,4 @@
+
 var Propagation = {
 	limit: 4,
   dx: [ 1, 0,-1, 0, 1, 1,-1,-1],
@@ -7,9 +8,9 @@ var Propagation = {
 		var board = [],
         ypos, xpos,
         field = Simulator.field,
-        contact_list = [],
+        contact_list = {},
         queue = new PriorityQueue(),
-        node, y, x, i;
+        node, y, x, i, eid, key;
 
 		for( ypos = 0; ypos < View.height; ypos++ ){
       board[ypos] = [];
@@ -33,10 +34,11 @@ var Propagation = {
         if( View.isInside( y, x ) && node.cost + field[y][x].pf < board[y][x].cost ){
           board[y][x].cost = node.cost + field[y][x].pf;
           
-          if( Simulator.field[y][x].type == 'server' ){
-            contact_list.push( Simulator.field[y][x] );
-          }else if( Simulator.user_map[y][x].type == 'user' ){
-            contact_list.push( Simulator.user_map[y][x] );
+          key = Simulator.point2key( x, y );
+          if( Simulator.node_map[key] !== undefined ){
+            for( eid in Simulator.node_map[key] ){
+              contact_list[eid] = Simulator.node_map[key][eid];
+            }
           }
 
           if( board[y][x].cost <= this.limit ){
@@ -48,17 +50,5 @@ var Propagation = {
     }
 
     return contact_list;
-	},
-
-	clear: function(id){
-    var x, y;
-
-		for( y = 0; y < this.canvas_height; y++ ){
-      for( x = 0; x < this.canvas_width; x++ ){
-        if(Simulator.connection_list[y][x][id] !== undefined){
-        	delete Simulator.connection_list[y][x][id];
-        }
-      }
-		}
-	},
+	}
 }

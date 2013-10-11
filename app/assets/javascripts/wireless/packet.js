@@ -1,4 +1,4 @@
-var Packet = {
+var Message = {
 	packet_color: "yellow",
 	packet_size: 3,
 	packet_speed: 5,
