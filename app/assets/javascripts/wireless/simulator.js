@@ -14,7 +14,7 @@ var Simulator = {
   packet_id: 0,
   article_id: 0,
   time: 0,
-  per_frame: 60,
+  per_frame: 30,
 
   init: function(){
     var x, y, key;
@@ -83,7 +83,8 @@ var Simulator = {
   },
 
   communicationUpdate: function(){
-
+    Node.transmit();
+    Node.receive();
   },
 
   point2key: function( x, y ){

@@ -30,6 +30,7 @@ var Node = {
     user.contact_list = [];
     user.circuit = [];
     user.route_list = [];
+    user.strage = {};
 
     user.x = x * View.gridSize;
     user.y = y * View.gridSize;
@@ -49,7 +50,6 @@ var Node = {
     Simulator.node_map[key][user.eid] = { x: x, y: y, obj: user, type: 'user' };
 
     this.node_list[user.eid] = user;
-    console.log(this.node_list);
 	},
 
 	createNode: function( x, y, type ){
@@ -58,10 +58,12 @@ var Node = {
 
     node.x = x * View.gridSize;
     node.y = y * View.gridSize;
+    node.strage = {};
 
     switch(type){
       case 'start':
       	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+      	Message.init(node);
       	break;
       case 'end':
       	node.graphics.beginFill('rgba(0,0,128,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
@@ -113,8 +115,7 @@ var Node = {
     		node,
         eid,
         coord,
-        i,
-        contact_list = [];
+        i;
 
     for( eid in this.node_list ){
       node = this.node_list[eid];
@@ -122,15 +123,41 @@ var Node = {
       if(Simulator.map.contains(node)){
         this.clearEdge(node);       
         coord = View.point2coord( node.x, node.y );
-        contact_list = Propagation.calc(coord.x, coord.y);
+        node.contact_list = Propagation.calc(coord.x, coord.y);
 
-        for( i in contact_list ){
-          dest = this.node_list[contact_list[i]];
+        for( i in node.contact_list ){
+          dest = this.node_list[node.contact_list[i]];
           
           this.addEdge(node, dest, "orange");  
         }
       }
     }
+  },
+
+  transmit: function(){
+  	var eid,
+  			node;
+
+  	for( eid in this.node_list ){
+  		node = this.node_list[eid];
+
+  		if(Simulator.map.contains(node)){
+  			
+  		}
+  	}
+  },
+
+  receive: function(){
+  	var eid,
+  			node;
+
+  	for( eid in this.node_list ){
+  		node = this.node_list[eid];
+
+  		if(Simulator.map.contains(node)){
+  			
+  		}
+  	}
   },
 
  	addEdge: function(node, dest, color_opt){
