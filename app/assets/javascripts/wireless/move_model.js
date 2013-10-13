@@ -1,5 +1,5 @@
 var MoveModel = {
-  user_speed: 3,
+  user_speed: 4,
 
   randomWayPoint: function(user){
   	user.way_point = user.way_point || this.directWayPoint(user);
@@ -16,21 +16,21 @@ var MoveModel = {
   },
 
   home2office: function(user, home, office){
-    if(user.state.current != 'travel2work') return undefined;
+    if(user.state.current !== 'travel2work') return undefined;
 
     user.way_point = { x: office.x, y: office.y };
     user.route_list = Search.find({ x: home.x, y: home.y }, user.way_point);
   },
 
   office2home: function(user, office, home){
-    if(user.state.current != 'go_home') return undefined;
+    if(user.state.current !== 'go_home') return undefined;
 
     user.way_point = { x: home.x, y: home.y };
     user.route_list = Search.find({ x: office.x, y: office.y }, user.way_point);
   },
 
   sampleMove: function(user){
-    if(user.state.current == 'move'){
+    if(user.state.current === 'move'){
       user.way_point = user.way_point || this.directWayPointServer(user);
 
       if(user.way_point){ 
@@ -103,7 +103,7 @@ var MoveModel = {
 
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});
 
-    if(user.route_list.length == 0){
+    if(user.route_list.length === 0){
       console.log('reload')
       user.route_list.push({x: coord.x * View.gridSize, y: coord.y * View.gridSize});
     }

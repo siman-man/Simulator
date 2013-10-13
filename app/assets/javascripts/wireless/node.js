@@ -27,7 +27,7 @@ var Node = {
     user.type = type;
     user.eid = this.eid;
     this.eid++;
-    user.contact_list = {};
+    user.contact_list = [];
     user.circuit = [];
     user.route_list = [];
 
@@ -49,6 +49,7 @@ var Node = {
     Simulator.node_map[key][user.eid] = { x: x, y: y, obj: user, type: 'user' };
 
     this.node_list[user.eid] = user;
+    console.log(this.node_list);
 	},
 
 	createNode: function( x, y, type ){
@@ -60,13 +61,13 @@ var Node = {
 
     switch(type){
       case 'start':
-      node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
-      break;
+      	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+      	break;
       case 'end':
-      node.graphics.beginFill('rgba(0,0,128,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
-      break;
+      	node.graphics.beginFill('rgba(0,0,128,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+      	break;
       default:
-      node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+      	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
     }
     
     node.ob_type = type || 'normal';
@@ -75,7 +76,7 @@ var Node = {
 
     node.drag = false;
 
-   	node.contact_list = {};
+   	node.contact_list = [];
     Simulator.map.addChild(node);
 
     node.status = ServerStatus.init();
@@ -87,29 +88,22 @@ var Node = {
     View.update();
 	},
 
-	update: function(){
-		var node,
-        eid,
-        key;
-
-    for( eid in this.node_list ){
-      node = this.node_list[eid];
-      this.moveNode(node);
-      coord = View.point2coord( node.x, node.y );
-      key = Simulator.key_map[coord.x][coord.y];
-      Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: user, type: 'user', cost: 1, pf: 1 };
-    }
-	},
-
 	move: function(){
 		var node,
-				eid;
+				eid,
+				key;
 
 		for( eid in this.node_list ){
 			node = this.node_list[eid];
 
-			if( node.ob_type == 'user' ){
+			if( node.ob_type === 'user' ){
+				coord = View.point2coord( node.x, node.y );
+				key = Simulator.key_map[coord.y][coord.x];
+				delete Simulator.node_map[key][node.eid];
 				this.moveUser(node);
+				coord = View.point2coord( node.x, node.y );
+				key = Simulator.key_map[coord.y][coord.x];
+      	Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'user' };
 			}
 		}
 	},
@@ -119,18 +113,20 @@ var Node = {
     		node,
         eid,
         coord,
-        i;
+        i,
+        contact_list = [];
 
     for( eid in this.node_list ){
       node = this.node_list[eid];
 
       if(Simulator.map.contains(node)){
-        User.clear_edge(node);       
+        this.clearEdge(node);       
         coord = View.point2coord( node.x, node.y );
         contact_list = Propagation.calc(coord.x, coord.y);
 
         for( i in contact_list ){
-          dest = contact_list[i].obj;
+          dest = this.node_list[contact_list[i]];
+          
           this.addEdge(node, dest, "orange");  
         }
       }
@@ -146,6 +142,15 @@ var Node = {
   	line.graphics.lineTo(dest.x + View.gridSize/2, dest.y + View.gridSize/2);
 
     View.connection_line.push(line);
+	},
+
+	clearEdge: function(node){
+    var line, i;
+    for( i in node.contact_list){
+      line = node.contact_list[i];
+      Simulator.map.removeChild(line);
+    }
+    node.contact_list = [];
 	},
 
 	moveUser: function(user){
@@ -167,7 +172,7 @@ var Node = {
 	remove: function(node){
     console.log("remove node =>");
     var coord = View.point2coord( node.x, node.y ),
-    		key = Simulator.key_map[coord.x][coord.y];
+    		key = Simulator.key_map[coord.y][coord.x];
 
     Simulator.map.removeChild(node);
     delete Simulator.node_map[key][node.eid];

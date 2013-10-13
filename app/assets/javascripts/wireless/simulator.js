@@ -13,7 +13,6 @@ var Simulator = {
   press_flag: false,
   packet_id: 0,
   article_id: 0,
-  eid: 0,
   time: 0,
   per_frame: 60,
 
@@ -53,6 +52,7 @@ var Simulator = {
     Tree.clear();
     Office.clear();
     Node.clear();
+    View.clear();
     
     View.drawGrid()
     View.init();
@@ -65,7 +65,6 @@ var Simulator = {
       Simulator.time++;
       Simulator.updateTime();
       View.clear();
-      Server.update();
       Simulator.moveUpdate();
       Simulator.scanUpdate();
       Simulator.communicationUpdate();
@@ -124,7 +123,7 @@ var Simulator = {
           break;
         case 'user':
           key = Simulator.key_map[y][x];
-          if( Simulator.node_map[key] ){
+          if( Object.keys(Simulator.node_map[key]).length === 0 ){
             Node.create( x, y, 'user', { type: 'normal' });
           }
           break;

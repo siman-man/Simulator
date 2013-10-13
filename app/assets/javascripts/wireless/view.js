@@ -25,7 +25,10 @@ var View = {
 	},
 
 	update: function(){
-		var x, y, flag, obj;
+		var x, y, 
+				flag, 
+				obj, 
+				line;
 
 		for( y = 0; y < View.height; y++ ){
 			for( x = 0; x < View.width; x++ ){
@@ -39,6 +42,8 @@ var View = {
 				View.propagation[y][x].flag = false;
 			}
 		}
+
+		View.drawConnectionLine();
 	},
 
 	movePacket: function(packet, speed){

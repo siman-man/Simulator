@@ -7,10 +7,10 @@ var Propagation = {
 	calc: function(x, y){
 		var board = [],
         ypos, xpos,
-        field = Simulator.field,
-        contact_list = {},
+        contact_list = [],
         queue = new PriorityQueue(),
-        node, y, x, i, eid, key;
+        node, y, x, i, eid, key,
+        cost;
 
 		for( ypos = 0; ypos < View.height; ypos++ ){
       board[ypos] = [];
@@ -31,21 +31,25 @@ var Propagation = {
       for(i = 0; i < 8; i++){
         y = node.y + this.dy[i];
         x = node.x + this.dx[i];
-        if( View.isInside( y, x ) && node.cost + field[y][x].pf < board[y][x].cost ){
-          board[y][x].cost = node.cost + field[y][x].pf;
-          
-          key = Simulator.point2key( x, y );
-          if( Simulator.node_map[key] !== undefined ){
-            for( eid in Simulator.node_map[key] ){
-              contact_list[eid] = Simulator.node_map[key][eid];
-            }
-          }
 
-          if( board[y][x].cost <= this.limit ){
-            View.propagation[y][x].flag = true;
-            queue.push( { x: x, y: y, cost: board[y][x].cost } )
-          }
-        } 
+        if( View.isInside( y, x ) ){
+          cost = node.cost + Simulator.field[y][x].pf;
+          if( cost < board[y][x].cost ){
+            board[y][x].cost = cost;
+          
+            key = Simulator.key_map[y][x];
+            if( Object.keys(Simulator.node_map[key]).length !== 0 ){
+              for( eid in Simulator.node_map[key] ){
+                contact_list.push(eid);
+              }
+            }
+
+            if( board[y][x].cost <= this.limit ){
+              View.propagation[y][x].flag = true;
+              queue.push( { x: x, y: y, cost: board[y][x].cost } )
+            }
+          } 
+        }
       }
     }
 
