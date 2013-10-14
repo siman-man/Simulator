@@ -1,3 +1,4 @@
+
 var Propagation = {
 	limit: 4,
   dx: [ 1, 0,-1, 0, 1, 1,-1,-1],
@@ -6,10 +7,10 @@ var Propagation = {
 	calc: function(x, y){
 		var board = [],
         ypos, xpos,
-        field = Simulator.field,
         contact_list = [],
         queue = new PriorityQueue(),
-        node, y, x, i;
+        node, y, x, i, eid, key,
+        cost;
 
 		for( ypos = 0; ypos < View.height; ypos++ ){
       board[ypos] = [];
@@ -30,35 +31,28 @@ var Propagation = {
       for(i = 0; i < 8; i++){
         y = node.y + this.dy[i];
         x = node.x + this.dx[i];
-        if( View.isInside( y, x ) && node.cost + field[y][x].pf < board[y][x].cost ){
-          board[y][x].cost = node.cost + field[y][x].pf;
-          
-          if( Simulator.field[y][x].type == 'server' ){
-            contact_list.push( Simulator.field[y][x] );
-          }else if( Simulator.user_map[y][x].type == 'user' ){
-            contact_list.push( Simulator.user_map[y][x] );
-          }
 
-          if( board[y][x].cost <= this.limit ){
-            View.propagation[y][x].flag = true;
-            queue.push( { x: x, y: y, cost: board[y][x].cost } )
-          }
-        } 
+        if( View.isInside( y, x ) ){
+          cost = node.cost + Simulator.field[y][x].pf;
+          if( cost < board[y][x].cost ){
+            board[y][x].cost = cost;
+          
+            key = Simulator.key_map[y][x];
+            if( Object.keys(Simulator.node_map[key]).length !== 0 ){
+              for( eid in Simulator.node_map[key] ){
+                contact_list.push(eid);
+              }
+            }
+
+            if( board[y][x].cost <= this.limit ){
+              View.propagation[y][x].flag = true;
+              queue.push( { x: x, y: y, cost: board[y][x].cost } )
+            }
+          } 
+        }
       }
     }
 
     return contact_list;
-	},
-
-	clear: function(id){
-    var x, y;
-
-		for( y = 0; y < this.canvas_height; y++ ){
-      for( x = 0; x < this.canvas_width; x++ ){
-        if(Simulator.connection_list[y][x][id] !== undefined){
-        	delete Simulator.connection_list[y][x][id];
-        }
-      }
-		}
-	},
+	}
 }

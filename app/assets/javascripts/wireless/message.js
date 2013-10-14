@@ -2,10 +2,12 @@ var Message = {
 	packet_color: "yellow",
 	packet_size: 3,
 	packet_speed: 5,
+	message_num: 10,
 
-	init: function(from, dest){
-		this.from = from;
-		this.dest = dest;
+	init: function(node){
+		for(var i = 0; i < this.message_num; i++){
+			node.strage[i] = true;
+		}
 	},
 
 	data: function(text){
