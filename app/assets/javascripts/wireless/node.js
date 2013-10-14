@@ -2,6 +2,23 @@ var Node = {
 	eid: 0,
 	node_list: {},
 
+  init: function(){
+    var node,
+        from_eid,
+        dest_eid;
+
+    console.log('connection init =>');
+
+    for( from_eid in this.node_list ){
+      node = this.node_list[from_eid];
+      for( dest_eid in this.node_list ){
+        if( from_eid !== dest_eid ){
+          node.contact_list[dest_eid] = new Connection.init();
+        }
+      }
+    }
+  },
+
 	create: function( x, y, type, opt ){
 		switch(type){
 			case 'user':
@@ -27,10 +44,12 @@ var Node = {
     user.type = type;
     user.eid = this.eid;
     this.eid++;
-    user.contact_list = [];
+    user.contact_list = {};
     user.circuit = [];
     user.route_list = [];
+    user.last_connect_time = {};
     user.strage = {};
+    user.buffer = [];
     user.routing_protocol = new Epidemic();
 
     user.x = x * View.gridSize;
@@ -60,6 +79,8 @@ var Node = {
     node.x = x * View.gridSize;
     node.y = y * View.gridSize;
     node.strage = {};
+    node.buffer = [];
+    node.last_connect_time = {};
 
     switch(type){
       case 'start':
@@ -112,25 +133,44 @@ var Node = {
 	},
 
 	scan: function(){
-    var dest,
+    var dest_eid,
     		node,
         eid,
         coord,
-        i;
+        i,
+        connect_list;
+
+    for( eid in this.node_list ){
+      node = this.node_list[eid];
+
+      if(Simulator.map.contains(node)){     
+        coord = View.point2coord( node.x, node.y );
+        connect_list = Propagation.calc(coord.x, coord.y);
+
+        for( dest_eid in node.contact_list ){
+          if( connect_list[dest_eid] !== undefined ){
+            if( node.contact_list[dest_eid].current === 'close' ){
+              node.contact_list[dest_eid].connect(node, this.node_list[dest_eid]);
+            }
+            node.last_connect_time[dest_eid] = Simulator.time;
+            this.addEdge(node, this.node_list[dest_eid], "orange"); 
+          }else if( node.contact_list[dest_eid].current === 'establish' ){
+            node.contact_list[dest_eid].shutdown(node, this.node_list[dest_eid]);
+          }
+        }
+      }
+    }
+  },
+
+  routingUpdate: function(){
+    var eid,
+        node;
 
     for( eid in this.node_list ){
       node = this.node_list[eid];
 
       if(Simulator.map.contains(node)){
-        this.clearEdge(node);       
-        coord = View.point2coord( node.x, node.y );
-        node.contact_list = Propagation.calc(coord.x, coord.y);
 
-        for( i in node.contact_list ){
-          dest = this.node_list[node.contact_list[i]];
-          
-          this.addEdge(node, dest, "orange");  
-        }
       }
     }
   },
@@ -173,13 +213,7 @@ var Node = {
 	},
 
 	clearEdge: function(node){
-    var line, i;
-    for( i in node.contact_list){
-      line = node.contact_list[i];
-      Simulator.map.removeChild(line);
-    }
-    node.contact_list = [];
-	},
+ 	},
 
 	moveUser: function(user){
     switch(user.type){

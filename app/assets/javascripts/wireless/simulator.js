@@ -11,7 +11,7 @@ var Simulator = {
   target: undefined,
   operation_flag: false,
   press_flag: false,
-  packet_id: 0,
+  end_flag: false,
   article_id: 0,
   time: 0,
   per_frame: 30,
@@ -32,6 +32,7 @@ var Simulator = {
     }
 
     this.state = FSM.simulator();
+    this.end_flag = false;
 
     Node.create( 10, 10, 'start');
     Node.create( 20, 10, 'end');
@@ -61,7 +62,7 @@ var Simulator = {
   },
 
   handleTick: function(event) {
-    if(Simulator.state.current == 'run'){
+    if(Simulator.state.current == 'run' && !Simulator.end_flag ){
       Simulator.time++;
       Simulator.updateTime();
       View.clear();
@@ -69,6 +70,7 @@ var Simulator = {
       Simulator.scanUpdate();
       Simulator.communicationUpdate();
       View.update();
+      Simulator.finishCheck();
     }
     Simulator.map.update();
   },
@@ -83,8 +85,15 @@ var Simulator = {
   },
 
   communicationUpdate: function(){
+    Node.routingUpdate();
     Node.transmit();
     Node.receive();
+  },
+
+  finishCheck: function(){
+    if( Object.keys(Node.node_list[1].strage).length == Message.message_num ){
+      Simulator.end_flag = true;
+    }
   },
 
   point2key: function( x, y ){

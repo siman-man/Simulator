@@ -11,6 +11,7 @@ var FSM = {
 
 			callbacks: {
 				onstart: function(event, from, to, user) {
+					Node.init();
 					console.log('start simulation =>'); 
 				},
 

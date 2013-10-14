@@ -7,7 +7,7 @@ var Propagation = {
 	calc: function(x, y){
 		var board = [],
         ypos, xpos,
-        contact_list = [],
+        connect_list = {},
         queue = new PriorityQueue(),
         node, y, x, i, eid, key,
         cost;
@@ -40,7 +40,7 @@ var Propagation = {
             key = Simulator.key_map[y][x];
             if( Object.keys(Simulator.node_map[key]).length !== 0 ){
               for( eid in Simulator.node_map[key] ){
-                contact_list.push(eid);
+                connect_list[eid] = true;
               }
             }
 
@@ -53,6 +53,6 @@ var Propagation = {
       }
     }
 
-    return contact_list;
+    return connect_list;
 	}
 }
