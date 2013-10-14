@@ -11,7 +11,6 @@ var Simulator = {
   target: undefined,
   operation_flag: false,
   press_flag: false,
-  end_flag: false,
   article_id: 0,
   time: 0,
   per_frame: 30,
@@ -36,6 +35,8 @@ var Simulator = {
 
     Node.create( 10, 10, 'start');
     Node.create( 20, 10, 'end');
+
+    Log.send( 0, 'init', "Simulation Start");
 
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
@@ -63,7 +64,7 @@ var Simulator = {
   },
 
   handleTick: function(event) {
-    if(Simulator.state.current == 'run' && !Simulator.end_flag ){
+    if(Simulator.state.current == 'run'){
       Simulator.time++;
       Simulator.updateTime();
       View.clear();
@@ -93,7 +94,7 @@ var Simulator = {
 
   finishCheck: function(){
     if( Object.keys(Node.node_list[1].strage).length == Message.message_num ){
-      Simulator.end_flag = true;
+      Simulator.state.finish();
     }
   },
 

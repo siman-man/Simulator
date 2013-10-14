@@ -23,6 +23,7 @@ Epidemic.prototype = {
 				this.node.buffer[0].size--;
 				if( this.node.buffer[0].size == 0 ){
 					dest.strage[message.id] = message.data;
+					Log.send(Simulator.time, 'normal', "type:reserve");
 					this.node.buffer.shift();
 				}
 			}

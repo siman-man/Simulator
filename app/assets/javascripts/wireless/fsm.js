@@ -6,6 +6,7 @@ var FSM = {
 				{ name: 'start',  from: 'init',  to: 'run' },
 				{ name: 'pause', from: 'run', to: 'stop'    },
 				{ name: 'restart',  from: 'stop',    to: 'run' },
+				{ name: 'finish', from: 'run', to: 'end' },
 				{ name: 'reset', from: ['stop', 'run'], to: 'init' },
 			],
 
@@ -21,6 +22,12 @@ var FSM = {
 
 				onrestart: function(event, from, to, user){
 					console.log('restart simulation =>');
+				},
+
+				onfinish: function(event, from, to){
+					console.log('finish simulation =>');
+					Log.send(Simulator.time, 'close', "Simulation end");
+					window.alert('finish time: ' + Simulator.time );
 				},
 
 				onreset: function(event, from, to){

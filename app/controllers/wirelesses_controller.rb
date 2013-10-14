@@ -16,8 +16,6 @@ class WirelessesController < ApplicationController
 
     if params[:file].presence
       file = params[:file]
-      p file.tempfile
-      p file.tempfile.class
 
       file.tempfile.open
       str = ""

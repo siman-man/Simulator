@@ -6,6 +6,8 @@ Simulator::Application.routes.draw do
   match 'simulator' => "wirelesses#index", :via => [:get, :post]
   root to: 'wirelesses#index'
 
+  match "/logs" => "logs#record", :as => :log_init, :via => [:post]
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

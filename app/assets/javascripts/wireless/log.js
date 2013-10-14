@@ -11,4 +11,17 @@ var Log = {
   		},
   	});
 	},
+
+
+  send: function(time, type, msg){
+    $.ajax({
+      type: "post",
+      url: "/logs",
+      data: {
+        time: time,
+        type: type,
+        message: msg
+      },
+    });
+  }
 }

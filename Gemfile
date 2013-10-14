@@ -20,6 +20,9 @@ gem 'twitter-bootstrap-rails'
 gem 'uglifier', '>= 1.0.3'
 gem 'td-logger'
 gem 'remotipart'
+gem 'mongo_mapper'
+gem 'bson_ext'
+gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
 
 # Gems used only for assets and not required
 # in production environments by default.
