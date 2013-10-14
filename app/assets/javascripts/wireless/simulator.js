@@ -58,6 +58,7 @@ var Simulator = {
     View.drawGrid()
     View.init();
     Simulator.init();
+    Node.init();
     Street.init();  
   },
 

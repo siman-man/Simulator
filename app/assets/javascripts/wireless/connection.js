@@ -14,11 +14,12 @@ var Connection = {
 					var message_diff,
 							message_id;
 
-					message_diff = Message.diff( node, Node.node_list[dest_eid] );	
+					message_diff = Message.diff( from, Node.node_list[dest.eid] );	
 
 					for( message_id in message_diff ){
-						node.buffer.push(Message.create( message_id, node.eid, dest_eid ))
+						from.buffer.push(Message.create( message_id, from.eid, dest.eid ))
 					}
+					console.log(from.buffer);
 				},
 
 				onshutdown: function(event, from, to, from, dest){

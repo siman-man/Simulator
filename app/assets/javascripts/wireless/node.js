@@ -50,7 +50,7 @@ var Node = {
     user.last_connect_time = {};
     user.strage = {};
     user.buffer = [];
-    user.routing_protocol = new Epidemic();
+    user.routing_protocol = new Epidemic(user);
 
     user.x = x * View.gridSize;
     user.y = y * View.gridSize;
@@ -81,6 +81,7 @@ var Node = {
     node.strage = {};
     node.buffer = [];
     node.last_connect_time = {};
+    node.routing_protocol = new Epidemic(node);
 
     switch(type){
       case 'start':
@@ -100,7 +101,7 @@ var Node = {
 
     node.drag = false;
 
-   	node.contact_list = [];
+   	node.contact_list = {};
     Simulator.map.addChild(node);
 
     node.status = ServerStatus.init();
@@ -170,7 +171,7 @@ var Node = {
       node = this.node_list[eid];
 
       if(Simulator.map.contains(node)){
-
+        node.routing_protocol.update();
       }
     }
   },
