@@ -13,6 +13,10 @@
     <![endif]-->
 
       <%= stylesheet_link_tag "application", :media => "all" %>
+      <%= javascript_include_tag "application" %>
+      <%= javascript_include_tag "createjs-2013.02.12.min" %>
+      <%= javascript_include_tag "d3.v3.min" %>
+      <%= javascript_include_tag "state-machine" %>
 
       <!-- For third-generation iPad with high-resolution Retina display: -->
       <!-- Size should be 144 x 144 pixels -->
@@ -43,7 +47,6 @@
     <!-- Javascripts
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <%= javascript_include_tag "application" %>
 
   </body>
 </html>

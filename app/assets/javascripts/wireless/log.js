@@ -1,7 +1,7 @@
 var Log = {
 	create: function(time, host, dest, req, size){
 		$.ajax({
-  		url: "/",
+  		url: "/simulates",
  			data: {
     		time: time,
     		host: host,

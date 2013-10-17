@@ -1,0 +1,17 @@
+<% @obj_list.each do |obj| %>
+	<% case obj[:type] %>
+	<% when :server %>
+		var x = <%= obj[:x] %>
+		var y = <%= obj[:y] %>
+		Server.create(x, y);
+	<% when :user %>
+		var x = <%= obj[:x] %>
+		var y = <%= obj[:y] %>
+		User.create(x, y);
+	<% when :tree %>
+		var x = <%= obj[:x] %>
+		var y = <%= obj[:y] %>
+		Tree.create(x, y);
+	<% else %>
+	<% end %>
+<% end %>

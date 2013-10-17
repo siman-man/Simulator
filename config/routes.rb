@@ -3,10 +3,13 @@ Simulator::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  match 'simulator' => "wirelesses#index", :via => [:get, :post]
-  root to: 'wirelesses#index'
+  match '/simulates' => "simulates#index", :as => :simulator, :via => [:get, :post]
+
+  match '/wds' => 'wds#index', :via => [:get]
+  root to: 'wds#index'
 
   match "/logs" => "logs#record", :as => :log_init, :via => [:post]
+  match "/logs" => "logs#index", :as => :log, :via => [:get]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

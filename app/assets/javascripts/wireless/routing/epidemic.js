@@ -20,13 +20,14 @@ Epidemic.prototype = {
 			if( this.node.contact_list[dest_eid].current === 'close' || dest.strage[message.id] !== undefined ){
 				this.node.buffer.shift();
 			}else{
-				this.node.buffer[0].size--;
-				if( this.node.buffer[0].size == 0 ){
+				message.size--;
+				if( message.size === 0 ){
 					dest.strage[message.id] = message.data;
-					Log.send(Simulator.time, 'normal', "type:reserve");
+					dest.label.text = Object.keys(dest.strage).length;
 					this.node.buffer.shift();
+					Log.send(Simulator.time, 'normal', "type:reserve from:"+this.node.eid+" dest:"+dest_eid);
 				}
 			}
 		}
 	}
-}
+};

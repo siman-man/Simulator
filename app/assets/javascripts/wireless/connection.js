@@ -8,22 +8,27 @@ var Connection = {
 			],
 
 			callbacks: {
-				onconnect: function(event, from, to, from, dest) {
+				onconnect: function(event, from_state, to_state, from, dest) {
 					console.log(from.eid +' connect => ' + dest.eid );
+					Log.send( Simulator.time, 'normal', "type:establish"+" from:"+from.eid+" dest:"+dest.eid);
 
-					var message_diff,
-							message_id;
+					var message_diff = [],
+							message_id,
+							i;
 
 					message_diff = Message.diff( from, Node.node_list[dest.eid] );	
 
-					for( message_id in message_diff ){
+					console.log(from.buffer);
+					for( i in message_diff ){
+						message_id = message_diff[i];
 						from.buffer.push(Message.create( message_id, from.eid, dest.eid ))
 					}
 					console.log(from.buffer);
 				},
 
-				onshutdown: function(event, from, to, from, dest){
+				onshutdown: function(event, from_state, to_state, from, dest){
 					console.log(from.eid +' close => ' + dest.eid ); 
+					Log.send( Simulator.time, 'normal', "type:close"+" from:"+from.eid+" dest:"+dest.eid);
 				}
 			}
 		});

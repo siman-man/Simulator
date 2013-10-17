@@ -37,7 +37,7 @@
       </label>
     </div>
   </div>
-
+  
   <h3>設定ファイル読み込み</h3>
   <div id="config" class="sub_options">
     <%= form_tag(simulator_path, { remote: true, multipart: true } ) do %>
@@ -68,6 +68,9 @@
 <%= javascript_include_tag "wireless/fsm" %>
 <%= javascript_include_tag "wireless/street" %>
 <%= javascript_include_tag "wireless/car" %>
+<%= javascript_include_tag "wireless/office" %>
+<%= javascript_include_tag "wireless/tree" %>
+<%= javascript_include_tag "wireless/home" %>
 <%= javascript_include_tag "wireless/propagation" %>
 <%= javascript_include_tag "wireless/server_status" %>
 <%= javascript_include_tag "wireless/search" %>

@@ -9,7 +9,7 @@ var Message = {
 	},
 
 	create: function( id, from_eid, dest_eid ){
-		return { id: id, from_eid: from_eid, dest_eid: dest_eid, data: 'hello', size: this.message_size }
+		return { id: id, from_eid: from_eid, dest_eid: dest_eid, data: 'hello', size: Message.message_size }
 	},
 
 	diff: function( from, dest ){

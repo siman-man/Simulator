@@ -1,4 +1,4 @@
 development:
   agent: localhost:24224
-  tag: syslog
+  tag: simulation
   debug_mode: true

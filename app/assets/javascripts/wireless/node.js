@@ -55,6 +55,11 @@ var Node = {
     user.x = x * View.gridSize;
     user.y = y * View.gridSize;
 
+    user.label = new createjs.Text(0, "16px Arial", "white");
+    user.label.x = user.x;
+    user.label.y = user.y;
+    user.label.textBaseline = "top";
+
     if(type == 'worker'){
       user.state = FSM.worker(user);
     }else{
@@ -65,6 +70,7 @@ var Node = {
     View.update();
 
     Simulator.map.addChild(user);
+    Simulator.map.addChild(user.label);
 
     key = Simulator.key_map[y][x];
     Simulator.node_map[key][user.eid] = { x: x, y: y, obj: user, type: 'user' };
@@ -101,8 +107,14 @@ var Node = {
 
     node.drag = false;
 
+    node.label = new createjs.Text(0, "16px Arial", "white");
+    node.label.x = node.x;
+    node.label.y = node.y;
+    node.label.textBaseline = "top";
+
    	node.contact_list = {};
     Simulator.map.addChild(node);
+    Simulator.map.addChild(node.label);
 
     node.status = ServerStatus.init();
 
@@ -126,6 +138,8 @@ var Node = {
 				key = Simulator.key_map[coord.y][coord.x];
 				delete Simulator.node_map[key][node.eid];
 				this.moveUser(node);
+        node.label.y = node.y;
+        node.label.x = node.x;
 				coord = View.point2coord( node.x, node.y );
 				key = Simulator.key_map[coord.y][coord.x];
       	Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'user' };
@@ -143,6 +157,7 @@ var Node = {
 
     for( eid in this.node_list ){
       node = this.node_list[eid];
+      node.label.text = Object.keys(node.strage).length;
 
       if(Simulator.map.contains(node)){     
         coord = View.point2coord( node.x, node.y );

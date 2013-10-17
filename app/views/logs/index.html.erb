@@ -1,0 +1,29 @@
+<div id="log">
+	<script>
+		var dataset = [ 11, 25, 45, 30, 33 ];
+
+		var w = 500;
+		var h = 200;
+
+		var svg = d3.select("div#log").append("svg").attr({ width: w, height: h });
+
+		svg.selectAll("circle")
+		.data(dataset)
+		.enter()
+		.append("circle")
+		.attr({
+			cx: function( d, i ){ return 50 + ( i * 100 ); },
+			cy: h / 2,
+			r: 0,
+			fill: "red"
+		})
+		.transition()
+		.delay( function(d, i){
+			return i * 300;
+		})
+		.duration(1000)
+		.attr({
+			r: function(d){ return d; }
+		});
+	</script>
+</div>

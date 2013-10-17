@@ -97,8 +97,8 @@ var MoveModel = {
   },
 
   directWayPoint: function(user){
-    var x = Math.random() * View.width | 0,
-        y = Math.random() * View.height | 0,
+    var x = Math.random() * View.width/2 | 0,
+        y = Math.random() * View.height/2 | 0,
         coord = View.point2coord( user.x, user.y );
 
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});

@@ -72,9 +72,11 @@ var Simulator = {
       Simulator.scanUpdate();
       Simulator.communicationUpdate();
       View.update();
+      Simulator.map.update();
       Simulator.finishCheck();
+    }else{
+      Simulator.map.update();
     }
-    Simulator.map.update();
   },
 
   moveUpdate: function(){
@@ -93,7 +95,7 @@ var Simulator = {
   },
 
   finishCheck: function(){
-    if( Object.keys(Node.node_list[1].strage).length == Message.message_num ){
+    if( Object.keys(Node.node_list[1].strage).length === Message.message_num ){
       Simulator.state.finish();
     }
   },
