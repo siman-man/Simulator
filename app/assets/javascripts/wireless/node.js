@@ -121,6 +121,7 @@ var Node = {
     this.node_list[node.eid] = node;
     key = Simulator.key_map[y][x];
     Simulator.node_map[key][node.eid] = { x: x, y: y, obj: node, type: 'server' };
+    Simulator.field[y][x] = { x: x, y: y, obj: node, type: 'server', cost: 1, pf: 1 };
     Propagation.calc(x, y);
     View.update();
 	},
@@ -138,12 +139,12 @@ var Node = {
 				key = Simulator.key_map[coord.y][coord.x];
 				delete Simulator.node_map[key][node.eid];
 				this.moveUser(node);
-        node.label.y = node.y;
-        node.label.x = node.x;
 				coord = View.point2coord( node.x, node.y );
 				key = Simulator.key_map[coord.y][coord.x];
       	Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'user' };
 			}
+      node.label.y = node.y;
+      node.label.x = node.x;
 		}
 	},
 

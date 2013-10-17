@@ -196,7 +196,8 @@ var Simulator = {
           coord = View.point2coord(x, y),
           operation_type = e.button,
           object_type = $("input[name='draw_object']:checked").val(),
-          draw_object = Simulator.field[coord.y][coord.x]; 
+          draw_object = Simulator.field[coord.y][coord.x],
+          key;
 
           console.log(operation_type);
 
@@ -204,6 +205,11 @@ var Simulator = {
         Simulator.operation_flag = true;
         Simulator.target = draw_object;
         Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+
+        if( draw_object.obj.type === 'server' ){
+          key = Simulator.key_map[coord.y][coord.x];
+          Simulator.node_map[key][draw_object.obj.eid] = undefined;
+        }
       }else{
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
       }
@@ -224,11 +230,13 @@ var Simulator = {
       if( Simulator.operation_flag && draw_object.obj === undefined){
         Simulator.target.obj.x = coord.x * gridSize;
         Simulator.target.obj.y = coord.y * gridSize;
+        Simulator.target.obj.label.y = Simulator.target.obj.y;
+        Simulator.target.obj.label.x = Simulator.target.obj.x;
         Simulator.target.x = coord.x;
         Simulator.target.y = coord.y;
         Propagation.calc(coord.x, coord.y);
         View.update();
-      }else{
+      }else if( draw_object.obj === undefined){
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
       }
     }
@@ -236,8 +244,14 @@ var Simulator = {
 
   onmouseup: function(e){
     if( Simulator.target ){
-      var coord = View.point2coord( Simulator.target.obj.x, Simulator.target.obj.y );
+      var coord = View.point2coord( Simulator.target.obj.x, Simulator.target.obj.y ),
+          key, eid;
       Simulator.field[coord.y][coord.x] = Simulator.target;
+      if( Simulator.target.type === 'server' ){
+        key = Simulator.key_map[coord.y][coord.x];
+        eid = Simulator.target.obj.eid;
+        Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'server' };
+      }
       Propagation.calc(coord.x, coord.y);
       View.update();
       Simulator.target = undefined;
