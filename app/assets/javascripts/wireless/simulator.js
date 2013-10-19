@@ -204,9 +204,9 @@ var Simulator = {
         Simulator.target = draw_object;
         Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 
-        if( draw_object.obj.type === 'server' ){
+        if( draw_object.type === 'server' ){
           key = Simulator.key_map[coord.y][coord.x];
-          Simulator.node_map[key][draw_object.obj.eid] = undefined;
+          delete Simulator.node_map[key][draw_object.obj.eid];
         }
       }else{
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
@@ -226,8 +226,8 @@ var Simulator = {
           draw_object = Simulator.field[coord.y][coord.x]; 
 
       if( Simulator.operation_flag && draw_object.obj === undefined){
-        Simulator.target.obj.x = coord.x * gridSize;
         Simulator.target.obj.y = coord.y * gridSize;
+        Simulator.target.obj.x = coord.x * gridSize;
         Simulator.target.obj.label.y = Simulator.target.obj.y;
         Simulator.target.obj.label.x = Simulator.target.obj.x;
         Simulator.target.x = coord.x;

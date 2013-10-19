@@ -2,8 +2,10 @@ module LogsHelper
   require 'find'
 
   def init
+    @finish_time = 0
     @total_emit = 0
     @transmit_num = Hash.new(0)
+    @recieve_num = Hash.new(0)
   end
 
   def collect_data( key )
@@ -26,7 +28,25 @@ module LogsHelper
       end
     end
 
-    { total_emit: @total_emit, transmit: @transmit_num }
+    data_order
+
+    collect_result
+  end
+
+  def data_order
+    @transmit_num = Hash[@transmit_num.sort_by{|k,v| k}]
+    @recieve_num = Hash[@recieve_num.sort_by{|k,v| k}]
+  end
+
+  def collect_result
+    result = Hash.new
+
+    result[:total_emit] = @total_emit
+    result[:transmit] = @transmit_num
+    result[:receive] = @recieve_num
+    result[:finish_time] = @finish_time
+
+    result
   end
 
   def search_file( key )
@@ -41,11 +61,13 @@ module LogsHelper
   end
 
   def check(data)
-    p data
     case data[:operation]
     when 'transmit'
       @total_emit += 1
       @transmit_num[data[:from]] += 1
+      @recieve_num[data[:dest]] += 1
+    when 'finish'
+      @finish_time = data[:time]
     else
     end
   end

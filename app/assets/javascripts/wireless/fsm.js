@@ -16,7 +16,7 @@ var FSM = {
 					Log.send({ 
 						time: 0, 
 						type: 'init',
-						operation: "none",
+						operation: "start",
 						msg: 'start'
 					});
 					console.log('start simulation =>'); 
@@ -34,8 +34,8 @@ var FSM = {
 					console.log('finish simulation =>');
 					Log.send({ 
 						time: Simulator.time, 
-						type: 'end', 
-						operation: "none",
+						type: 'finish', 
+						operation: "finish",
 						msg: 'end'
 					});
 					alert('message');
