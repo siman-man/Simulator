@@ -25,7 +25,13 @@ Epidemic.prototype = {
 					dest.strage[message.id] = message.data;
 					dest.label.text = Object.keys(dest.strage).length;
 					this.node.buffer.shift();
-					Log.send(Simulator.time, 'normal', "type:reserve from:"+this.node.eid+" dest:"+dest_eid);
+					Log.send({ 
+						time: Simulator.time, 
+						type: 'normal', 
+						operation: 'transmit',
+						from: this.node.eid, 
+						dest: dest.eid 
+					});
 				}
 			}
 		}

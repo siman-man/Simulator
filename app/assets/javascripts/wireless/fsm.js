@@ -13,6 +13,12 @@ var FSM = {
 			callbacks: {
 				onstart: function(event, from, to, user) {
 					Node.init();
+					Log.send({ 
+						time: 0, 
+						type: 'init',
+						operation: "none",
+						msg: 'start'
+					});
 					console.log('start simulation =>'); 
 				},
 
@@ -26,8 +32,14 @@ var FSM = {
 
 				onfinish: function(event, from, to){
 					console.log('finish simulation =>');
-					Log.send(Simulator.time, 'close', "Simulation end");
-					window.alert('finish time: ' + Simulator.time );
+					Log.send({ 
+						time: Simulator.time, 
+						type: 'end', 
+						operation: "none",
+						msg: 'end'
+					});
+					alert('message');
+					window.location = '/result';
 				},
 
 				onreset: function(event, from, to){

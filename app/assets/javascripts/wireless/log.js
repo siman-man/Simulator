@@ -12,15 +12,17 @@ var Log = {
   	});
 	},
 
-
-  send: function(time, type, msg){
+  send: function( data ){
     $.ajax({
       type: "post",
       url: "/logs",
       data: {
-        time: time,
-        type: type,
-        message: msg
+        time: data.time,
+        type: data.type,
+        operation: data.operation,
+        from: data.from,
+        dest: data.dest,
+        message: data.msg
       },
     });
   }

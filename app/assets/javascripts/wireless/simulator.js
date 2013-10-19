@@ -36,8 +36,6 @@ var Simulator = {
     Node.create( 10, 10, 'start');
     Node.create( 20, 10, 'end');
 
-    Log.send( 0, 'init', "Simulation Start");
-
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
     Simulator.map.update();
