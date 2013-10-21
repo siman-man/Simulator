@@ -13,7 +13,7 @@ var Simulator = {
   press_flag: false,
   article_id: 0,
   time: 0,
-  per_frame: 30,
+  per_frame: 60,
 
   init: function(){
     var x, y, key;

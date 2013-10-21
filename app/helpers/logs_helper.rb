@@ -67,6 +67,7 @@ module LogsHelper
       @total_emit += 1
       @transmit_num[data[:from]] += 1
       @recieve_num[data[:dest]] += 1
+      @finish_time = data[:time]
     when 'finish'
       @finish_time = data[:time]
     else
