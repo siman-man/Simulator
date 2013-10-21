@@ -1,6 +1,6 @@
 var Message = {
 	message_size: 5,
-	message_num: 5,
+	message_num: 10,
 
 	init: function(node){
 		for(var i = 0; i < this.message_num; i++){

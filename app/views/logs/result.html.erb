@@ -1,5 +1,17 @@
-hello
-
 <p>
 	<%= @result %>
 </p>
+
+<h3>終了タイム: <%= @result[:finish_time] %></h3>
+<h3>合計データ送信数: <%= @result[:total_emit] %></h3>
+
+<%= javascript_include_tag "log/result" %>
+<%= javascript_include_tag "log/show" %>
+
+<script>
+	var test = <%= @result[:transmit].to_json.html_safe %>
+			show = <%= @result[:receive].to_json.html_safe %>
+	console.log(test);
+	Result.vertical(test);
+	Result.vertical(show);
+</script>

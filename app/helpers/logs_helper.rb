@@ -42,8 +42,8 @@ module LogsHelper
     result = Hash.new
 
     result[:total_emit] = @total_emit
-    result[:transmit] = @transmit_num
-    result[:receive] = @recieve_num
+    result[:transmit] = @transmit_num.map{|key, value| { label: key, value: value }}
+    result[:receive] = @recieve_num.map{|key, value| { label: key, value: value }}
     result[:finish_time] = @finish_time
 
     result
@@ -62,6 +62,7 @@ module LogsHelper
 
   def check(data)
     case data[:operation]
+    when 'init'
     when 'transmit'
       @total_emit += 1
       @transmit_num[data[:from]] += 1

@@ -17,6 +17,8 @@ class LogsController < ApplicationController
 	 	if defined?(@@file_name)
 			@result = collect_data(@@file_name)
 		else
+			@sample = [{ label: 0, value: 5 }, { label: 1, value: 10}, { label: 2, value: 15 }]
+			@result = { test: [ 1,2,3,4,5], test2: { a: 1 }}
 			redirect_to root_path
 		end
 	end
