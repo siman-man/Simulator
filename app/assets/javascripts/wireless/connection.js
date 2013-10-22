@@ -22,7 +22,7 @@ var Connection = {
 							message_id,
 							i;
 
-					message_diff = Message.diff( from, Node.node_list[dest.eid] );	
+					message_diff = from.routing_protocol.diff( from, dest );	
 
 					for( i in message_diff ){
 						message_id = message_diff[i];

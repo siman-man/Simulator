@@ -17,7 +17,7 @@ Epidemic.prototype = {
 			dest_eid = message.dest_eid;
 			dest = Node.node_list[dest_eid];
 			
-			if( this.node.contact_list[dest_eid].current === 'close' || dest.strage[message.id] !== undefined ){
+			if( this.check( dest, message ) ){
 				this.node.buffer.shift();
 			}else{
 				message.size--;
@@ -35,5 +35,28 @@ Epidemic.prototype = {
 				}
 			}
 		}
+	},
+
+	check: function( dest, message ){
+
+		if( this.node.contact_list[dest_eid].current === 'close' ) return true;
+		if( dest.strage[message.id] !== undefined ) return true;
+
+		return false;
+	},
+
+	diff: function( from, dest ){
+		var strageA = from.strage,
+				strageB = dest.strage,
+				message_id,
+				diff= [];
+
+		for( message_id in from.strage ){
+			if( dest.strage[message_id] === undefined ){
+				diff.push(message_id);
+			}
+		}
+
+		return diff;
 	}
 };
