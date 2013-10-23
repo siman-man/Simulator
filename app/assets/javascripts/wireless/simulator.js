@@ -7,6 +7,7 @@ var Simulator = {
   node_map: {},
   field: [],
   key_map: [],
+  seed: 1,
   selected_target: -1,
   target: undefined,
   operation_flag: false,
@@ -16,6 +17,7 @@ var Simulator = {
   per_frame: 60,
 
   init: function(){
+    this.mersenne = new MersenneTwister(this.seed);
     var x, y, key;
 
     for( y = 0; y < View.height; y++ ){

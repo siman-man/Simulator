@@ -1,5 +1,51 @@
-<div>
-	Welcome!
+<style>
+p.button {
+	text-align: center;
+}
 
-	<%= link_to 'シミュレータへ', simulator_path %>
-</div
+h1 {
+	text-align: center;
+}
+
+.lead {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+#wds-info {
+	margin-bottom: 50px;
+}
+</style>
+
+<div class="container">
+	<div class="jumbotron">
+		<%= content_tag( :h1, "Web DTN Simulator" ) %>
+		<%= content_tag( :p, "このサイトではDTN(Delay Toralent Network)のシミュレーションが行えます。現在DTNでは様々なルーティング
+		プロトコルが提案されてきましたが、このサイトではそれぞれのプロトコルの比較・検証を行うことが出来ます。", class: "lead") %>
+		<%= content_tag( :p , link_to('シミュレータへ', simulator_path, class: "btn btn-lg btn-success"), class: "button") %>
+	</div>
+
+	<!-- Example row of columns -->
+	<div class="row" id="wds-info">
+		<div class="col-lg-4">
+			<h2>統計データ</h2>
+			<%= content_tag( :p, "各DTNプロトコルの統計情報を閲覧することが出来ます。") %>
+			<p><a class="btn btn-primary" href="#">View details &raquo;</a></p>
+		</div>
+		<div class="col-lg-4">
+			<h2>実装プロトコル一覧</h2>
+			<%= content_tag( :p, "各種プロトコル一覧。") %>
+			<p><a class="btn btn-primary" href="#">View details &raquo;</a></p>
+		</div>
+		<div class="col-lg-4">
+			<h2>過去データ</h2>
+			<%= content_tag( :p, "過去に行われたシミュレーションの実行結果の履歴を閲覧できます。") %>
+			<p><a class="btn btn-primary" href="#">View details &raquo;</a></p>
+		</div>
+	</div>
+
+	<footer>
+		<p class="pull-right"><a href="#">Back to top</a></p>
+		<p>&copy; 2013 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+	</footer>
+</div>
