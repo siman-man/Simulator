@@ -12,17 +12,16 @@ end
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-ui-bootstrap-rails'
-gem 'sass-rails',   '~> 4.0.0.beta1'
 gem 'coffee-rails', '~> 4.0.0.beta1'
 gem 'therubyracer'
 gem 'less-rails'
-gem 'twitter-bootstrap-rails'
+gem 'sass-rails'
+gem 'execjs'
 gem 'uglifier', '>= 1.0.3'
 gem 'td-logger'
 gem 'remotipart'
-gem 'mongo_mapper'
-gem 'bson_ext'
-gem 'mongoid', git: 'https://github.com/mongoid/mongoid.git'
+gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
+  :github => 'anjlab/bootstrap-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -39,7 +39,7 @@ Epidemic.prototype = {
 
 	check: function( dest, message ){
 
-		if( this.node.contact_list[dest_eid].current === 'close' ) return true;
+		if( this.node.contact_list[dest.eid].current === 'close' ) return true;
 		if( dest.strage[message.id] !== undefined ) return true;
 
 		return false;
