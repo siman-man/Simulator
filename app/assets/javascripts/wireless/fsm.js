@@ -17,7 +17,6 @@ var FSM = {
 						time: 0, 
 						type: 'init',
 						operation: "start",
-						config: { seed: Simulator.seed, stage_type: Simulator.stage_type }
 						msg: 'start'
 					});
 					console.log('start simulation =>'); 
@@ -37,6 +36,11 @@ var FSM = {
 						time: Simulator.time, 
 						type: 'finish', 
 						operation: "finish",
+						config: { 
+							seed: Simulator.seed, 
+							stage_type: Simulator.stage_type, 
+							node_num: Object.keys(Node.node_list).length  
+						},
 						msg: 'end'
 					});
 					alert('message');

@@ -41,15 +41,7 @@
   
     <h3>設定ファイル読み込み</h3>
     <div id="config" class="sub_options">
-      <%= form_tag(simulator_path, { remote: true, multipart: true } ) do %>
-      <input type="file" id="file-input" name="file" style="display: none;">
-      <div class="input-prepend">
-        <a class="btn" onclick="$('#file-input').click();"><i class="icon-folder-open"></i></a>
-        <span id="cover" class="input-medium uneditable-input">select file</span>
-      </div>
-
-      <%= submit_tag("送信", { class: "btn" }) %>
-      <% end %>
+      <button id="stage_write" class="btn">設定書き出し</button>
     </div>
   </div><!-- .accordion -->
 </div>
@@ -87,5 +79,6 @@
 <%= javascript_include_tag "wireless/node" %>
 <%= javascript_include_tag "wireless/stage" %>
 <%= javascript_include_tag "wireless/simulator" %>
+<%= javascript_include_tag "wireless/config" %>
 <%= javascript_include_tag "wireless/view" %>
 <%= javascript_include_tag "wireless/init" %>
