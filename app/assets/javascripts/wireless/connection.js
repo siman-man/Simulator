@@ -22,11 +22,11 @@ var Connection = {
 							message_id,
 							i;
 
-					message_diff = from.routing_protocol.diff( from, dest );	
+					message_diff = from.routing_protocol.diff( dest );	
 
 					for( i in message_diff ){
 						message_id = message_diff[i];
-						from.buffer.push(Message.create( message_id, from.eid, dest.eid ))
+						from.buffer.push(Message.create( message_id, from, dest ))
 					}
 				},
 

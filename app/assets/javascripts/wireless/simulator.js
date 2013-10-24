@@ -8,6 +8,7 @@ var Simulator = {
   field: [],
   key_map: [],
   seed: 1,
+  stage_type: 1,
   selected_target: -1,
   target: undefined,
   operation_flag: false,
@@ -17,6 +18,8 @@ var Simulator = {
   per_frame: 60,
 
   init: function(){
+    this.protocol_type = 'spray_and_wait';
+    //this.protocol_type = 'epidemic';
     this.mersenne = new MersenneTwister(this.seed);
     var x, y, key;
 
@@ -35,8 +38,7 @@ var Simulator = {
     this.state = FSM.simulator();
     this.end_flag = false;
 
-    Node.create( 10, 10, 'start');
-    Node.create( 20, 10, 'end');
+    Stage.stage1();
 
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);

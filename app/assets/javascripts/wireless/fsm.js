@@ -17,6 +17,7 @@ var FSM = {
 						time: 0, 
 						type: 'init',
 						operation: "start",
+						config: { seed: Simulator.seed, stage_type: Simulator.stage_type }
 						msg: 'start'
 					});
 					console.log('start simulation =>'); 

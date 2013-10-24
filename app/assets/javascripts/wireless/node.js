@@ -19,6 +19,20 @@ var Node = {
     }
   },
 
+  direct_routing_protocol: function(node){
+    switch(Simulator.protocol_type){
+      case 'epidemic':
+        return new Epidemic(node);
+        break;
+      case 'spray_and_wait':
+        return new SprayAndWait(node);
+        break;
+      default:
+        return new Epidemic(node);
+        break;
+    }
+  },
+
 	create: function( x, y, type, opt ){
 		switch(type){
 			case 'user':
@@ -50,7 +64,8 @@ var Node = {
     user.last_connect_time = {};
     user.strage = {};
     user.buffer = [];
-    user.routing_protocol = new Epidemic(user);
+
+    user.routing_protocol = this.direct_routing_protocol(user);
 
     user.x = x * View.gridSize;
     user.y = y * View.gridSize;
@@ -87,7 +102,7 @@ var Node = {
     node.strage = {};
     node.buffer = [];
     node.last_connect_time = {};
-    node.routing_protocol = new Epidemic(node);
+    node.routing_protocol = this.direct_routing_protocol(node);
 
     switch(type){
       case 'start':

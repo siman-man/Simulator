@@ -22,6 +22,7 @@ var Log = {
         operation: data.operation,
         from: data.from,
         dest: data.dest,
+        config: data.config,
         message: data.msg
       },
     });

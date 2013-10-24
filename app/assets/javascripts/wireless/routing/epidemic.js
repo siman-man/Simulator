@@ -45,14 +45,14 @@ Epidemic.prototype = {
 		return false;
 	},
 
-	diff: function( from, dest ){
-		var strageA = from.strage,
+	diff: function( dest ){
+		var strageA = this.node.strage,
 				strageB = dest.strage,
 				message_id,
 				diff= [];
 
-		for( message_id in from.strage ){
-			if( dest.strage[message_id] === undefined ){
+		for( message_id in strageA ){
+			if( strageB[message_id] === undefined ){
 				diff.push(message_id);
 			}
 		}

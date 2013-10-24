@@ -7,6 +7,7 @@ class LogsController < ApplicationController
 	def record		
 		if params[:type] == 'init'
 			@@file_name = Time.now.to_i
+			@@seed = params[:seed]
 		end
 
 		TD.event.post( @@file_name, time: params[:time], operation: params[:operation],
@@ -14,12 +15,14 @@ class LogsController < ApplicationController
 	end
 
 	def result
+		@result = {:total_emit=>33, :transmit=>[{:label=>"0", :value=>23}, {:label=>"2", :value=>1}, {:label=>"4", :value=>3}, {:label=>"6", :value=>6}], :receive=>[{:label=>"1", :value=>10}, {:label=>"2", :value=>10}, {:label=>"4", :value=>3}, {:label=>"6", :value=>10}], :finish_time=>"1282"}
+
+
 	 	if defined?(@@file_name)
 			@result = collect_data(@@file_name)
 		else
 			@sample = [{ label: 0, value: 5 }, { label: 1, value: 10}, { label: 2, value: 15 }]
-			@result = { test: [ 1,2,3,4,5], test2: { a: 1 }}
-			redirect_to root_path
+			#redirect_to root_path
 		end
 	end
 end
