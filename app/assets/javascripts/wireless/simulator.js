@@ -18,8 +18,8 @@ var Simulator = {
   per_frame: 60,
 
   init: function(){
-    this.protocol_type = 'spray_and_wait';
-    //this.protocol_type = 'epidemic';
+    //this.protocol_type = 'spray_and_wait';
+    this.protocol_type = 'epidemic';
     this.mersenne = new MersenneTwister(this.seed);
     var x, y, key;
 

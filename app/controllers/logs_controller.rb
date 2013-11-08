@@ -19,7 +19,7 @@ class LogsController < ApplicationController
 	end
 
 	def result
-		@result = { seed: @@seed, :total_emit=>33, :transmit=>[{:label=>"0", :value=>23}, {:label=>"2", :value=>1}, {:label=>"4", :value=>3}, {:label=>"6", :value=>6}], :receive=>[{:label=>"1", :value=>10}, {:label=>"2", :value=>10}, {:label=>"4", :value=>3}, {:label=>"6", :value=>10}], :finish_time=>"1282"}
+		#@result = { seed: @@seed, :total_emit=>33, :transmit=>[{:label=>"0", :value=>23}, {:label=>"2", :value=>1}, {:label=>"4", :value=>3}, {:label=>"6", :value=>6}], :receive=>[{:label=>"1", :value=>10}, {:label=>"2", :value=>10}, {:label=>"4", :value=>3}, {:label=>"6", :value=>10}], :finish_time=>"1282"}
 
 
 	 	if defined?(@@file_name)
@@ -27,7 +27,7 @@ class LogsController < ApplicationController
 			@result = @result.merge(@@config)
 		else
 			@sample = [{ label: 0, value: 5 }, { label: 1, value: 10}, { label: 2, value: 15 }]
-			#redirect_to root_path
+			redirect_to root_path
 		end
 	end
 end
