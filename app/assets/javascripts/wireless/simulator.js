@@ -161,6 +161,7 @@ var Simulator = {
           break;
       }
     }else if(operation_type == 2 && draw_object.obj !== undefined){
+      console.log("remove object =>");
       switch(object_type){
         case 'server':
         Server.remove( draw_object.obj );
@@ -211,8 +212,14 @@ var Simulator = {
         if( draw_object.type === 'server' ){
           key = Simulator.key_map[coord.y][coord.x];
           delete Simulator.node_map[key][draw_object.obj.eid];
+        }else{
+          console.log("before => ", Simulator.field[coord.y][coord.x] );
+          console.log("object check =>", coord.y, coord.x, draw_object.type, operation_type );
+          Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
+          console.log("after => ", Simulator.field[coord.y][coord.x] );
         }
       }else{
+        console.log("nothing object =>");
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
       }
     }
@@ -229,7 +236,7 @@ var Simulator = {
           object_type = $("input[name='draw_object']:checked").val(),
           draw_object = Simulator.field[coord.y][coord.x]; 
 
-      if( Simulator.operation_flag && draw_object.obj === undefined){
+      if( Simulator.target && Simulator.target.type === 'server' && Simulator.operation_flag && draw_object.obj === undefined){
         Simulator.target.obj.y = coord.y * gridSize;
         Simulator.target.obj.x = coord.x * gridSize;
         Simulator.target.obj.label.y = Simulator.target.obj.y;
@@ -248,14 +255,16 @@ var Simulator = {
     if( Simulator.target ){
       var coord = View.point2coord( Simulator.target.obj.x, Simulator.target.obj.y ),
           key, eid;
-      Simulator.field[coord.y][coord.x] = Simulator.target;
       if( Simulator.target.type === 'server' ){
+        Simulator.field[coord.y][coord.x] = Simulator.target;
         key = Simulator.key_map[coord.y][coord.x];
         eid = Simulator.target.obj.eid;
         Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'server' };
       }
       Propagation.calc(coord.x, coord.y);
-      View.update();
+      if( e.button != 2 ){
+        View.update();
+      }
       Simulator.target = undefined;
     }
     
