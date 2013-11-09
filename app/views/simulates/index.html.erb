@@ -42,6 +42,18 @@
     <h3>設定ファイル読み込み</h3>
     <div id="config" class="sub_options">
       <button id="stage_write" class="btn">設定書き出し</button>
+      <%= form_tag(simulator_path, { remote: true, multipart: true } ) do %>
+        <input type="file" id="file-input" name="file">
+        <%= submit_tag("送信", { class: "btn" }) %>
+      <% end %>
+    </div>
+
+    <h3>設定ファイル読み込み</h3>
+    <div id="config" class="sub_options">
+      <%= form_tag(simulator_path, { remote: true, multipart: true } ) do %>
+        <%= hidden_field_tag( :stage_type, 1 ) %>
+        <%= submit_tag("ステージ1", { class: "btn" }) %>
+      <% end %>
     </div>
   </div><!-- .accordion -->
 </div>

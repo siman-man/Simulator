@@ -38,8 +38,6 @@ var Simulator = {
     this.state = FSM.simulator();
     this.end_flag = false;
 
-    Stage.stage1();
-
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
     Simulator.map.update();

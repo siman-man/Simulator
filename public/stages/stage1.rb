@@ -17,3 +17,4 @@ WebSimulator.define do
     t.pos(x: 7, y: 7)
   end
 end 
+

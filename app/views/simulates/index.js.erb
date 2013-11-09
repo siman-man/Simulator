@@ -1,17 +1,27 @@
+console.log('create map =>');
 <% @obj_list.each do |obj| %>
+	var x, y;
 	<% case obj[:type] %>
 	<% when :server %>
-		var x = <%= obj[:x] %>
-		var y = <%= obj[:y] %>
-		Server.create(x, y);
+		x = <%= obj[:x] %>
+		y = <%= obj[:y] %>
+		Node.create(x, y, 'server');
+	<% when :start %>
+		x = <%= obj[:x] %>
+		y = <%= obj[:y] %>
+		Node.create( x, y, 'start' );
+	<% when :end %>
+		x = <%= obj[:x] %>
+		y = <%= obj[:y] %>
+		Node.create( x, y, 'end' );
 	<% when :user %>
-		var x = <%= obj[:x] %>
-		var y = <%= obj[:y] %>
-		User.create(x, y);
+		x = <%= obj[:x] %>
+		y = <%= obj[:y] %>
+		Node.create(x, y, 'user', { type: 'normal' } );
 	<% when :tree %>
-		var x = <%= obj[:x] %>
-		var y = <%= obj[:y] %>
-		Tree.create(x, y);
+		x = <%= obj[:x] %>
+		y = <%= obj[:y] %>
+		Tree.create( x, y );
 	<% else %>
 	<% end %>
 <% end %>
