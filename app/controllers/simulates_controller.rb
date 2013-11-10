@@ -37,6 +37,11 @@ class SimulatesController < ApplicationController
       @obj_list = Simulator.new.instance_eval { eval(str); @list }
     end
 
+    if params[:field_data] 
+      p params[:field_data]
+      create_field_data(params[:field_data])
+    end
+
     respond_to do |format|
       format.html { render action: 'index' }
       @hello = ["Ruby", "Python", "JavaScript"]

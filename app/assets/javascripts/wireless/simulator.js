@@ -133,9 +133,11 @@ var Simulator = {
     if(operation_type == 0 && draw_object.obj === undefined){
       switch(object_type){
         case 'server':
+          console.log("Node create:server =>");
           Node.create( x, y, 'server' );
           break;
         case 'user':
+          console.log("Node create:user =>");
           key = Simulator.key_map[y][x];
           if( Object.keys(Simulator.node_map[key]).length === 0 ){
             Node.create( x, y, 'user', { type: 'normal' });
@@ -162,10 +164,10 @@ var Simulator = {
       console.log("remove object =>");
       switch(object_type){
         case 'server':
-        Server.remove( draw_object.obj );
+        Node.remove( draw_object.obj );
         break;
         case 'user':
-        User.remove( draw_object.obj );
+        Node.remove( draw_object.obj );
         case 'road':
         Street.remove( draw_object.obj );
         break;
@@ -207,7 +209,8 @@ var Simulator = {
         Simulator.target = draw_object;
         Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
 
-        if( draw_object.type === 'server' ){
+        if( draw_object.type === 'server' && operation_type === 0 ){
+          console.log("hello world =>");
           key = Simulator.key_map[coord.y][coord.x];
           delete Simulator.node_map[key][draw_object.obj.eid];
         }else{
@@ -235,6 +238,7 @@ var Simulator = {
           draw_object = Simulator.field[coord.y][coord.x]; 
 
       if( Simulator.target && Simulator.target.type === 'server' && Simulator.operation_flag && draw_object.obj === undefined){
+        console.log("server pos update =>");
         Simulator.target.obj.y = coord.y * gridSize;
         Simulator.target.obj.x = coord.x * gridSize;
         Simulator.target.obj.label.y = Simulator.target.obj.y;
@@ -243,29 +247,28 @@ var Simulator = {
         Simulator.target.y = coord.y;
         Propagation.calc(coord.x, coord.y);
         View.update();
-      }else if( draw_object.obj === undefined){
+      }else if( draw_object.obj === undefined ){
+        console.log("mousemove - objectCheck =>");
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
       }
     }
   },
 
   onmouseup: function(e){
-    if( Simulator.target ){
+    console.log("onmouseup =>");
+    if( Simulator.target && e.button != 2 ){
       var coord = View.point2coord( Simulator.target.obj.x, Simulator.target.obj.y ),
           key, eid;
-      if( Simulator.target.type === 'server' ){
+      if( Simulator.target.type === 'server'){
         Simulator.field[coord.y][coord.x] = Simulator.target;
         key = Simulator.key_map[coord.y][coord.x];
         eid = Simulator.target.obj.eid;
         Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'server' };
       }
       Propagation.calc(coord.x, coord.y);
-      if( e.button != 2 ){
-        View.update();
-      }
-      Simulator.target = undefined;
+      View.update();
     }
-    
+    Simulator.target = undefined;
     Simulator.operation_flag = false;
     Simulator.press_flag = false;
   },

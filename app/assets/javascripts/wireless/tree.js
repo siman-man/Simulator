@@ -14,7 +14,7 @@ var Tree = {
 
 		tree.id = this.tree_id;
 		this.tree_id++;
-		tree.type = 'tree';
+		tree.ob_type = 'tree';
 
 		Simulator.map.addChild(tree);
 		Simulator.field[y][x] = { x: x, y: y, obj: tree, type: 'tree', cost: 100, pf: 3 };

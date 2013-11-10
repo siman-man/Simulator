@@ -40,6 +40,7 @@ var Node = {
 				break;
 			case 'server':
 				this.createNode( x, y, type );
+        break;
 			case 'start':
 				this.createNode( x, y, type );
 				break;
@@ -55,7 +56,7 @@ var Node = {
     user.graphics.beginFill('rgba(255,59,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
     user.ob_type = 'user';
-    user.type = type;
+    user.type = type || 'normal';
     user.eid = this.eid;
     this.eid++;
     user.contact_list = {};
@@ -116,7 +117,7 @@ var Node = {
       	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
     }
     
-    node.ob_type = type || 'normal';
+    node.ob_type = type || 'server';
     node.eid = this.eid;
    	this.eid++;
 
@@ -136,9 +137,11 @@ var Node = {
     this.node_list[node.eid] = node;
     key = Simulator.key_map[y][x];
     Simulator.node_map[key][node.eid] = { x: x, y: y, obj: node, type: 'server' };
-    Simulator.field[y][x] = { x: x, y: y, obj: node, type: 'server', cost: 1, pf: 1 };
+    Simulator.field[y][x] = { x: x, y: y, obj: node, type: node.ob_type, cost: 1, pf: 1 };
     Propagation.calc(x, y);
     View.update();
+
+    console.log("create node" + node.eid + " =>");
 	},
 
 	move: function(){
@@ -264,12 +267,14 @@ var Node = {
 	},
 
 	remove: function(node){
-    console.log("remove node =>");
+    console.log("remove node" + node.eid + " =>");
     var coord = View.point2coord( node.x, node.y ),
     		key = Simulator.key_map[coord.y][coord.x];
 
     Simulator.map.removeChild(node);
-    delete Simulator.node_map[key][node.eid];
     delete this.node_list[node.eid];
-	},
+    delete Simulator.node_map[key][node.eid];
+    Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+	  console.log(this.node_list);
+  },
 }
