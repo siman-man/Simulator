@@ -7,7 +7,7 @@ module WirelessesHelper
 
   def create_field_data(data_list)
     file_name = Time.now.strftime("%Y%m%d%H%M%S")
-    File.open("#{Rails.root}/public/stages/stage_data#{file_name}.rb", "w") do |file|
+    File.open("#{Rails.root}/public/stages/#{file_name}_stage_data.rb", "w") do |file|
 
       file.write("WebSimulator.define do\n")
       

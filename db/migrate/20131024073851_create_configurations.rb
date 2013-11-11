@@ -3,7 +3,7 @@ class CreateConfigurations < ActiveRecord::Migration
     create_table :configurations do |t|
       t.integer :seed
       t.string :stage_type
-      t.integer :node_num
+      t.string :file_path
 
       t.timestamps
     end

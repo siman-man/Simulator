@@ -236,6 +236,11 @@ var Node = {
   	}
   },
 
+  isServer: function( type ){
+    if( type === 'server' || type === 'start' || type === 'end' ) return true;
+    return false;
+  },
+
  	addEdge: function(node, dest, color_opt){
   	var line = new createjs.Shape(),
         color = color_opt || "orange";

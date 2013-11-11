@@ -17,7 +17,7 @@ var Simulator = {
   time: 0,
   per_frame: 60,
 
-  init: function(){
+  init: function( config ){
     //this.protocol_type = 'spray_and_wait';
     this.protocol_type = 'epidemic';
     this.mersenne = new MersenneTwister(this.seed);
@@ -38,12 +38,17 @@ var Simulator = {
     this.state = FSM.simulator();
     this.end_flag = false;
 
+    if( config === undefined ){
+      Node.create( 10, 10, 'start' );
+      Node.create( 20, 10, 'end' );
+    }
+
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
     Simulator.map.update();
   },
 
-  clear: function(){
+  clear: function( config ){
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     Simulator.map.removeAllChildren();
 
@@ -58,7 +63,7 @@ var Simulator = {
     
     View.drawGrid()
     View.init();
-    Simulator.init();
+    Simulator.init( config );
     Node.init();
     Street.init();  
   },
@@ -208,8 +213,9 @@ var Simulator = {
         Simulator.operation_flag = true;
         Simulator.target = draw_object;
         Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+        console.log( draw_object );
 
-        if( draw_object.type === 'server' && operation_type === 0 ){
+        if( Node.isServer(draw_object.type) && operation_type === 0 ){
           console.log("hello world =>");
           key = Simulator.key_map[coord.y][coord.x];
           delete Simulator.node_map[key][draw_object.obj.eid];
@@ -237,7 +243,7 @@ var Simulator = {
           object_type = $("input[name='draw_object']:checked").val(),
           draw_object = Simulator.field[coord.y][coord.x]; 
 
-      if( Simulator.target && Simulator.target.type === 'server' && Simulator.operation_flag && draw_object.obj === undefined){
+      if( Simulator.target && Node.isServer(Simulator.target.type) && Simulator.operation_flag && draw_object.obj === undefined){
         console.log("server pos update =>");
         Simulator.target.obj.y = coord.y * gridSize;
         Simulator.target.obj.x = coord.x * gridSize;
@@ -259,7 +265,7 @@ var Simulator = {
     if( Simulator.target && e.button != 2 ){
       var coord = View.point2coord( Simulator.target.obj.x, Simulator.target.obj.y ),
           key, eid;
-      if( Simulator.target.type === 'server'){
+      if( Node.isServer(Simulator.target.type) ){
         Simulator.field[coord.y][coord.x] = Simulator.target;
         key = Simulator.key_map[coord.y][coord.x];
         eid = Simulator.target.obj.eid;

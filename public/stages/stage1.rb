@@ -1,22 +1,14 @@
 WebSimulator.define do
   create :start do |t|
-    t.pos( x: 5, y: 5 )
+    t.pos( x: 10, y: 10 )
   end
 
   create :end do |t|
-    t.pos( x: 30, y: 15 )
+    t.pos( x: 20, y: 10 )
   end
 
-  5.times do |index|
-    create :user do |t|
-      t.pos(x: 10+index*2, y: 7)
-    end
-  end
-
-  10.times do |index|
-    create :tree do |t|
-      t.pos(x: 7+index, y: 7)
-    end
+  create :user do |t|
+    t.pos( x: 12, y: 10 )
   end
 end 
 

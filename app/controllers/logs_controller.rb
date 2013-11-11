@@ -8,10 +8,11 @@ class LogsController < ApplicationController
 		if params[:type] == 'init'
 			@@file_name = Time.now.to_i
 		elsif params[:type] == 'finish'
+			p params[:config]
 			@@config = Hash.new
-			@@config[:seed] = 1
-			@@config[:stage_type] = 1
-			@@config[:node_num] = 5
+			@@config[:seed] = params[:config]["seed"].to_i
+			@@config[:stage_type] = params[:config]["stage_type"].to_i
+			@@config[:file_path] = ""
 		end
 
 		TD.event.post( @@file_name, time: params[:time], operation: params[:operation],
