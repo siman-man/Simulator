@@ -24,6 +24,7 @@ gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
   :github => 'anjlab/bootstrap-rails'
 
 gem 'pry-rails'
+gem 'kaminari'
 
 # Gems used only for assets and not required
 # in production environments by default.

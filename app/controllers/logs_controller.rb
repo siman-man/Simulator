@@ -12,7 +12,13 @@ class LogsController < ApplicationController
 			@@config = Hash.new
 			@@config[:seed] = params[:config]["seed"].to_i
 			@@config[:stage_type] = params[:config]["stage_type"].to_i
+			@@config[:finish_time] = params[:config]["finish_time"].to_i
 			@@config[:file_path] = ""
+
+			record = History.new( seed: @@config[:seed], stage_type: @@config[:stage_type], clear_time: @@config[:finish_time] )
+			if record.save!
+				puts "Create new record!"
+			end
 		end
 
 		TD.event.post( @@file_name, time: params[:time], operation: params[:operation],

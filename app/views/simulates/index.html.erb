@@ -52,7 +52,7 @@
     <div id="config" class="sub_options">
       <%= form_tag(simulator_path, { remote: true, multipart: true } ) do %>
         <%= hidden_field_tag( :stage_type, 1 ) %>
-        <%= submit_tag("ステージ1", { class: "btn" }) %>
+        <%= submit_tag("ステージ1", { id: "stage1", class: "btn" }) %>
       <% end %>
     </div>
   </div><!-- .accordion -->
@@ -62,8 +62,9 @@
   <button id="button1" class="btn">開始</button>
   <button id="button2" class="btn">停止</button>
   <button id="button3" class="btn">リセット</button>
+  <input type="number" id="seed" min="0" value="0">
   <div id="clock">
-    <span id="time">00:00:00:000</span>
+    <span id="time">0</span>
   </div>
 </div>
 
@@ -94,3 +95,12 @@
 <%= javascript_include_tag "wireless/config" %>
 <%= javascript_include_tag "wireless/view" %>
 <%= javascript_include_tag "wireless/init" %>
+
+
+<script>
+  <% if defined?(@data) %>
+    console.log(<%= @data[:seed] %>);
+    Simulator.seed = <%= @data[:seed].to_i %>;
+    Simulator.replay = true;
+  <% end %>
+</script>

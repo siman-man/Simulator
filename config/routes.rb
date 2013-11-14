@@ -12,6 +12,8 @@ Simulator::Application.routes.draw do
   match "/logs" => "logs#index", :as => :log, :via => [:get]
   match "/result" => "logs#result", :via => [:get]
 
+  match "/history" => "histories#index", :via => [:get]
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

@@ -1,0 +1,40 @@
+<style>
+th, td {
+  text-align: center;
+}
+</style>
+
+<%= content_tag(:title, '過去の実験データ') %>
+<%= link_to 'TOPに戻る', root_path %>
+
+<table class="table">
+</table>
+
+<table class="table table-striped table-bordered table-hover table-condensed center">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>seed</th>
+      <th>stage</th>
+      <th>finish time</th>
+      <th>detail</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @histories.each do |history| %>
+      <tr>
+        <td><%= history.id %></td>
+        <td><%= history.seed %></td>
+        <td><%= history.stage_type %></td>
+        <td><%= history.clear_time %></td>
+        <%= content_tag(:td, button_to("detail", '#', { class: "btn btn-primary"})) %>
+        <%= content_tag(:td, button_to("replay", { controller: "simulates", action: "index", data: {
+          seed: history.seed,
+          stage_type: history.stage_type
+        }}, { class: "btn btn-success" })) %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

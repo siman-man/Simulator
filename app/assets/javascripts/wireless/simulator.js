@@ -8,6 +8,7 @@ var Simulator = {
   field: [],
   key_map: [],
   seed: 1,
+  replay: false,
   stage_type: 1,
   selected_target: -1,
   target: undefined,
@@ -18,6 +19,12 @@ var Simulator = {
   per_frame: 60,
 
   init: function( config ){
+    if( Simulator.replay ){
+      $("#seed").val(Simulator.seed);
+      console.log('simulator replay =>');
+    }else{
+      console.log('simulator init =>');
+    }
     //this.protocol_type = 'spray_and_wait';
     this.protocol_type = 'epidemic';
     this.mersenne = new MersenneTwister(this.seed);
@@ -38,7 +45,7 @@ var Simulator = {
     this.state = FSM.simulator();
     this.end_flag = false;
 
-    if( config === undefined ){
+    if( config === undefined && !Simulator.replay ){
       Node.create( 10, 10, 'start' );
       Node.create( 20, 10, 'end' );
     }
@@ -46,6 +53,7 @@ var Simulator = {
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
     Simulator.map.update();
+    console.log('seed value => ' + Simulator.seed);
   },
 
   clear: function( config ){
@@ -130,7 +138,8 @@ var Simulator = {
     sec %= 60;
     if(sec < 10) sec = "0" + sec;
 
-    $("span#time").html([hour, min, sec, mil].join(':'));
+    //$("span#time").html([hour, min, sec, mil].join(':'));
+    $("span#time").html(Simulator.time);
   },
 
   objectCheck: function(x, y, object_type, operation_type, draw_object){

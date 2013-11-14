@@ -13,4 +13,8 @@ $(document).ready(function(){
   canvas.addEventListener("contextmenu", function(e){
     e.preventDefault();
   }, false);
+
+  if( Simulator.replay ){
+    $("#stage1").click();
+  }
 });

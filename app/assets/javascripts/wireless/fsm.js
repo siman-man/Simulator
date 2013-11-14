@@ -12,6 +12,7 @@ var FSM = {
 
 			callbacks: {
 				onstart: function(event, from, to, user) {
+					Simulator.seed = $("#seed").val();
 					Node.init();
 					Log.send({ 
 						time: 0, 
@@ -19,7 +20,8 @@ var FSM = {
 						operation: "start",
 						msg: 'start'
 					});
-					console.log('start simulation =>'); 
+					console.log('start simulation =>');
+					console.log('seed value => ' + Simulator.seed); 
 				},
 
 				onpause: function(event, from, to, user){
@@ -32,19 +34,24 @@ var FSM = {
 
 				onfinish: function(event, from, to){
 					console.log('finish simulation =>');
-					Log.send({ 
-						time: Simulator.time, 
-						type: 'finish', 
-						operation: "finish",
-						config: { 
-							seed: Simulator.seed, 
-							stage_type: Simulator.stage_type, 
-							node_num: Object.keys(Node.node_list).length  
-						},
-						msg: 'end'
-					});
-					alert('message');
-					window.location = '/result';
+					if( !Simulator.replay ){
+						Log.send({ 
+							time: Simulator.time, 
+							type: 'finish', 
+							operation: "finish",
+							config: { 
+								seed: Simulator.seed, 
+								stage_type: Simulator.stage_type,
+								finish_time: Simulator.time, 
+								node_num: Object.keys(Node.node_list).length  
+							},
+							msg: 'end'
+						});
+						alert('message');
+						window.location = '/result';
+					}else{
+						window.location = '/history';
+					}
 				},
 
 				onreset: function(event, from, to){
