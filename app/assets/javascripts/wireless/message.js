@@ -2,9 +2,9 @@ var Message = {
 	message_size: 5,
 	message_num: 1,
 
-	init: function(node){
+	init: function(){
 		for(var i = 0; i < this.message_num; i++){
-			node.strage[i] = { size: this.message_size, ftoken: 4 };
+			Node.node_list[0].strage[i] = { size: this.message_size, ftoken: 4 };
 		}
 	},
 

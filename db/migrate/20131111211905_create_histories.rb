@@ -4,7 +4,10 @@ class CreateHistories < ActiveRecord::Migration
     	t.integer :seed
     	t.integer :stage_type
     	t.integer :clear_time
-    	t.string :file_path
+    	t.integer :message_num
+    	t.string :protocol
+    	t.string :dir_name
+    	t.string :file_name
 
       t.timestamps
     end

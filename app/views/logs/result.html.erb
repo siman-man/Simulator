@@ -10,8 +10,14 @@
 
 <script>
 	var test = <%= @result[:transmit].to_json.html_safe %>
-			show = <%= @result[:receive].to_json.html_safe %>
+	var	show = <%= @result[:receive].to_json.html_safe %>
+	var dir_name = <%= @result[:dir_name].to_json.html_safe %>
+	var send_file_name = dir_name + "/send_" + <%= @result[:file_name].to_json.html_safe %>
+	var receive_file_name = dir_name + "/receive_" + <%= @result[:file_name].to_json.html_safe %>
 	console.log(test);
+	console.log(dir_name);
+	console.log(send_file_name);
+	console.log(receive_file_name);
 	Result.vertical(test);
 	Result.vertical(show);
 </script>

@@ -13,6 +13,8 @@ var FSM = {
 			callbacks: {
 				onstart: function(event, from, to, user) {
 					Simulator.seed = $("#seed").val();
+					Message.message_num = parseInt($("#message_num").val());
+					Message.init();
 					Node.init();
 					Log.send({ 
 						time: 0, 
@@ -43,6 +45,8 @@ var FSM = {
 								seed: Simulator.seed, 
 								stage_type: Simulator.stage_type,
 								finish_time: Simulator.time, 
+								message_num: Message.message_num,
+								protocol: Simulator.protocol_type,
 								node_num: Object.keys(Node.node_list).length  
 							},
 							msg: 'end'

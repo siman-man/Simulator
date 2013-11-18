@@ -13,9 +13,11 @@ th, td {
 <table class="table table-striped table-bordered table-hover table-condensed center">
   <thead>
     <tr>
-      <th>ID</th>
+      <th>time</th>
+      <th>protocol</th>
       <th>seed</th>
       <th>stage</th>
+      <th>message num</th>
       <th>finish time</th>
       <th>detail</th>
       <th></th>
@@ -25,11 +27,13 @@ th, td {
   <tbody>
     <% @histories.each do |history| %>
       <tr>
-        <td><%= history.id %></td>
+        <td><%= history.created_at %></td>
+        <td><%= history.protocol %></td>
         <td><%= history.seed %></td>
         <td><%= history.stage_type %></td>
+        <td><%= history.message_num %></td>
         <td><%= history.clear_time %></td>
-        <%= content_tag(:td, button_to("detail", '#', { class: "btn btn-primary"})) %>
+        <%= content_tag(:td, button_to("detail", detail_path(history), { class: "btn btn-primary"})) %>
         <%= content_tag(:td, button_to("replay", { controller: "simulates", action: "index", data: {
           seed: history.seed,
           stage_type: history.stage_type

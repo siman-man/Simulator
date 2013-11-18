@@ -45,10 +45,12 @@ var Simulator = {
     this.state = FSM.simulator();
     this.end_flag = false;
 
+    /*
     if( config === undefined && !Simulator.replay ){
       Node.create( 10, 10, 'start' );
       Node.create( 20, 10, 'end' );
     }
+    */
 
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);

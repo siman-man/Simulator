@@ -1,0 +1,13 @@
+history show
+<%= content_tag(:p, link_to("Back", history_path, { class: "btn btn-primary"})) %>
+
+<%= javascript_include_tag "log/result" %>
+<%= javascript_include_tag "log/show" %>
+
+<script>
+	var test = <%= @send_data.to_json.html_safe %>
+	var	show = <%= @receive_data.to_json.html_safe %>
+
+	Result.vertical(test);
+	Result.vertical(show);
+</script>

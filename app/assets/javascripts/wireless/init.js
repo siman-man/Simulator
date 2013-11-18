@@ -16,5 +16,7 @@ $(document).ready(function(){
 
   if( Simulator.replay ){
     $("#stage1").click();
+  }else{
+    $("#stage1").click();
   }
 });

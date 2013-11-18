@@ -108,7 +108,6 @@ var Node = {
     switch(type){
       case 'start':
       	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
-      	Message.init(node);
       	break;
       case 'end':
       	node.graphics.beginFill('rgba(0,0,128,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
