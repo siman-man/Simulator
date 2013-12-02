@@ -12,6 +12,7 @@ var FSM = {
 
 			callbacks: {
 				onstart: function(event, from, to, user) {
+					Simulator.direct_protocol_type(parseInt($("#protocol").val()));
 					Simulator.seed = $("#seed").val();
 					Message.message_num = parseInt($("#message_num").val());
 					Message.init();
@@ -22,6 +23,7 @@ var FSM = {
 						operation: "start",
 						msg: 'start'
 					});
+					Node.node_set_routing_protocol();
 					console.log('start simulation =>');
 					console.log('seed value => ' + Simulator.seed); 
 				},
@@ -46,6 +48,7 @@ var FSM = {
 								stage_type: Simulator.stage_type,
 								finish_time: Simulator.time, 
 								message_num: Message.message_num,
+								total_send_message_num: Simulator.total_send_message_num,
 								protocol: Simulator.protocol_type,
 								node_num: Object.keys(Node.node_list).length  
 							},

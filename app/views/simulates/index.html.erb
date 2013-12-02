@@ -54,6 +54,10 @@
         <%= hidden_field_tag( :stage_type, 1 ) %>
         <%= submit_tag("ステージ1", { id: "stage1", class: "btn" }) %>
       <% end %>
+      <%= form_tag(simulator_path, { remote: true, multipart: true } ) do %>
+        <%= hidden_field_tag( :stage_type, 2 ) %>
+        <%= submit_tag("ステージ2", { id: "stage2", class: "btn" }) %>
+      <% end %>
     </div>
   </div><!-- .accordion -->
 </div>
@@ -63,7 +67,14 @@
   <button id="button2" class="btn">停止</button>
   <button id="button3" class="btn">リセット</button>
   <input type="number" id="seed" min="0" value="0">
-  <input type="number" id="message_num" min="1" max="100" value="1">
+  <input type="number" id="message_num" min="1" max="100" value="10">
+  <select id="protocol" class="selectpicker">
+    <optgroup label="Epidemic">
+      <option value="0" selected>Epidemic</option>
+      <option value="1">Spray and Wait</option>
+      <option value="2">ProPHET</option>
+    </optgroup>
+  </select>
   <div id="clock">
     <span id="time">0</span>
   </div>
@@ -90,6 +101,7 @@
 <%= javascript_include_tag "wireless/log" %>
 <%= javascript_include_tag "wireless/routing/epidemic" %>
 <%= javascript_include_tag "wireless/routing/spray_and_wait" %>
+<%= javascript_include_tag "wireless/routing/pro_phet" %>
 <%= javascript_include_tag "wireless/node" %>
 <%= javascript_include_tag "wireless/stage" %>
 <%= javascript_include_tag "wireless/simulator" %>

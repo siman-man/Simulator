@@ -14,6 +14,7 @@ var Simulator = {
   target: undefined,
   operation_flag: false,
   press_flag: false,
+  total_send_message_num: 0,
   article_id: 0,
   time: 0,
   per_frame: 60,
@@ -25,8 +26,6 @@ var Simulator = {
     }else{
       console.log('simulator init =>');
     }
-    //this.protocol_type = 'spray_and_wait';
-    this.protocol_type = 'epidemic';
     this.mersenne = new MersenneTwister(this.seed);
     var x, y, key;
 
@@ -51,11 +50,28 @@ var Simulator = {
       Node.create( 20, 10, 'end' );
     }
     */
+    
 
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
     Simulator.map.update();
     console.log('seed value => ' + Simulator.seed);
+  },
+
+  direct_protocol_type: function( type ){
+    switch(type){
+      case 0:
+        this.protocol_type = 'epidemic';
+        break;
+      case 1:
+        this.protocol_type = 'spray_and_wait';
+        break;
+      case 2:
+        this.protocol_type = 'pro_phet';
+        break;
+      default:
+        this.protocol_type = 'epidemic';
+    }
   },
 
   clear: function( config ){

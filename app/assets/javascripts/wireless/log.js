@@ -13,6 +13,9 @@ var Log = {
 	},
 
   send: function( data ){
+    if( data.operation === 'transmit' ){
+      Simulator.total_send_message_num++;
+    }
     $.ajax({
       type: "post",
       url: "/logs",

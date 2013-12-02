@@ -21,6 +21,19 @@ SprayAndWait.prototype = {
 		this.transmit();
 	},
 
+	connect: function( dest ){
+		var message_diff = [],
+				message_id,
+				i;
+
+		message_diff = this.node.routing_protocol.diff( dest );	
+
+		for( i in message_diff ){
+			message_id = message_diff[i];
+			this.node.buffer.push(Message.create( message_id, this.node, dest ))
+		}
+	},
+
 	transmit: function(){
 		var dest,
 				dest_eid,

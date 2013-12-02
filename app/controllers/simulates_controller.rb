@@ -2,6 +2,7 @@ class SimulatesController < ApplicationController
   include WirelessesHelper
 	
   def index
+    @stage_type = 1
     p params
     if params[:time].presence
       params.delete(:controller)
@@ -37,15 +38,14 @@ class SimulatesController < ApplicationController
         str += line
       end
 
-      puts str
-
       @obj_list = Simulator.new.instance_eval { eval(str); @list }
     end
 
-    if params[:stage_type] == "1"
-      puts "create stage type 1"
+    if params[:stage_type].presence
+      @stage_type = params[:stage_type].to_i
+      puts "create stage type #{@stage_type}"
       str = ""
-      File.open("#{Rails.root}/public/stages/stage1.rb") do |file|
+      File.open("#{Rails.root}/public/stages/stage#{@stage_type}.rb") do |file|
         file.readlines.each do |line|
           str += line
         end
@@ -57,7 +57,6 @@ class SimulatesController < ApplicationController
     end
 
     if params[:field_data] 
-      p params[:field_data]
       create_field_data(params[:field_data])
     end
 

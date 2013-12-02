@@ -1,6 +1,5 @@
 var MoveModel = {
   user_speed: 5,
-
   randomWayPoint: function(user){
   	user.way_point = user.way_point || this.directWayPoint(user);
 
@@ -97,9 +96,14 @@ var MoveModel = {
   },
 
   directWayPoint: function(user){
-    var x = Simulator.mersenne.random() * View.width * 0.85 | 0,
-        y = Simulator.mersenne.random() * View.height * 0.85 | 0,
+    var x,
+        y,
         coord = View.point2coord( user.x, user.y );
+    while(true){
+      x = Simulator.mersenne.random() * View.width * 0.85 | 0;
+      y = Simulator.mersenne.random() * View.height * 0.85 | 0;
+      if( Simulator.field[y][x].type != 'tree' ) break;
+    }
 
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});
 

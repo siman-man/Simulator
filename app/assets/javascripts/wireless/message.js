@@ -17,6 +17,9 @@ var Message = {
 				return { id: id, from_eid: from.eid, dest_eid: dest.eid, data: 'hello', size: Message.message_size,
 								ftoken: from.strage[id].ftoken / 2 }
 				break;
+			case 'pro_phet':
+				return { id: id, from_eid: from.eid, dest_eid: dest.eid, data: 'hello', size: Message.message_size }
+				break;
 			default:
 				return { id: id, from_eid: from.eid, dest_eid: dest.eid, data: 'hello', size: Message.message_size }
 				break;

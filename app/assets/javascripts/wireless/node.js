@@ -19,6 +19,14 @@ var Node = {
     }
   },
 
+  node_set_routing_protocol: function(){
+    var node, eid;
+    for( eid in this.node_list ){
+      node = this.node_list[eid];
+      node.routing_protocol = this.direct_routing_protocol(node);
+    }
+  },
+
   direct_routing_protocol: function(node){
     switch(Simulator.protocol_type){
       case 'epidemic':
@@ -26,6 +34,9 @@ var Node = {
         break;
       case 'spray_and_wait':
         return new SprayAndWait(node);
+        break;
+      case 'pro_phet':
+        return new ProPHET(node);
         break;
       default:
         return new Epidemic(node);
@@ -62,6 +73,12 @@ var Node = {
     user.contact_list = {};
     user.circuit = [];
     user.route_list = [];
+    user.delivery_predictability = {};
+    
+    var ratio_info = {};
+    ratio_info[user.eid] = 1.0;
+    user.delivery_predictability[user.eid] = ratio_info;
+
     user.last_connect_time = {};
     user.strage = {};
     user.buffer = [];
@@ -103,6 +120,7 @@ var Node = {
     node.strage = {};
     node.buffer = [];
     node.last_connect_time = {};
+    node.delivery_predictability = {};
     node.routing_protocol = this.direct_routing_protocol(node);
 
     switch(type){
@@ -119,6 +137,10 @@ var Node = {
     node.ob_type = type || 'server';
     node.eid = this.eid;
    	this.eid++;
+
+    var ratio_info = {};
+    ratio_info[node.eid] = 1.0;
+    node.delivery_predictability[node.eid] = ratio_info;
 
     node.drag = false;
 

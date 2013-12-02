@@ -18,6 +18,7 @@ th, td {
       <th>seed</th>
       <th>stage</th>
       <th>message num</th>
+      <th>total send message num</th>
       <th>finish time</th>
       <th>detail</th>
       <th></th>
@@ -32,6 +33,7 @@ th, td {
         <td><%= history.seed %></td>
         <td><%= history.stage_type %></td>
         <td><%= history.message_num %></td>
+        <td><%= history.total_send_message_num %></td>
         <td><%= history.clear_time %></td>
         <%= content_tag(:td, button_to("detail", detail_path(history), { class: "btn btn-primary"})) %>
         <%= content_tag(:td, button_to("replay", { controller: "simulates", action: "index", data: {

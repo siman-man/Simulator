@@ -1,5 +1,6 @@
 console.log('create map =>');
 Simulator.clear( true );
+Simulator.stage_type = <%= @stage_type %>
 <% @obj_list.each do |obj| %>
 	var x, y;
 	<% case obj[:type] %>
@@ -26,3 +27,5 @@ Simulator.clear( true );
 	<% else %>
 	<% end %>
 <% end %>
+
+console.log('stage_type => ', Simulator.stage_type);
