@@ -174,10 +174,16 @@ var Result = {
   		return d.label;
   	}));
 
+    /*
   	var y = d3.scale.linear()
   	.domain([0, d3.max(dataset, function(d){ return d.value; })])
   	.nice()
   	.range([height, 0]);
+    */
+    var y = d3.scale.linear()
+    .domain([0, d3.max(dataset, function(d){ return 30; })])
+    .nice()
+    .range([height, 0]);
 
   	var xAxis = d3.svg.axis()
   	.scale(x)
