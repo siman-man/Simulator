@@ -232,7 +232,8 @@ var Simulator = {
           operation_type = e.button,
           object_type = $("input[name='draw_object']:checked").val(),
           draw_object = Simulator.field[coord.y][coord.x],
-          key;
+          key = Simulator.key_map[coord.y][coord.x],
+          node_num = Object.keys(Simulator.node_map[key]).length;
 
           console.log(operation_type);
 
@@ -252,7 +253,7 @@ var Simulator = {
           Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
           console.log("after => ", Simulator.field[coord.y][coord.x] );
         }
-      }else{
+      }else if( node_num === 0 ){
         console.log("nothing object =>");
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
       }

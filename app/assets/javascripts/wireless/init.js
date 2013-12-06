@@ -6,11 +6,11 @@ $(document).ready(function(){
   Simulator.init();
   Street.init();
 
-  canvas.addEventListener('mousedown', Simulator.onmousedown, false);
-  canvas.addEventListener('mousemove', Simulator.onmousemove, false);
-  canvas.addEventListener('mouseup', Simulator.onmouseup, false);
+  Simulator.canvas.addEventListener('mousedown', Simulator.onmousedown, false);
+  Simulator.canvas.addEventListener('mousemove', Simulator.onmousemove, false);
+  Simulator.canvas.addEventListener('mouseup', Simulator.onmouseup, false);
 
-  canvas.addEventListener("contextmenu", function(e){
+  Simulator.canvas.addEventListener("contextmenu", function(e){
     e.preventDefault();
   }, false);
 

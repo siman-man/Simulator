@@ -7,6 +7,8 @@ history show
 <script>
 var test = <%= @send_data.to_json.html_safe %>
 var	show = <%= @receive_data.to_json.html_safe %>
+Show.nodes_list = <%= @node_list.to_json.html_safe %>
+Show.edges_list = <%= @each_send_data.to_json.html_safe %>
 
 Result.vertical(test);
 Result.vertical(show);
@@ -33,7 +35,7 @@ text {
 
 </style>
 
-<canvas id='canvas' width="600" height="300"></canvas>
+<canvas id='my_canvas' width="1000" height="800"></canvas>
 
 <script type="text/javascript">
 

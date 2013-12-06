@@ -4,9 +4,7 @@ var Home = {
 
 	create: function(x, y, num){
 		console.log('home created');
-		var user_num = num || 1,
-				home = new createjs.Shape(),
-				resident, i;
+		var home = new createjs.Shape();
 
 		home.graphics.beginFill('rgba(96,123,139,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
 		home.id = this.home_id;
@@ -14,20 +12,6 @@ var Home = {
 		home.x = x * gridSize; 
 		home.y = y * gridSize;
 		home.type = 'home';
-		home.residents = [];
-
-		switch(num){
-			default:
-				home.user_num = 1;
-				home.residents.push( User.create( x, y, 'worker') );
-				break;
-		}
-
-		for( i in home.residents ){
-			resident = home.residents[i];
-			resident.home = home;
-			Simulator.map.removeChild(resident);
-		}
 
 		Simulator.map.addChild(home);
 		Simulator.field[y][x] = { x: x, y: y, obj: home, type: 'home', cost: 100, pf: 2 };
@@ -48,13 +32,7 @@ var Home = {
 
 	remove: function( home ){
 		console.log('home remove');
-		var coord = View.point2coord( home.x, home.y ),
-				i, resident;
-
-		for( i in home.residents ){
-			resident = home.residents[i];
-			resident.home = undefined;
-		}
+		var coord = View.point2coord( home.x, home.y );
 
 		Simulator.map.removeChild(home);
 		Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };

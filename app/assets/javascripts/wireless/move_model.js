@@ -1,5 +1,5 @@
 var MoveModel = {
-  user_speed: 5,
+  user_speed: 3.75,
   randomWayPoint: function(user){
   	user.way_point = user.way_point || this.directWayPoint(user);
 
