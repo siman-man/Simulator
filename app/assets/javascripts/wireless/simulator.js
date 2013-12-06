@@ -50,7 +50,6 @@ var Simulator = {
       Node.create( 20, 10, 'end' );
     }
     */
-    
 
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
@@ -185,7 +184,12 @@ var Simulator = {
           Home.create( x, y );
           break;
         case 'car':
-          Car.create( x, y );
+          key = Simulator.key_map[y][x];
+          if( Object.keys(Simulator.node_map[key]).length === 0 ){
+            console.log("Node create:car =>");
+            Node.create( x, y, 'car', { type: 'normal' });
+          }
+          //Car.create( x, y );
           break;
         case 'office':
           Office.create( x, y );
@@ -216,7 +220,11 @@ var Simulator = {
     }else if(draw_object.obj !== undefined){
       switch(object_type){
         case 'car':
-        Car.create( x, y );
+        console.log("Node create:user =>");
+        key = Simulator.key_map[y][x];
+        if( Object.keys(Simulator.node_map[key]).length === 0 ){
+          Node.create( x, y, 'car', { type: 'normal' });
+        }
         break;
       }
     }
@@ -252,6 +260,8 @@ var Simulator = {
           console.log("object check =>", coord.y, coord.x, draw_object.type, operation_type );
           Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
           console.log("after => ", Simulator.field[coord.y][coord.x] );
+        }else if( node_num === 0 && draw_object.type === 'road' && object_type === 'car' ){
+          Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
         }
       }else if( node_num === 0 ){
         console.log("nothing object =>");

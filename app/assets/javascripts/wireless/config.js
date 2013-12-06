@@ -21,7 +21,7 @@ var Config = {
 			node = Node.node_list[eid];
 			coord = View.point2coord( node.x, node.y );
 			console.log(Node.node_list[eid].ob_type);
-			if( Node.node_list[eid].ob_type === 'user'){
+			if( Node.node_list[eid].ob_type === 'user' || Node.node_list[eid].ob_type === 'car'){
 				data.push( this.create_data( node.ob_type, { y: coord.y, x: coord.x }))
 			}
 		}

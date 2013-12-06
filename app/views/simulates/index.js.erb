@@ -3,28 +3,24 @@ Simulator.clear( true );
 Simulator.stage_type = <%= @stage_type %>
 <% @obj_list.each do |obj| %>
 	var x, y;
+	x = <%= obj[:x] %>
+	y = <%= obj[:y] %>
 	<% case obj[:type] %>
 	<% when :server %>
-		x = <%= obj[:x] %>
-		y = <%= obj[:y] %>
 		Node.create(x, y, 'server');
 	<% when :start %>
-		x = <%= obj[:x] %>
-		y = <%= obj[:y] %>
 		Node.create( x, y, 'start' );
 	<% when :end %>
-		x = <%= obj[:x] %>
-		y = <%= obj[:y] %>
 		Node.create( x, y, 'end' );
 	<% when :user %>
-		x = <%= obj[:x] %>
-		y = <%= obj[:y] %>
 		Node.create(x, y, 'user', { type: 'normal' } );
 	<% when :tree %>
-		x = <%= obj[:x] %>
-		y = <%= obj[:y] %>
 		Tree.create( x, y );
-	<% else %>
+	<% when :road %>
+		Street.create(x, y);
+	<% when :car %>
+		Node.create(x, y, 'car', { type: 'normal' } );
+	<% else %>	
 	<% end %>
 <% end %>
 

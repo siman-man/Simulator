@@ -50,6 +50,10 @@ var Car = {
 		car.x += dx;
 	},
 
+	isRoad: function( y, x ){
+		return Simulator.field[y][x].type === 'road';
+	},
+
 	move: function(car){
 		var direct = car.direct,
 				coord = View.point2coordCar(car.x, car.y, car.direct),
@@ -61,7 +65,13 @@ var Car = {
 				if(obj && obj.type == 'road'){
 					car.x += this.speed;
 				}else{
-					car.direct = (direct+1)%4;
+					if( this.isRoad( coord.y+1, coord.x ) ){
+						car.direct = 1;
+					}else if( this.isRoad( coord.y-1, coord.x )){
+						car.direct = 3;
+					}else{
+						car.direct = 2;
+					}
 				}
 				break;
 			case 1:
@@ -69,7 +79,13 @@ var Car = {
 				if(obj && obj.type == 'road'){
 					car.y += this.speed;
 				}else{
-					car.direct = (direct+1)%4;
+					if( this.isRoad( coord.y, coord.x+1 ) ){
+						car.direct = 0;
+					}else if( this.isRoad( coord.y, coord.x-1 )){
+						car.direct = 2;
+					}else{
+						car.direct = 3;
+					}
 				}
 				break;
 			case 2:
@@ -77,7 +93,13 @@ var Car = {
 				if(obj && obj.type == 'road'){
 					car.x -= this.speed;
 				}else{
-					car.direct = (direct+1)%4;
+					if( this.isRoad( coord.y+1, coord.x ) ){
+						car.direct = 1;
+					}else if( this.isRoad( coord.y-1, coord.x )){
+						car.direct = 3;
+					}else{
+						car.direct = 0;
+					}
 				}
 				break;
 			case 3:
@@ -85,7 +107,13 @@ var Car = {
 				if(obj && obj.type == 'road'){
 					car.y -= this.speed;
 				}else{
-					car.direct = (direct+1)%4;
+					if( this.isRoad( coord.y, coord.x+1 ) ){
+						car.direct = 0;
+					}else if( this.isRoad( coord.y, coord.x-1 )){
+						car.direct = 2;
+					}else{
+						car.direct = 1;
+					}
 				}
 				break;
 		}

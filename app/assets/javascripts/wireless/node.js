@@ -58,8 +58,58 @@ var Node = {
 			case 'end':
 				this.createNode( x, y, type );
 				break;
+      case 'car':
+        this.createCar( x, y, type );
+        break;
 		};
 	},
+
+  createCar: function( x, y, type ){
+    console.log('create car =>');
+    var car = new createjs.Shape(),
+        key;
+    car.graphics.beginFill('rgba(0,59,255,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
+    
+    car.ob_type = 'car';
+    car.type = type || 'normal';
+    car.eid = this.eid;
+    this.eid++;
+    car.contact_list = {};
+    car.circuit = [];
+    car.route_list = [];
+    car.delivery_predictability = {};
+    car.speed = 5;
+    car.direct = 0;
+    
+    var ratio_info = {};
+    ratio_info[car.eid] = 1.0;
+    car.delivery_predictability[car.eid] = ratio_info;
+
+    car.last_connect_time = {};
+    car.strage = {};
+    car.buffer = [];
+
+    car.routing_protocol = this.direct_routing_protocol(car);
+
+    car.x = x * View.gridSize;
+    car.y = y * View.gridSize;
+
+    car.label = new createjs.Text(0, "12px Arial", "white");
+    car.label.x = car.x;
+    car.label.y = car.y;
+    car.label.textBaseline = "top";
+
+    Propagation.calc(x, y);
+    View.update();
+
+    Simulator.map.addChild(car);
+    Simulator.map.addChild(car.label);
+
+    key = Simulator.key_map[y][x];
+    Simulator.node_map[key][car.eid] = { x: x, y: y, obj: car, type: 'car' };
+
+    this.node_list[car.eid] = car;
+  },
 
 	createUser: function( x, y, type ){
     var user = new createjs.Shape(),
@@ -74,6 +124,7 @@ var Node = {
     user.circuit = [];
     user.route_list = [];
     user.delivery_predictability = {};
+    user.speed = 1.5;
     
     var ratio_info = {};
     ratio_info[user.eid] = 1.0;
@@ -88,7 +139,7 @@ var Node = {
     user.x = x * View.gridSize;
     user.y = y * View.gridSize;
 
-    user.label = new createjs.Text(0, "16px Arial", "white");
+    user.label = new createjs.Text(0, "12px Arial", "white");
     user.label.x = user.x;
     user.label.y = user.y;
     user.label.textBaseline = "top";
@@ -144,7 +195,7 @@ var Node = {
 
     node.drag = false;
 
-    node.label = new createjs.Text(0, "16px Arial", "white");
+    node.label = new createjs.Text(0, "12px Arial", "white");
     node.label.x = node.x;
     node.label.y = node.y;
     node.label.textBaseline = "top";
@@ -181,7 +232,15 @@ var Node = {
 				coord = View.point2coord( node.x, node.y );
 				key = Simulator.key_map[coord.y][coord.x];
       	Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'user' };
-			}
+			}else if( node.ob_type === 'car'){
+        coord = View.point2coord( node.x, node.y );
+        key = Simulator.key_map[coord.y][coord.x];
+        delete Simulator.node_map[key][node.eid];
+        Car.move(node);
+        coord = View.point2coord( node.x, node.y );
+        key = Simulator.key_map[coord.y][coord.x];
+        Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'car' };
+      }
       node.label.y = node.y;
       node.label.x = node.x;
 		}

@@ -24,7 +24,7 @@ var Street = {
 		road.type = type;
 
 		Simulator.map.addChild(road);
-		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 100, pf: 2 };
+		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 1, pf: 2 };
 
 		//this.update(x, y+1);
 		//this.update(x, y-1);

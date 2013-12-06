@@ -157,10 +157,10 @@ var MoveModel = {
         dy = point.y - user.y,
         radian = Math.atan2(dy, dx);
 
-    if(dx > 0) user.x += speed;
-    if(dy > 0) user.y += speed;
-    if(dx < 0) user.x -= speed;
-    if(dy < 0) user.y -= speed;
+    if(dx > 0) user.x += user.speed;
+    if(dy > 0) user.y += user.speed;
+    if(dx < 0) user.x -= user.speed;
+    if(dy < 0) user.y -= user.speed;
 
     if(user.x === point.x && user.y === point.y){
       user.route_list.shift();
