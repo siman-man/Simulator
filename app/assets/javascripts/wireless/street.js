@@ -30,9 +30,6 @@ var Street = {
 		//this.update(x, y-1);
 		//this.update(x+1, y);
 		//this.update(x-1, y);
-
-		Car.imageUpdate();
-		User.imageUpdate();
 	},
 
 	selectRoadType: function(x, y){
@@ -53,8 +50,8 @@ var Street = {
 			var type = this.selectRoadType(x, y),
 					road = new createjs.Bitmap('/assets/road' + type + '.jpeg');
 
-			road.x = x * 30;
-			road.y = y * 30;
+			road.x = x * gridSize;
+			road.y = y * gridSize;
 
 			Simulator.map.addChild(road);
 			Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 100, pf: 2 };
@@ -87,9 +84,6 @@ var Street = {
 		this.update(coord.x+1, coord.y);
 		this.update(coord.x-1, coord.y);
 		*/
-
-		Car.imageUpdate();
-		User.imageUpdate();
 	},
 
 	checkRange: function(x, y){

@@ -1,7 +1,7 @@
 var Car = {
 	car_id: 0,
 	car_list: {},
-	speed: 6,
+	speed: 5,
 
 	create: function(x, y){
 		console.log('car created');
@@ -45,6 +45,11 @@ var Car = {
 		}
 	},
 
+	moveCar: function( car, dy, dx ){
+		car.y += dy;
+		car.x += dx;
+	},
+
 	move: function(car){
 		var direct = car.direct,
 				coord = View.point2coordCar(car.x, car.y, car.direct),
@@ -76,7 +81,7 @@ var Car = {
 				}
 				break;
 			case 3:
-				obj = (coord.y-1 >= 0)? Simulator.field[coord.y-1][coord.x] : undefined;
+				obj = Simulator.field[coord.y-1][coord.x];
 				if(obj && obj.type == 'road'){
 					car.y -= this.speed;
 				}else{

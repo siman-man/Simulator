@@ -121,7 +121,7 @@ var View = {
 		var rest_x = px%gridSize,
 		    rest_y = py%gridSize;
 
-		if(rest_x == 0 && rest_y == 0){
+		if(rest_x === 0 && rest_y === 0){
 			return { x: px/gridSize|0, y: py/gridSize|0 };
 		}
 
