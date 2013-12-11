@@ -2,6 +2,8 @@
  * 宛先への到達確率を求めて、一番高いノードに送信。
  */
 
+var time_unit = 100;
+
 var ProPHET = function(node){
 	this.node = node;
 	this.gamma = 0.999;
@@ -30,11 +32,15 @@ ProPHET.prototype = {
 
 	aging_check: function(){
 		var eid,
-				last_time;
+				last_time,
+				diff_time;
 
 		for( eid in this.node.last_connect_time ){
 			last_time = this.node.last_connect_time[eid];
-			console.log(eid, last_time);
+			diff_time = Simulator.time - last_time;
+			if( this.node.eid !== eid && last_time !== 0 && diff_time % time_unit === 0 ){
+				this.node.delivery_predictability[this.node.eid][eid] = this.node.delivery_predictability[eid] * Math.pow( this.gamma, diff_time / time_unit ); 
+			}
 		}
 	},
 
