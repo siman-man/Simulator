@@ -1,3 +1,10 @@
+<style>
+#play_panel {
+  top: 30px;
+  left: 700px;
+}
+</style>
+
 <div class="container-fluid">
 	<div id="algorithm_panel" class="panel right_panel">
 		<header>
@@ -35,6 +42,10 @@
         <label class="radio">
           <input type="radio" name="draw_object" value="office">
           office
+        </label>
+        <label class="radio">
+          <input type="radio" name="draw_object" value="lake">
+          lake
         </label>
       </div>
     </div>
@@ -95,6 +106,7 @@
 <%= javascript_include_tag "wireless/car" %>
 <%= javascript_include_tag "wireless/office" %>
 <%= javascript_include_tag "wireless/tree" %>
+<%= javascript_include_tag "wireless/lake" %>
 <%= javascript_include_tag "wireless/home" %>
 <%= javascript_include_tag "wireless/propagation" %>
 <%= javascript_include_tag "wireless/server_status" %>

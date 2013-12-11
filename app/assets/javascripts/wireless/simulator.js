@@ -194,6 +194,8 @@ var Simulator = {
           break;
         case 'office':
           Office.create( x, y );
+        case 'lake':
+          Lake.create( x, y );
         default:
           break;
       }
@@ -216,6 +218,8 @@ var Simulator = {
         break;
         case 'office':
         Office.remove( draw_object.obj );
+        case 'lake':
+        Lake.remove( draw_object );
         break;
       }
     }else if(draw_object.obj !== undefined){

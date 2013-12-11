@@ -1,14 +1,9 @@
-<p>
-	<%= @result %>
-</p>
-
 <%= content_tag( :p , link_to("View details &raquo;".html_safe, history_path, class: "btn btn-primary"), class: "button") %>
 
 <h3>終了タイム: <%= @result[:finish_time] %></h3>
 <h3>合計データ送信数: <%= @result[:total_emit] %></h3>
 
 <%= javascript_include_tag "log/result" %>
-<%= javascript_include_tag "log/show" %>
 
 <script>
 	var test = <%= @result[:transmit].to_json.html_safe %>
