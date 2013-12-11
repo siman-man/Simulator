@@ -9,7 +9,7 @@ var Connection = {
 
 			callbacks: {
 				onconnect: function(event, from_state, to_state, from, dest) {
-					console.log(from.eid +' connect => ' + dest.eid );
+					//console.log(from.eid +' connect => ' + dest.eid );
 					Log.send({ 
 						time: Simulator.time, 
 						type: 'normal', 
@@ -22,7 +22,7 @@ var Connection = {
 				},
 
 				onshutdown: function(event, from_state, to_state, from, dest){
-					console.log(from.eid +' close => ' + dest.eid ); 
+					//console.log(from.eid +' close => ' + dest.eid ); 
 					Log.send({ 
 						time: Simulator.time, 
 						type: 'normal', 

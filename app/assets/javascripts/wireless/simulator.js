@@ -17,7 +17,7 @@ var Simulator = {
   total_send_message_num: 0,
   article_id: 0,
   time: 0,
-  per_frame: 60,
+  per_frame: 360,
 
   init: function( config ){
     if( Simulator.replay ){
@@ -26,6 +26,7 @@ var Simulator = {
     }else{
       console.log('simulator init =>');
     }
+
     this.mersenne = new MersenneTwister(this.seed);
     var x, y, key;
 
@@ -102,7 +103,7 @@ var Simulator = {
       Simulator.scanUpdate();
       Simulator.communicationUpdate();
       View.update();
-      Simulator.map.update();
+      if( $("#animation").is(":checked") ) Simulator.map.update(); 
       Simulator.finishCheck();
     }else{
       Simulator.map.update();

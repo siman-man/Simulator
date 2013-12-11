@@ -19,9 +19,6 @@ var Show = {
 
   	this.canvas.addEventListener('mousemove', this.onmousemove, false);
   	this.canvas.addEventListener('mouseup', this.onmouseup, false);
-  	this.canvas.addEventListener("contextmenu", function(e){
-    	e.preventDefault();
-  	}, false);
 
 		this.stage = new createjs.Stage(document.getElementById('my_canvas'));
 		createjs.Ticker.setFPS(30);

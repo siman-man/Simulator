@@ -1,0 +1,76 @@
+<style>
+#protocol_list {
+  margin-top: 30px;
+}
+
+.head {
+  font-size: 18px;
+}
+</style>
+
+<div id="protocol_list" class="container">
+  <div class="row row-offcanvas row-offcanvas-right">
+
+    <div class="col-xs-12 col-sm-9">
+      <p class="pull-right visible-xs">
+        <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+      </p>
+      <div class="jumbotron">
+        <h3>ルーティングプロトコルとは</h3>
+        <p class="head">DTNで使用されるルーティングプロトコルでは、通常のアドホックネットワークで使用されるプロトコルと違い、疎なネットワークに対して特化したアルゴリズムが特徴です。以下で紹介するプロトコルは過去研究が行われてきたプロトコルのリストです。</p>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <h2>Epidemic</h2>
+          <p>Epidemicは接触があった全てノードに対してデータの通信を行います。宛先までの到達時間は高速ですが、ネットワーク帯域やノードの通信キューを大幅に消費するので、ネットワークのリソースが乏しい環境では使用するべきではありません。</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div><!--/span-->
+        <div class="col-6">
+          <h2>Spray and Wait</h2>
+          <p>Spray and WaitはEpidemicを改良したプロトコルであり、接触したノードにメッセージを送信するが、その歳、決められた値を超えないようにメッセージの複製を行う。これによってネットワーク上に流れる通信の量を抑えることが出来るようになります。</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div><!--/span-->
+        <div class="col-6">
+          <h2>ProPHET</h2>
+          <p>ProPHETは接触したノードと、宛先ノードでの到達確率を計算し、宛先ノードへの到達確率が高い場合にデータを送信する。</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div><!--/span-->
+        <div class="col-6">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div><!--/span-->
+        <div class="col-6">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div><!--/span-->
+        <div class="col-6">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div><!--/span-->
+      </div><!--/row-->
+    </div><!--/span-->
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group">
+        <%= link_to("TOPに戻る", root_path, class: "list-group-item" ) %>
+        <a href="#" class="list-group-item">プロトコルリスト</a>
+        <a href="#" class="list-group-item">Epidemic</a>
+        <a href="#" class="list-group-item">Spray and Wait</a>
+        <a href="#" class="list-group-item">ProPHET</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+        <a href="#" class="list-group-item">Link</a>
+      </div>
+    </div><!--/span-->
+  </div><!--/row-->
+
+  <hr>
+
+  <footer>
+    <p>&copy; Company 2013</p>
+  </footer>
+
+    </div><!--/.container-->

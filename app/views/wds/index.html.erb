@@ -15,9 +15,13 @@ h1 {
 #wds-info {
 	margin-bottom: 50px;
 }
+
+#top_page {
+	margin-top: 30px;
+}
 </style>
 
-<div class="container">
+<div id="top_page" class="container">
 	<div class="jumbotron">
 		<%= content_tag( :h1, "Web DTN Simulator" ) %>
 		<%= content_tag( :p, "このサイトではDTN(Delay Toralent Network)のシミュレーションが行えます。現在DTNでは様々なルーティングプロトコルが提案されていますが、このサイトではそれぞれのプロトコルの比較・検証を行うことが出来ます。", class: "lead") %>
@@ -34,7 +38,7 @@ h1 {
 		<div class="col-lg-4">
 			<h2>実装プロトコル一覧</h2>
 			<%= content_tag( :p, "各種プロトコル一覧。") %>
-			<p><a class="btn btn-primary" href="#">View details &raquo;</a></p>
+			<%= content_tag( :p , link_to("View details &raquo;".html_safe, protocol_list_path, class: "btn btn-primary"), class: "button") %>
 		</div>
 		<div class="col-lg-4">
 			<h2>過去データ</h2>

@@ -16,6 +16,7 @@ var ProPHET = function(node){
 
 ProPHET.prototype = {
 	update: function(){
+		this.aging_check();
 		this.transmit();
 	},
 
@@ -25,6 +26,16 @@ ProPHET.prototype = {
 	
 	get_ratio: function( obj ){
 		return ( obj === undefined )? 0.0 : obj[Object.keys(obj)[0]];
+	},
+
+	aging_check: function(){
+		var eid,
+				last_time;
+
+		for( eid in this.node.last_connect_time ){
+			last_time = this.node.last_connect_time[eid];
+			console.log(eid, last_time);
+		}
 	},
 
 	connect: function( to ){
