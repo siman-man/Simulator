@@ -1,0 +1,17 @@
+<style>
+#stage_list {
+  margin-top: 30px;
+}
+</style>
+
+<div class="container">
+  <div class="jumbotron" id="stage_list">
+    <h2>ステージ管理画面</h2>
+    <p>ここではシミュレーションに使用するステージの作成・管理ができます。</p>
+    <p>下のページから作成画面へと進んで下さい</p>
+    <%= content_tag(:p, button_to("Create", { controller: "simulates", action: "index", edit_mode: {
+      edit: true,
+      stage_type: "hello"
+    }}, { class: "btn btn-lg btn-success" })) %>
+  </div>
+</div>

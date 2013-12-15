@@ -1,4 +1,7 @@
 $(document).ready(function(){
+  if( !Simulator.control_panel ){
+    $("#play_panel").hide();
+  }
   Panel.init();
   View.drawGrid()
   View.init();

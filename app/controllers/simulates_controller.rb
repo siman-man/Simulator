@@ -2,12 +2,19 @@ class SimulatesController < ApplicationController
   include WirelessesHelper
 	
   def index
+    @control_panel = true
     @stage_type = 1
     p params
     if params[:time].presence
       params.delete(:controller)
       params.delete(:action)
       create_log(params)
+    end
+
+    if params[:edit_mode].presence
+      @control_panel = false
+      p params
+      p "edit info"
     end
 
     if params[:data]

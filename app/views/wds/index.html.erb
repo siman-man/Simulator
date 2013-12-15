@@ -42,10 +42,19 @@ h1 {
 		</div>
 		<div class="col-lg-4">
 			<h2>過去データ</h2>
-			<%= content_tag( :p, "過去に行われたシミュレーションの実行結果の履歴を閲覧できます。") %>
+			<%= content_tag( :p, "シミュレーションの実行結果の履歴を閲覧できます。") %>
 			<%= content_tag( :p , link_to("View details &raquo;".html_safe, history_path, class: "btn btn-primary"), class: "button") %>
 		</div>
 	</div>
+
+	<div class="row">
+		<div class="col-lg-4">
+			<h2>ステージ作成</h2>
+			<%= content_tag( :p, "シミュレーションのステージを編集できます。") %>
+			<%= content_tag( :p, link_to("View details &raquo;".html_safe, stage_list_path, class: "btn btn-primary"), class: "button") %>	
+		</div>
+	</div>
+
 
 	<footer>
 		<p class="pull-right"><a href="#">Back to top</a></p>
