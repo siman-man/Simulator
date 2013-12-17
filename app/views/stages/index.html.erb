@@ -2,6 +2,10 @@
 #stage_list {
   margin-top: 30px;
 }
+
+th, td {
+  text-align: center;
+}
 </style>
 
 <div class="container">
@@ -9,9 +13,39 @@
     <h2>ステージ管理画面</h2>
     <p>ここではシミュレーションに使用するステージの作成・管理ができます。</p>
     <p>下のページから作成画面へと進んで下さい</p>
-    <%= content_tag(:p, button_to("Create", { controller: "simulates", action: "index", edit_mode: {
-      edit: true,
-      stage_type: "hello"
-    }}, { class: "btn btn-lg btn-success" })) %>
+    <%= content_tag(:p, button_to("Create", { controller: "simulates", action: "index", edit_mode: true }, {class: "btn btn-lg btn-success" })) %>
   </div>
+
+  <p>
+    <h2>ステージ一覧</h2>
+  </p>
+  <table class="table table-striped table-bordered table-hover table-condensed center">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>File Name</th>
+      <th>Node num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @stages.each do |stage| %>
+      <tr>
+        <td><%= stage.created_at %></td>
+        <td><%= stage.filename %></td>
+        <td><%= stage.node_num %></td>
+        <td>
+        <%= form_tag(simulator_path) do %>
+        <%= hidden_field_tag( :edit_stage, true ) %>
+        <%= hidden_field_tag( :filename, stage.filename ) %>
+        <%= submit_tag("Edit", { class: "btn" } ) %>
+        <% end %>
+      </td>
+        <%= content_tag(:td, button_to("Delete", stage_delete_path(stage), method: :delete, class: "btn btn-primary")) %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 </div>

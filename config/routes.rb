@@ -4,6 +4,7 @@ Simulator::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   match '/simulates' => "simulates#index", :as => :simulator, :via => [:get, :post]
+  match '/stage_create' => "simulates#stage_create", :as => :stage_create, :via => [:post]
 
   match '/wds' => 'wds#index', :via => [:get]
   root to: 'wds#index'
@@ -16,6 +17,8 @@ Simulator::Application.routes.draw do
   post 'histories/:id' => 'histories#show', :as => :detail
   match "/protocol_list" => "protocols#index", :via => [:get]
   match '/stage_list' => 'stages#index', :via => [:get]
+  match '/stage_create' => 'stages#create', :via => [:post]
+  delete 'stages/:id' => 'stages#destroy', :as => :stage_delete
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

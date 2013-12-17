@@ -1,0 +1,22 @@
+<div id="play_panel" class="panel right_panel">
+  <button id="button1" class="btn">開始</button>
+  <button id="button2" class="btn">停止</button>
+  <button id="button3" class="btn">リセット</button>
+  <input type="number" id="seed" min="0" value="0">
+  <input type="number" id="message_num" min="1" max="100" value="10">
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="animation" checked> アニメーション
+    </label>
+  </div>
+  <select id="protocol" class="selectpicker">
+    <optgroup label="Epidemic">
+      <option value="0" selected>Epidemic</option>
+      <option value="1">Spray and Wait</option>
+      <option value="2">ProPHET</option>
+    </optgroup>
+  </select>
+  <div id="clock">
+    <span id="time">0</span>
+  </div>
+</div>

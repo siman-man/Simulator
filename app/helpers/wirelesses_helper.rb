@@ -5,9 +5,13 @@ module WirelessesHelper
     TD.event.post('simulator', data)
   end
 
-  def create_field_data(data_list)
-    file_name = Time.now.strftime("%Y%m%d%H%M%S")
-    File.open("#{Rails.root}/public/stages/#{file_name}_stage_data.rb", "w") do |file|
+  def create_field_data(data_list, filename = "sample")
+    if File.exist?("#{Rails.root}/public/stages/#{filename}.rb")
+      #filename = filename + Time.now.strftime("%Y%m%d%H%M%S")   
+    end
+    stage_data = Hash.new
+    stage_data[:filename] = filename
+    File.open("#{Rails.root}/public/stages/#{filename}.rb", "w") do |file|
 
       file.write("WebSimulator.define do\n")
       
@@ -15,11 +19,23 @@ module WirelessesHelper
         p data
         p data.split(' ')
         info = Hash[data.split(' ').map{|e| e.split(':')}]
+        if info["type"] == "stage_data"
+          info["x"] = 0
+          info["y"] = 0
+        end
         file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]} )}\n")
+        if info["type"] == "stage_data"
+          if info["node_num"] 
+            p info
+            node_num = info["node_num"].to_i
+            stage_data[:node_num] = node_num
+          end
+        end
       end
       
       file.write("end\n")
     end
+    p stage_data
   end
 
   module WebSimulator

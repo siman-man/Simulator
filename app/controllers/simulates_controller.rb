@@ -2,7 +2,8 @@ class SimulatesController < ApplicationController
   include WirelessesHelper
 	
   def index
-    @control_panel = true
+    @stages = Stage.where(nil).order("created_at DESC")
+    p @stages
     @stage_type = 1
     p params
     if params[:time].presence
@@ -12,9 +13,45 @@ class SimulatesController < ApplicationController
     end
 
     if params[:edit_mode].presence
-      @control_panel = false
-      p params
-      p "edit info"
+      @edit_mode = true
+    end
+
+    if params[:stage_select]
+      p 'stage select'
+      @edit_mode = true
+
+      str = ""
+      filename = params["filename"]
+      puts "edit filename = #{filename}"
+      File.open("#{Rails.root}/public/stages/#{filename}.rb") do |file|
+        file.readlines.each do |line|
+          str += line
+        end
+      end
+
+      puts str
+
+      @obj_list = Simulator.new.instance_eval { eval(str); @list }
+    end
+
+    if params[:edit_stage]
+      p 'edit stage mode'
+      @edit_mode = true
+      @stage_change = true
+
+      str = ""
+      filename = params["filename"]
+      puts "filename = #{filename}"
+      File.open("#{Rails.root}/public/stages/#{filename}.rb") do |file|
+        file.readlines.each do |line|
+          str += line
+        end
+      end
+
+      @file_name = filename
+      puts str
+
+      @obj_list = Simulator.new.instance_eval { eval(str); @list }
     end
 
     if params[:data]
@@ -24,7 +61,7 @@ class SimulatesController < ApplicationController
       @data[:stage_type] = params["data"]["stage_type"]
 
       file_name = "#{Rails.root}/public/stages/stage#{@data[:stage_type]}.rb"
-      p file_name
+
       str = ""
       File.open(file_name) do |file|
         file.readlines.each do |line|
@@ -48,27 +85,43 @@ class SimulatesController < ApplicationController
       @obj_list = Simulator.new.instance_eval { eval(str); @list }
     end
 
-    if params[:stage_type].presence
-      @stage_type = params[:stage_type].to_i
+    if params[:stage_edit].presence
+      @edit_mode = true
+
       puts "create stage type #{@stage_type}"
       str = ""
-      File.open("#{Rails.root}/public/stages/stage#{@stage_type}.rb") do |file|
+      File.open("#{Rails.root}/public/stages/params[:filename].rb") do |file|
         file.readlines.each do |line|
           str += line
         end
       end
 
-      puts str
-
       @obj_list = Simulator.new.instance_eval { eval(str); @list }
-    end
-
-    if params[:field_data] 
-      create_field_data(params[:field_data])
     end
 
     respond_to do |format|
       format.html { render action: 'index' }
+      format.js { render 'index' }
+    end
+  end
+  
+  def stage_create 
+    puts "stage_create"
+    if params[:stage_type].presence
+      @stage_type = params[:stage_type]
+      puts "create stage type #{@stage_type}"
+      str = ""
+
+      File.open("#{Rails.root}/public/stages/#{@stage_type}.rb") do |file|
+        file.readlines.each do |line|
+          str += line
+        end
+      end
+
+      @obj_list = Simulator.new.instance_eval { eval(str); @list }
+    end
+
+    respond_to do |format|
       format.js { render 'index' }
     end
   end

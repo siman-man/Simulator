@@ -26,9 +26,11 @@ var Config = {
 			}
 		}
 
-		console.log( data );
+		data.push( this.create_data( "stage_data", { node_num: Object.keys(Node.node_list).length }));
 
-		Config.send( data );
+		console.log( data );
+		return data;
+		//Config.send( data );
 	},
 
 	send: function( data ){
@@ -37,6 +39,7 @@ var Config = {
   		url: "/simulates",
  			data: {
     		time: { tree: 'hello' },
+    		edit_mode: Simulator.edit_mode,
     		field_data: data
   		},
   	});

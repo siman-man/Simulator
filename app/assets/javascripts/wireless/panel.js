@@ -10,9 +10,22 @@ var Panel = {
 			heightStyle: "fill",
 		});
 
+		$("#stage_type").change(function(){		
+			console.log($("#stage_type option:selected").text());
+			$.ajax({
+				type: "post",
+  			url: "/stage_create",
+ 				data: {
+    			stage_type: $("#stage_type option:selected").text()
+  			},
+  		});
+		});
+
 		$("#stage_write").click(function(){
 			console.log('hello');
-			Config.output();
+			$("#node_num").val(Object.keys(Node.node_list).length);
+			$("#field_data").val(Config.output())
+			//Config.output();
 		});
 
 		$('.option_label').click(function() {

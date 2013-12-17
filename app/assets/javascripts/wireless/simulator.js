@@ -287,7 +287,7 @@ var Simulator = {
           draw_object = Simulator.field[coord.y][coord.x]; 
 
       if( Simulator.target && Node.isServer(Simulator.target.type) && Simulator.operation_flag && draw_object.obj === undefined){
-        console.log("server pos update =>");
+        //console.log("server pos update =>");
         Simulator.target.obj.y = coord.y * gridSize;
         Simulator.target.obj.x = coord.x * gridSize;
         Simulator.target.obj.label.y = Simulator.target.obj.y;
