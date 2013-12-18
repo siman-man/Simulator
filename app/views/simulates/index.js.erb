@@ -4,6 +4,8 @@ console.log('create map =>');
 <% @obj_list.each do |obj| %>
 	var x, y;
 	console.log("create =>");
+	var test = <%= obj.to_json.html_safe %>
+	console.log(test);
 	x = <%= obj[:x] %>
 	y = <%= obj[:y] %>
 	<% case obj[:type] %>

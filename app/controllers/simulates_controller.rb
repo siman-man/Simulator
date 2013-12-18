@@ -105,8 +105,8 @@ class SimulatesController < ApplicationController
     end
   end
   
-  def stage_create 
-    puts "stage_create"
+  def stage_init
+    puts "stage_init"
     if params[:stage_type].presence
       @stage_type = params[:stage_type]
       puts "create stage type #{@stage_type}"

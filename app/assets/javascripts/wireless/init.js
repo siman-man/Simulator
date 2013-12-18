@@ -26,14 +26,13 @@ if( Simulator.stage_change === undefined ){
       console.log($("#stage_type option:selected").text());
       $.ajax({
         type: "post",
-        url: "/stage_create",
+        url: "/stage_init",
         data: {
           stage_type: $("#stage_type option:selected").text()
         },
       });
     }
   }else{
-    console.log('hello world', Simulator.file_name);
-    $("#stage1").click();
+    $("#filename").val(Simulator.file_name);
   }
 });

@@ -12,103 +12,98 @@
     </header>
 
     <div class="accordion">
-    <% if @edit_mode %>
+      <% if @edit_mode %>
       <h3 id="draw_objects" onclick="Panel.radioClear()"><a href="#">オブジェクト選択</a></h3>
-        <%= render 'object_list' %>
+      <%= render 'object_list' %>
       <h3>ステージ保存</h3>
       <div id="config" class="sub_options">
         <%= form_tag(stage_create_path) do %>
-          <div class="form-group">
-            <label class="control-label">ファイル名</label>
+        <div class="form-group">
+          <label class="control-label">ファイル名</label>
           <div class="col">
-          <%= text_field_tag :filename, params[:filename], { class: "form-control", value: "sample" } %>
-          <%= hidden_field_tag :node_num, params[:node_num], { id: "node_num" } %>
-          <%= hidden_field_tag :field_data, params[:field_data], { id: "field_data" } %>
-          <button id="stage_write" class="btn">登録</button>
+            <%= text_field_tag :filename, params[:filename], { class: "form-control", value: "sample" } %>
+            <%= hidden_field_tag :node_num, params[:node_num], { id: "node_num" } %>
+            <%= hidden_field_tag :field_data, params[:field_data], { id: "field_data" } %>
+            <button id="stage_write" class="btn">登録</button>
           </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
-    </div>
-    <% else %>
-    <h3>設定ファイル読み込み</h3>
-    <div id="config" class="sub_options">
-      <button id="stage_write" class="btn">設定書き出し</button>
-      <%= form_tag(simulator_path, { remote: true, multipart: true } ) do %>
-        <input type="file" id="file-input" name="file">
-        <%= submit_tag("送信", { class: "btn" }) %>
+      <% else %>
       <% end %>
-    </div>
-    <% end %>
 
-    <% unless @edit_mode %>
-    <h3>ステージ選択</h3>
-    <div id="config" class="sub_options">
-      <%= collection_select(:stage, :type, @stages, :id, :filename, { class: "selectpicker" } ) %>
-    </div>
-    <% else %>
-    <h3>戻る</h3>
-    <div class="sub_options">
-      <%= content_tag( :p, link_to("管理画面へ".html_safe, stage_list_path, class: "btn btn-primary"), class: "button") %>  
-    </div>
-    <% end %>
-  </div><!-- .accordion -->
-</div>
+      <% unless @edit_mode %>
+      <h3>ステージ選択</h3>
+      <div id="config" class="sub_options">
+        <%= collection_select(:stage, :type, @stages, :id, :filename, { class: "selectpicker" } ) %>
+      </div>
+      
 
-<% unless @edit_mode %>
-<%= render 'control_panel' %>
-<%= render 'user_status' %>
+      <% else %>
+      <h3>戻る</h3>
+      <div class="sub_options">
+        <%= content_tag( :p, link_to("管理画面へ".html_safe, stage_list_path, class: "btn btn-primary"), class: "button") %>  
+      </div>
+      <% end %>
+    </div><!-- .accordion -->
+  </div>
 
-<% end %>
+  <% unless @edit_mode %>
+  <%= render 'control_panel' %>
 
+  <% end %>
+  <%= render 'user_status' %>
   <canvas id='canvas' width="900" height="900"></canvas>
 </div>
 
 <%= render 'include_file' %>
 
 <script>
-  <% if defined?(@data) %>
-    console.log(<%= @data[:seed] %>);
-    Simulator.seed = <%= @data[:seed].to_i %>;
-    Simulator.replay = true;
-    Simulator.edit_mode = false;
-  <% end %>
+<% if defined?(@data) %>
+console.log(<%= @data[:seed] %>);
+Simulator.seed = <%= @data[:seed].to_i %>;
+Simulator.replay = true;
+Simulator.edit_mode = false;
+<% end %>
 
-  <% if defined?(@edit_mode) %>
-    Simulator.edit_mode = true;
-  <% end %>
+<% if defined?(@edit_mode) %>
+Simulator.edit_mode = true;
+<% end %>
 
-  <% if defined?(@stage_change) %>
-    console.log("stage change =>");
-    Panel.init();
-    View.drawGrid()
-    View.init();
-    Network.init();
-    Simulator.init();
-    Street.init();
-    Simulator.stage_change = true;
-    Simulator.file_name = "<%= @file_name %>"
+<% if defined?(@stage_change) %>
+console.log("stage change =>");
+Panel.init();
+View.drawGrid()
+View.init();
+Network.init();
+Simulator.init();
+Street.init();
+Simulator.stage_change = true;
+Simulator.file_name = "<%= @file_name %>"
 
-    <% @obj_list.each do |obj| %>
-    var x, y;
-    x = <%= obj[:x] %>
-    y = <%= obj[:y] %>
-    <% case obj[:type] %>
-    <% when :server %>
-    Node.create(x, y, 'server');
-    <% when :start %>
-    Node.create( x, y, 'start' );
-    <% when :end %>
-    Node.create( x, y, 'end' );
-    <% when :user %>
-    Node.create(x, y, 'user', { type: 'normal' } );
-    <% when :tree %>
-    Tree.create( x, y );
-    <% when :road %>
-    Street.create(x, y);
-    <% when :car %>
-    Node.create(x, y, 'car', { type: 'normal' } );
-    <% else %>  
-    <% end %>
-    <% end %>
-  <% end %>
+<% @obj_list.each do |obj| %>
+var x, y;
+var opt = <%= obj.to_json.html_safe %>
+console.log(opt);
+x = <%= obj[:x] %>
+y = <%= obj[:y] %>
+<% case obj[:type] %>
+<% when :server %>
+Node.create(x, y, 'server');
+<% when :start %>
+Node.create( x, y, 'start' );
+<% when :end %>
+Node.create( x, y, 'end' );
+<% when :user %>
+Node.create(x, y, 'user', opt );
+<% when :tree %>
+Tree.create( x, y );
+<% when :road %>
+Street.create(x, y);
+<% when :car %>
+Node.create(x, y, 'car', { type: 'normal' } );
+<% else %>  
+<% end %>
+<% end %>
+<% end %>
 </script>

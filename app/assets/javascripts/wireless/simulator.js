@@ -246,9 +246,15 @@ var Simulator = {
           object_type = $("input[name='draw_object']:checked").val(),
           draw_object = Simulator.field[coord.y][coord.x],
           key = Simulator.key_map[coord.y][coord.x],
-          node_num = Object.keys(Simulator.node_map[key]).length;
+          node_num = Object.keys(Simulator.node_map[key]).length,
+          node = Simulator.node_map[key],
+          obj_data = node[Object.keys(node)[0]];
+      
+      if( obj_data !== undefined ){
+        Panel.updateNodeData( obj_data.obj );
+      }
 
-          console.log(operation_type);
+      console.log(operation_type);
 
       if( draw_object.obj ){
         Simulator.operation_flag = true;
@@ -256,7 +262,7 @@ var Simulator = {
         console.log( draw_object );
 
         if( Node.isServer(draw_object.type) && operation_type === 0 ){
-          console.log("hello world =>");
+          console.log("server move =>");
           Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
           key = Simulator.key_map[coord.y][coord.x];
           delete Simulator.node_map[key][draw_object.obj.eid];
@@ -295,7 +301,7 @@ var Simulator = {
         Simulator.target.x = coord.x;
         Simulator.target.y = coord.y;
         Propagation.calc(coord.x, coord.y);
-        View.update();
+        //View.update();
       }else if( draw_object.obj === undefined ){
         console.log("mousemove - objectCheck =>");
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
@@ -314,7 +320,7 @@ var Simulator = {
         eid = Simulator.target.obj.eid;
         Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'server' };
         Propagation.calc(coord.x, coord.y);
-        View.update();
+        //View.update();
       }
     }
     Simulator.target = undefined;

@@ -22,8 +22,11 @@ module WirelessesHelper
         if info["type"] == "stage_data"
           info["x"] = 0
           info["y"] = 0
+        elsif ["user", "start", "end"].include?(info["type"])
+          file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]}, eid: #{info["eid"]}, name: '#{info["name"]}' )}\n")
+        else
+          file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]} )}\n")
         end
-        file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]} )}\n")
         if info["type"] == "stage_data"
           if info["node_num"] 
             p info
@@ -64,5 +67,9 @@ module WirelessesHelper
       @obj[:x] = pos[:x]
       @obj[:y] = pos[:y]
     end 
+
+    def add_data( data )
+      @obj.merge!(data)
+    end
   end
 end

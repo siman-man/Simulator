@@ -10,11 +10,28 @@ var Panel = {
 			heightStyle: "fill",
 		});
 
+		$("#node_info").change(function(){
+			if( $("#node_info").is(":checked") ){
+				$("#node_status").show();
+			}else{
+				$("#node_status").hide();
+			}
+		});
+
+		$("#user_name").change(function(){
+			var eid = $("#user_eid").val(),
+					name = $("#user_name").val();
+			console.log(Node.node_list[eid]);
+			if( name.length > 0 ){
+				Node.node_list[eid].name = name;
+			}
+		}); 
+		
 		$("#stage_type").change(function(){		
 			console.log($("#stage_type option:selected").text());
 			$.ajax({
 				type: "post",
-  			url: "/stage_create",
+  			url: "/stage_init",
  				data: {
     			stage_type: $("#stage_type option:selected").text()
   			},
@@ -73,5 +90,10 @@ var Panel = {
   radioClear: function(){
     console.log('clear radio')
     $("input:radio").attr("checked",false); 
+  },
+
+  updateNodeData: function( obj ){
+  	$("#user_eid").val(obj.eid);
+  	$("#user_name").val(obj.name);
   },
 };

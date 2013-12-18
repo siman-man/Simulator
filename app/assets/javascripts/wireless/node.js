@@ -47,7 +47,7 @@ var Node = {
 	create: function( x, y, type, opt ){
 		switch(type){
 			case 'user':
-				this.createUser( x, y, opt.type );
+				this.createUser( x, y, opt );
 				break;
 			case 'server':
 				this.createNode( x, y, type );
@@ -100,7 +100,7 @@ var Node = {
     car.label.textBaseline = "top";
 
     Propagation.calc(x, y);
-    View.update();
+    //View.update();
 
     Simulator.map.addChild(car);
     Simulator.map.addChild(car.label);
@@ -111,15 +111,16 @@ var Node = {
     this.node_list[car.eid] = car;
   },
 
-	createUser: function( x, y, type ){
+	createUser: function( x, y, opt ){
     var user = new createjs.Shape(),
     		key;
     user.graphics.beginFill('rgba(255,59,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
     user.ob_type = 'user';
-    user.type = type || 'normal';
-    user.eid = this.eid;
+    user.type = 'normal';
+    user.eid = opt.eid || this.eid;
     this.eid++;
+    user.name = opt.name || "none";
     user.contact_list = {};
     user.circuit = [];
     user.route_list = [];
@@ -144,14 +145,8 @@ var Node = {
     user.label.y = user.y;
     user.label.textBaseline = "top";
 
-    if(type == 'worker'){
-      user.state = FSM.worker(user);
-    }else{
-      user.state = FSM.normal(user);
-    }
-
     Propagation.calc(x, y);
-    View.update();
+    //View.update();
 
     Simulator.map.addChild(user);
     Simulator.map.addChild(user.label);
@@ -176,12 +171,15 @@ var Node = {
 
     switch(type){
       case 'start':
+        node.name = "start";
       	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
       	break;
       case 'end':
+        node.name = "end";
       	node.graphics.beginFill('rgba(0,0,128,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
       	break;
       default:
+        node.name = "none";
       	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
     }
     
@@ -211,7 +209,7 @@ var Node = {
     Simulator.node_map[key][node.eid] = { x: x, y: y, obj: node, type: 'server' };
     Simulator.field[y][x] = { x: x, y: y, obj: node, type: node.ob_type, cost: 1, pf: 1 };
     Propagation.calc(x, y);
-    View.update();
+    //View.update();
 
     console.log("create node" + node.eid + " =>");
 	},
