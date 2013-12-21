@@ -1,6 +1,18 @@
 WebSimulator.define do
-	create(:start){|t| t.pos( x: 10, y: 10, eid: 0, name: 'start' )}
-	create(:end){|t| t.pos( x: 20, y: 10, eid: 1, name: 'end' )}
-	create(:user){|t| t.pos( x: 40, y: 14, eid: 2, name: 'none' )}
-	create(:user){|t| t.pos( x: 15, y: 19, eid: 3, name: 'none' )}
+	create(:start) do |t| 
+		t.pos( x: 10, y: 10)
+		t.add_data( eid: 0, name: 'start')
+	end
+	create(:end) do |t| 
+		t.pos( x: 20, y: 10)
+		t.add_data( eid: 1, name: 'end')
+	end
+	create(:user) do |t| 
+		t.pos( x: 40, y: 14)
+		t.add_data( eid: 2, name: 'none')
+	end
+	create(:user) do |t| 
+		t.pos( x: 15, y: 19)
+		t.add_data( eid: 3, name: 'siman')
+	end
 end

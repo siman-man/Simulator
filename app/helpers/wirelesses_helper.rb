@@ -23,7 +23,10 @@ module WirelessesHelper
           info["x"] = 0
           info["y"] = 0
         elsif ["user", "start", "end"].include?(info["type"])
-          file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]}, eid: #{info["eid"]}, name: '#{info["name"]}' )}\n")
+          file.write("\tcreate(:#{info["type"]}) do |t| 
+\t\tt.pos( x: #{info["x"]}, y: #{info["y"]} )
+\t\tt.add_data( eid: #{info["eid"]}, name: '#{info["name"]}' )
+\tend\n")
         else
           file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]} )}\n")
         end
