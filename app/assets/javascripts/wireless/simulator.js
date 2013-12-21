@@ -302,7 +302,7 @@ var Simulator = {
         Simulator.target.y = coord.y;
         Propagation.calc(coord.x, coord.y);
         //View.update();
-      }else if( draw_object.obj === undefined ){
+      }else if( draw_object.obj === undefined && object_type !== 'user' ){
         console.log("mousemove - objectCheck =>");
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
       }
