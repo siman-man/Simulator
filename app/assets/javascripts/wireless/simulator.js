@@ -254,7 +254,7 @@ var Simulator = {
         Panel.updateNodeData( obj_data.obj );
       }
 
-      console.log(operation_type);
+      console.log("operation type => ", operation_type);
 
       if( draw_object.obj ){
         Simulator.operation_flag = true;
@@ -277,6 +277,16 @@ var Simulator = {
       }else if( node_num === 0 ){
         console.log("nothing object =>");
         Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
+      }else if( obj_data !== undefined ){
+        if( operation_type === 2 ){
+          Node.remove( obj_data.obj );
+        }else if( operation_type === 0 ){
+          console.log("user move =>");
+          Simulator.operation_flag = true;
+          Simulator.target = obj_data;
+          key = Simulator.key_map[coord.y][coord.x];
+          delete Simulator.node_map[key][obj_data.obj.eid];
+        }
       }
     }
 
@@ -292,7 +302,7 @@ var Simulator = {
           object_type = $("input[name='draw_object']:checked").val(),
           draw_object = Simulator.field[coord.y][coord.x]; 
 
-      if( Simulator.target && Node.isServer(Simulator.target.type) && Simulator.operation_flag && draw_object.obj === undefined){
+      if( Simulator.target && ( Node.isServer(Simulator.target.type) || Simulator.target.type === 'user' ) && Simulator.operation_flag && draw_object.obj === undefined){
         //console.log("server pos update =>");
         Simulator.target.obj.y = coord.y * gridSize;
         Simulator.target.obj.x = coord.x * gridSize;
@@ -321,6 +331,11 @@ var Simulator = {
         Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'server' };
         Propagation.calc(coord.x, coord.y);
         //View.update();
+      }else if( Simulator.target.type === 'user' ){
+        key = Simulator.key_map[coord.y][coord.x];
+        eid = Simulator.target.obj.eid;
+        Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'user' };
+        Propagation.calc(coord.x, coord.y);
       }
     }
     Simulator.target = undefined;
