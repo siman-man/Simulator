@@ -1,13 +1,16 @@
 $(document).ready(function(){
 
-if( Simulator.stage_change === undefined ){
-  Panel.init();
-  View.drawGrid()
-  View.init();
-  Network.init();
-  Simulator.init();
-  Street.init();
-}
+  if( Simulator.stage_change === undefined ){
+    Panel.init();
+    View.drawGrid()
+    View.init();
+    Network.init();
+    Simulator.init();
+    Street.init();
+  }
+
+  var route = [{ y: 5, x: 5 }, { y: 5, x: 6 }];
+  //View.route_view(route);
 
   Simulator.canvas.addEventListener('mousedown', Simulator.onmousedown, false);
   Simulator.canvas.addEventListener('mousemove', Simulator.onmousemove, false);

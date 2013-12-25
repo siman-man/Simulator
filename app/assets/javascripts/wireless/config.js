@@ -23,7 +23,13 @@ var Config = {
 			node = Node.node_list[eid];
 			coord = View.point2coord( node.x, node.y );
 			console.log(Node.node_list[eid].ob_type);
-			data.push( this.create_data( node.ob_type, { y: coord.y, x: coord.x, eid: node.eid, name: node.name }))
+			data.push( this.create_data( node.ob_type, { 
+				y: coord.y, 
+				x: coord.x, 
+				eid: node.eid, 
+				name: node.name,
+				path: node.path
+			}))
 		}
 
 		data.push( this.create_data( "stage_data", { node_num: Object.keys(Node.node_list).length }));

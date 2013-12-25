@@ -77,6 +77,7 @@ var Node = {
     car.contact_list = {};
     car.circuit = [];
     car.route_list = [];
+    car.path = {};
     car.delivery_predictability = {};
     car.speed = 5;
     car.direct = 0;
@@ -124,8 +125,10 @@ var Node = {
     user.contact_list = {};
     user.circuit = [];
     user.route_list = [];
+    user.path = {};
     user.delivery_predictability = {};
     user.speed = 1.5;
+    user.move_type = "randomWayPoint";
     
     var ratio_info = {};
     ratio_info[user.eid] = 1.0;
@@ -185,6 +188,7 @@ var Node = {
     
     node.ob_type = type || 'server';
     node.eid = this.eid;
+    node.path = {};
    	this.eid++;
 
     var ratio_info = {};
@@ -334,9 +338,12 @@ var Node = {
  	},
 
 	moveUser: function(user){
-    switch(user.type){
+    switch(user.move_type){
       case 'worker':
         MoveModel.worker(user);
+        break;
+      case 'randomWayPoint':
+        MoveModel.randomWayPoint(user);
         break;
       default:
         MoveModel.randomWayPoint(user);
