@@ -14,6 +14,37 @@ var MoveModel = {
     }
   },
 
+  traceMoveModel: function(user){
+    if( user.path_length === 1 ) return;
+
+    if( user.way_point === undefined ){
+      user.way_point = user.path[user.path_index];
+      if( user.close_path ){
+        user.path_index = (user.path_index + 1) % user.path_length;
+      }else{
+        user.path_index = user.path_index + user.step;
+        if( user.path_index === user.path_length - 1 ){
+          user.step = -1;
+        }else if( user.path_index === 0 ){
+          user.step = 1;
+        }
+      }
+    }
+
+    if(user.way_point){
+      this.moveToNextPoint(user, this.user_speed);
+    }
+    
+    if(this.checkArrive(user)){
+      if( user.way_point.wait === user.stop_time ){
+        user.way_point = undefined;
+        user.stop_time = 0;
+      }else{
+        user.stop_time++;
+      }
+    }
+  },
+
   home2office: function(user, home, office){
     if(user.state.current !== 'travel2work') return undefined;
 
@@ -151,11 +182,20 @@ var MoveModel = {
     return {x: x, y: y};
   },
 
+  moveToNextPoint: function( user, speed ){
+    var dx = user.way_point.x * gridSize - user.x,
+        dy = user.way_point.y * gridSize - user.y;
+
+    if(dx > 0) user.x += user.speed;
+    if(dy > 0) user.y += user.speed;
+    if(dx < 0) user.x -= user.speed;
+    if(dy < 0) user.y -= user.speed;
+  },
+
   moveToWayPoint: function(user, speed){
     var point = user.route_list[0],
         dx = point.x - user.x,
-        dy = point.y - user.y,
-        radian = Math.atan2(dy, dx);
+        dy = point.y - user.y;
 
     if(dx > 0) user.x += user.speed;
     if(dy > 0) user.y += user.speed;

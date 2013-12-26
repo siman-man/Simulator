@@ -11,6 +11,9 @@ var Node = {
 
     for( from_eid in this.node_list ){
       node = this.node_list[from_eid];
+      if( node.path !== undefined ){
+        node.close_path = this.isCloseRoute( node.path );
+      }
       for( dest_eid in this.node_list ){
         if( from_eid !== dest_eid ){
           node.contact_list[dest_eid] = new Connection.init();
@@ -63,6 +66,20 @@ var Node = {
         break;
 		};
 	},
+
+  isCloseRoute: function( route ){
+    var size = Object.keys(route).length,
+        first = route[0],
+        last = route[size-1],
+        ny, nx;
+
+    for(var i = 0; i < 4; i++){
+      ny = last.y + View.dy[i];
+      nx = last.x + View.dx[i];
+      if( first.y === ny && first.x === nx ) return true;
+    }
+    return false;
+  },
 
   createCar: function( x, y, type ){
     console.log('create car =>');
@@ -125,11 +142,24 @@ var Node = {
     user.contact_list = {};
     user.circuit = [];
     user.route_list = [];
-    user.path = {};
+    user.path = opt.path;
+    user.step = 1;
+    user.stop_time = 0;
+    if( user.path !== undefined ){
+      user.path_index = 0;
+      user.path_length = Object.keys(user.path).length;
+      user.close_path = this.isCloseRoute( user_path );
+    }else{
+      user.path = {}
+      user.path_index = 0;
+      user.path_length = 1;
+      user.path[0] = { y: y, x: x, wait: 0 };
+    }
     user.delivery_predictability = {};
     user.speed = 1.5;
-    user.move_type = "randomWayPoint";
-    
+    //user.move_type = "randomWayPoint";
+    user.move_type = "traceMoveModel";
+
     var ratio_info = {};
     ratio_info[user.eid] = 1.0;
     user.delivery_predictability[user.eid] = ratio_info;
@@ -188,7 +218,7 @@ var Node = {
     
     node.ob_type = type || 'server';
     node.eid = this.eid;
-    node.path = {};
+    //node.path = {};
    	this.eid++;
 
     var ratio_info = {};
@@ -344,6 +374,9 @@ var Node = {
         break;
       case 'randomWayPoint':
         MoveModel.randomWayPoint(user);
+        break;
+      case 'traceMoveModel':
+        MoveModel.traceMoveModel(user);
         break;
       default:
         MoveModel.randomWayPoint(user);

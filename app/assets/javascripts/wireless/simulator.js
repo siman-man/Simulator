@@ -307,8 +307,17 @@ var Simulator = {
             }
           }
         }else if( this.create_route_mode ){
-          if( !View.route_grid[coord.y][coord.x] ){
+          if( !View.route_grid[coord.y][coord.x].exist ){
             View.paint_route( coord.y, coord.x );
+          }else{
+            if( View.selected_cell ){
+               var before = View.selected_cell;
+               View.selected_cell.obj.graphics.clear().beginFill('rgba(255,0,0,0.2)').drawRect(before.x*gridSize, before.y*gridSize, gridSize, gridSize);
+            }
+            console.log("cell selected =>");
+            View.selected_cell = View.route_grid[coord.y][coord.x];
+            $("#wait_time").val(View.selected_cell.obj.label.text);
+            View.selected_cell.obj.graphics.clear().beginFill('rgba(0,0,255,0.2)').drawRect(coord.x*gridSize, coord.y*gridSize, gridSize, gridSize);
           }
         }
       }
@@ -340,8 +349,8 @@ var Simulator = {
           console.log("mousemove - objectCheck =>");
           Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
         }
-      }else if( Simulator.create_route_mode ){
-        if( !View.route_grid[coord.y][coord.x] ){
+      }else{
+        if( !View.route_grid[coord.y][coord.x].exist ){
           View.paint_route( coord.y, coord.x );
         }
       }

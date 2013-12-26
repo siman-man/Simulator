@@ -18,6 +18,16 @@ var Panel = {
 			}
 		});
 
+		$("#wait_time").change(function(){
+			if( View.selected_cell !== undefined ){
+				console.log("text change =>");
+				var id = View.selected_cell.path_id,
+						wait_time = $("#wait_time").val()|0;
+				View.selected_cell.obj.label.text = wait_time;
+				Simulator.route_user.path[id].wait = wait_time;
+			}
+		});
+
 		$("#draw_object").change(function(){
 			$("#create_route").attr("checked",false); 
 		});

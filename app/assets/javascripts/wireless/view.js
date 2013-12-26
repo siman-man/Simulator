@@ -11,6 +11,7 @@ var View = {
 	connection_line: [],
 	route_grid: [],
 	route_list: {},
+	selected_cell: undefined,
 	route_id: 0,
 	route_top: { y: -1, x: -1 },
 	dy: [ 0, 1, 0, -1],
@@ -27,7 +28,7 @@ var View = {
       	shape = new createjs.Shape();
       	shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
       	View.propagation[y][x] = { obj: shape, flag: false };
-      	this.route_grid[y][x] = false;
+      	this.route_grid[y][x] = { obj: undefined, exist: false };
       }
     }
 	},
@@ -45,17 +46,21 @@ var View = {
 
 	route_view: function( route ){
 		console.log("route view =>");
-		console.log(route);
 		var i, coord, shape;
 		for( i in route ){
 			coord = route[i];
 			shape = new createjs.Shape();
       shape.graphics.beginFill('rgba(255,0,0,0.2)').drawRect(coord.x*gridSize, coord.y*gridSize, gridSize, gridSize);
+      shape.label = new createjs.Text( coord.wait, "12px Arial", "black");
+    	shape.label.x = coord.x * gridSize;
+    	shape.label.y = coord.y * gridSize;
+    	shape.label.textBaseline = "top";
       Simulator.map.addChild(shape);
-      this.route_list[this.route_id] = { y: coord.y, x: coord.x, obj: shape };
+      Simulator.map.addChild(shape.label);
+      this.route_list[this.route_id] = { y: coord.y, x: coord.x, obj: shape, id: i };
+ 	    this.route_grid[coord.y][coord.x] = { path_id: this.route_id, y: y, x: x, obj: shape, exist: true };
     	this.route_id++;
     	this.route_top = { y: coord.y, x: coord.x };
-      this.route_grid[coord.y][coord.x] = true;
 		}
 	},
 
@@ -63,13 +68,18 @@ var View = {
 		if( !this.check_connect( y, x ) ) return;
 		shape = new createjs.Shape();
     shape.graphics.beginFill('rgba(255,0,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
+    shape.label = new createjs.Text(0, "12px Arial", "black");
+   	shape.label.x = x * gridSize;
+    shape.label.y = y * gridSize;
+    shape.label.textBaseline = "top";
     Simulator.map.addChild(shape);
-    this.route_grid[y][x] = true;
+    Simulator.map.addChild(shape.label);
+    this.route_grid[y][x] = { path_id: this.route_id, y: y, x: x, obj: shape, exist: true };
     this.route_list[this.route_id] = { y: y, x: x, obj: shape };
-    Simulator.route_user.path[this.route_id] = { y: y, x: x };
+    Simulator.route_user.path[this.route_id] = { y: y, x: x, wait: 0 };
+    Simulator.route_user.path_length = Object.keys(Simulator.route_user.path).length;
     this.route_id++;
     this.route_top = { y: y, x: x };
-    console.log(Simulator.route_user.path);
 	},
 
 	clear_route: function(){
@@ -78,8 +88,9 @@ var View = {
 		for( i in this.route_list ){
 			cell = this.route_list[i];
 			Simulator.map.removeChild(cell.obj);
+			Simulator.map.removeChild(cell.obj.label);
 			delete this.route_list[i];
-			this.route_grid[cell.y][cell.x] = false;
+			this.route_grid[cell.y][cell.x] = { obj: undefined, exist: false };
 		}
 		this.route_list = {};
 		this.route_id = 0;
