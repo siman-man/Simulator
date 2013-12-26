@@ -307,10 +307,11 @@ var Simulator = {
             }
           }
         }else if( this.create_route_mode ){
-          if( !View.route_grid[coord.y][coord.x].exist ){
+          if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
             View.paint_route( coord.y, coord.x );
-          }else{
+          }else if( operation_type === 0 ){
             if( View.selected_cell ){
+               console.log(View.selected_cell);
                var before = View.selected_cell;
                View.selected_cell.obj.graphics.clear().beginFill('rgba(255,0,0,0.2)').drawRect(before.x*gridSize, before.y*gridSize, gridSize, gridSize);
             }
@@ -318,6 +319,10 @@ var Simulator = {
             View.selected_cell = View.route_grid[coord.y][coord.x];
             $("#wait_time").val(View.selected_cell.obj.label.text);
             View.selected_cell.obj.graphics.clear().beginFill('rgba(0,0,255,0.2)').drawRect(coord.x*gridSize, coord.y*gridSize, gridSize, gridSize);
+          }else if( operation_type === 2 ){
+            if( View.route_top.y === coord.y && View.route_top.x === coord.x ){
+              View.delete_route();
+            }
           }
         }
       }
@@ -350,8 +355,12 @@ var Simulator = {
           Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
         }
       }else{
-        if( !View.route_grid[coord.y][coord.x].exist ){
+        if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
           View.paint_route( coord.y, coord.x );
+        }else if( operation_type === 2 ){
+          if( View.route_top.y === coord.y && View.route_top.x === coord.x ){
+            View.delete_route();
+          }
         }
       }
     }

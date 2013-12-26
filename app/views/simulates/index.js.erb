@@ -4,8 +4,8 @@ console.log('create map =>');
 <% @obj_list.each do |obj| %>
 	var x, y;
 	console.log("create =>");
-	var test = <%= obj.to_json.html_safe %>
-	console.log(test);
+	var opt = <%= obj.to_json.html_safe %>
+	console.log(opt);
 	x = <%= obj[:x] %>
 	y = <%= obj[:y] %>
 	<% case obj[:type] %>
@@ -16,7 +16,7 @@ console.log('create map =>');
 	<% when :end %>
 		Node.create( x, y, 'end' );
 	<% when :user %>
-		Node.create(x, y, 'user', { type: 'normal' } );
+		Node.create(x, y, 'user', opt );
 	<% when :tree %>
 		Tree.create( x, y );
 	<% when :road %>

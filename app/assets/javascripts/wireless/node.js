@@ -72,7 +72,7 @@ var Node = {
         first = route[0],
         last = route[size-1],
         ny, nx;
-
+    if( size <= 1 ) return false;
     for(var i = 0; i < 4; i++){
       ny = last.y + View.dy[i];
       nx = last.x + View.dx[i];
@@ -148,7 +148,7 @@ var Node = {
     if( user.path !== undefined ){
       user.path_index = 0;
       user.path_length = Object.keys(user.path).length;
-      user.close_path = this.isCloseRoute( user_path );
+      user.close_path = this.isCloseRoute( user.path );
     }else{
       user.path = {}
       user.path_index = 0;
@@ -157,8 +157,8 @@ var Node = {
     }
     user.delivery_predictability = {};
     user.speed = 1.5;
-    //user.move_type = "randomWayPoint";
-    user.move_type = "traceMoveModel";
+    //user.move_model = "randomWayPoint";
+    user.move_model = "traceMoveModel";
 
     var ratio_info = {};
     ratio_info[user.eid] = 1.0;
@@ -368,7 +368,7 @@ var Node = {
  	},
 
 	moveUser: function(user){
-    switch(user.move_type){
+    switch(user.move_model){
       case 'worker':
         MoveModel.worker(user);
         break;

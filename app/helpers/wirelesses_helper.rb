@@ -1,5 +1,9 @@
 require 'td-logger'
 
+class Array
+  alias :add :push
+end
+
 module WirelessesHelper
   def create_log(data)
     TD.event.post('simulator', data)
@@ -19,13 +23,16 @@ module WirelessesHelper
         p data
         p data.split(' ')
         info = Hash[data.split(' ').map{|e| e.split(':')}]
+        p info["path"]
         if info["type"] == "stage_data"
           info["x"] = 0
           info["y"] = 0
         elsif ["user", "start", "end"].include?(info["type"])
+          path = ( info["type"] == "user")? create_path(info["path"]) : ""
           file.write("\tcreate(:#{info["type"]}) do |t| 
 \t\tt.pos( x: #{info["x"]}, y: #{info["y"]} )
 \t\tt.add_data( eid: #{info["eid"]}, name: '#{info["name"]}' )
+#{path}
 \tend\n")
         else
           file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]} )}\n")
@@ -42,6 +49,15 @@ module WirelessesHelper
       file.write("end\n")
     end
     p stage_data
+  end
+
+  def create_path(path)
+    path = eval(path.gsub(/\*/,','))
+    str = "\t\tt.create_path do |route|\n"
+    path.each_slice(3) do |data|
+      str += "\t\t\troute.add({ y: #{data[0]}, x: #{data[1]}, wait: #{data[2]} })\n"
+    end
+    str += "\t\tend"
   end
 
   module WebSimulator
@@ -73,6 +89,12 @@ module WirelessesHelper
 
     def add_data( data )
       @obj.merge!(data)
+    end
+
+    def create_path( &block )
+      route = []
+      block.call route
+      @obj[:path] = route
     end
   end
 end

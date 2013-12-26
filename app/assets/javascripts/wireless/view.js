@@ -58,7 +58,7 @@ var View = {
       Simulator.map.addChild(shape);
       Simulator.map.addChild(shape.label);
       this.route_list[this.route_id] = { y: coord.y, x: coord.x, obj: shape, id: i };
- 	    this.route_grid[coord.y][coord.x] = { path_id: this.route_id, y: y, x: x, obj: shape, exist: true };
+ 	    this.route_grid[coord.y][coord.x] = { path_id: this.route_id, y: coord.y, x: coord.x, obj: shape, exist: true };
     	this.route_id++;
     	this.route_top = { y: coord.y, x: coord.x };
 		}
@@ -80,6 +80,29 @@ var View = {
     Simulator.route_user.path_length = Object.keys(Simulator.route_user.path).length;
     this.route_id++;
     this.route_top = { y: y, x: x };
+	},
+
+	delete_route: function(){
+		this.route_id--;
+		var cell = this.route_list[this.route_id];
+		Simulator.map.removeChild(cell.obj);
+		Simulator.map.removeChild(cell.obj.label);
+		delete Simulator.route_user.path[this.route_id]
+		delete this.route_list[this.route_id];
+		this.route_grid[cell.y][cell.x] = { obj: undefined, exist: false };
+		if( this.route_id !== 0 ){
+			var ny, nx;
+			for(var i = 0; i < 4; i++){
+				ny = cell.y + this.dy[i];
+				nx = cell.x + this.dx[i];
+				if( this.route_grid[ny][nx].exist ){
+					this.route_top = { y: ny, x: nx };
+					break;
+				}
+			}	
+		}else{
+			this.route_top = { y: -1, x: -1 };
+		}
 	},
 
 	clear_route: function(){

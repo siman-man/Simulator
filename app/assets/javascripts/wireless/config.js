@@ -28,7 +28,8 @@ var Config = {
 				x: coord.x, 
 				eid: node.eid, 
 				name: node.name,
-				path: node.path
+				move_model: node.move_model,
+				path: this.path2string(node.path),
 			}))
 		}
 
@@ -49,6 +50,20 @@ var Config = {
     		field_data: data
   		},
   	});
+	},
+
+	path2string: function( path ){
+		var array = [],
+				i, elem;
+
+		for( i in path ){
+			elem = path[i];
+			array.push(elem.y);
+			array.push(elem.x);
+			array.push(elem.wait);
+		}
+
+		return JSON.stringify(array).replace(/,/g, "*");  
 	},
 
 	create_data: function( type, opt ){
