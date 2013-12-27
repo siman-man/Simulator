@@ -157,8 +157,9 @@ var Node = {
     }
     user.delivery_predictability = {};
     user.speed = 1.5;
-    //user.move_model = "randomWayPoint";
-    user.move_model = "traceMoveModel";
+    user.move_model = "RandomWayPoint";
+    user.move_model = "RandomWalk";
+    //user.move_model = "traceMoveModel";
 
     var ratio_info = {};
     ratio_info[user.eid] = 1.0;
@@ -372,8 +373,11 @@ var Node = {
       case 'worker':
         MoveModel.worker(user);
         break;
-      case 'randomWayPoint':
+      case 'RandomWayPoint':
         MoveModel.randomWayPoint(user);
+        break;
+      case 'RandomWalk':
+        MoveModel.randomWalk(user);
         break;
       case 'traceMoveModel':
         MoveModel.traceMoveModel(user);

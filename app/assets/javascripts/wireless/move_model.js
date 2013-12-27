@@ -14,6 +14,20 @@ var MoveModel = {
     }
   },
 
+  randomWalk: function(user){
+    user.way_point = user.way_point || this.directRandomWalkPoint(user);
+
+    if(user.way_point){
+      this.moveToWayPoint(user, this.user_speed);
+    }
+
+    if(this.checkArrive(user)){
+      user.way_point = undefined;
+      Simulator.map.removeChild(Search.point);
+      Search.point = undefined;
+    }
+  },
+
   traceMoveModel: function(user){
     if( user.path_length === 1 ) return;
 
@@ -134,6 +148,30 @@ var MoveModel = {
       x = Simulator.mersenne.random() * View.width * 0.85 | 0;
       y = Simulator.mersenne.random() * View.height * 0.85 | 0;
       if( Simulator.field[y][x].type != 'tree' ) break;
+    }
+
+    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});
+
+    if(user.route_list.length === 0){
+      console.log('reload')
+      user.route_list.push({x: coord.x * View.gridSize, y: coord.y * View.gridSize});
+    }
+
+    return {x: x, y: y};
+  },
+
+  directRandomWalkPoint: function(user){
+    var x,
+        y,
+        direct,
+        length,
+        coord = View.point2coord( user.x, user.y );
+    while(true){
+      direct = Simulator.mersenne.random() * 4 | 0;
+      length = Simulator.mersenne.random() * 20 | 0;
+      x = coord.x + View.dx[direct] * length;
+      y = coord.y + View.dy[direct] * length;
+      if( View.isInside( y, x ) && Simulator.field[y][x].type != 'tree' ) break;
     }
 
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});
