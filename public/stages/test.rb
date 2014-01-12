@@ -1,107 +1,34 @@
 WebSimulator.define do
-	create(:tree){|t| t.pos( x: 32, y: 3 )}
-	create(:tree){|t| t.pos( x: 33, y: 3 )}
-	create(:tree){|t| t.pos( x: 31, y: 4 )}
-	create(:tree){|t| t.pos( x: 32, y: 4 )}
-	create(:tree){|t| t.pos( x: 34, y: 4 )}
-	create(:tree){|t| t.pos( x: 35, y: 4 )}
-	create(:tree){|t| t.pos( x: 36, y: 4 )}
-	create(:tree){|t| t.pos( x: 37, y: 4 )}
-	create(:tree){|t| t.pos( x: 38, y: 4 )}
-	create(:tree){|t| t.pos( x: 30, y: 5 )}
-	create(:tree){|t| t.pos( x: 38, y: 5 )}
-	create(:tree){|t| t.pos( x: 39, y: 5 )}
-	create(:tree){|t| t.pos( x: 30, y: 6 )}
-	create(:tree){|t| t.pos( x: 40, y: 6 )}
-	create(:tree){|t| t.pos( x: 29, y: 7 )}
-	create(:tree){|t| t.pos( x: 40, y: 7 )}
-	create(:tree){|t| t.pos( x: 41, y: 7 )}
-	create(:tree){|t| t.pos( x: 29, y: 8 )}
-	create(:tree){|t| t.pos( x: 41, y: 8 )}
-	create(:tree){|t| t.pos( x: 29, y: 9 )}
-	create(:end){|t| t.pos( x: 37, y: 9 )}
-	create(:tree){|t| t.pos( x: 41, y: 9 )}
-	create(:start){|t| t.pos( x: 10, y: 10 )}
-	create(:tree){|t| t.pos( x: 28, y: 10 )}
-	create(:tree){|t| t.pos( x: 41, y: 10 )}
-	create(:tree){|t| t.pos( x: 28, y: 11 )}
-	create(:tree){|t| t.pos( x: 40, y: 11 )}
-	create(:tree){|t| t.pos( x: 27, y: 12 )}
-	create(:tree){|t| t.pos( x: 28, y: 12 )}
-	create(:tree){|t| t.pos( x: 40, y: 12 )}
-	create(:tree){|t| t.pos( x: 25, y: 13 )}
-	create(:tree){|t| t.pos( x: 26, y: 13 )}
-	create(:tree){|t| t.pos( x: 40, y: 13 )}
-	create(:tree){|t| t.pos( x: 21, y: 14 )}
-	create(:tree){|t| t.pos( x: 22, y: 14 )}
-	create(:tree){|t| t.pos( x: 23, y: 14 )}
-	create(:tree){|t| t.pos( x: 24, y: 14 )}
-	create(:tree){|t| t.pos( x: 40, y: 14 )}
-	create(:tree){|t| t.pos( x: 18, y: 15 )}
-	create(:tree){|t| t.pos( x: 19, y: 15 )}
-	create(:tree){|t| t.pos( x: 20, y: 15 )}
-	create(:tree){|t| t.pos( x: 39, y: 15 )}
-	create(:tree){|t| t.pos( x: 40, y: 15 )}
-	create(:tree){|t| t.pos( x: 16, y: 16 )}
-	create(:tree){|t| t.pos( x: 17, y: 16 )}
-	create(:tree){|t| t.pos( x: 39, y: 16 )}
-	create(:tree){|t| t.pos( x: 15, y: 17 )}
-	create(:tree){|t| t.pos( x: 38, y: 17 )}
-	create(:tree){|t| t.pos( x: 39, y: 17 )}
-	create(:tree){|t| t.pos( x: 14, y: 18 )}
-	create(:tree){|t| t.pos( x: 15, y: 18 )}
-	create(:tree){|t| t.pos( x: 38, y: 18 )}
-	create(:tree){|t| t.pos( x: 14, y: 19 )}
-	create(:tree){|t| t.pos( x: 37, y: 19 )}
-	create(:tree){|t| t.pos( x: 38, y: 19 )}
-	create(:tree){|t| t.pos( x: 14, y: 20 )}
-	create(:tree){|t| t.pos( x: 37, y: 20 )}
-	create(:tree){|t| t.pos( x: 14, y: 21 )}
-	create(:tree){|t| t.pos( x: 27, y: 21 )}
-	create(:tree){|t| t.pos( x: 28, y: 21 )}
-	create(:tree){|t| t.pos( x: 29, y: 21 )}
-	create(:tree){|t| t.pos( x: 30, y: 21 )}
-	create(:tree){|t| t.pos( x: 31, y: 21 )}
-	create(:tree){|t| t.pos( x: 32, y: 21 )}
-	create(:tree){|t| t.pos( x: 36, y: 21 )}
-	create(:tree){|t| t.pos( x: 14, y: 22 )}
-	create(:tree){|t| t.pos( x: 19, y: 22 )}
-	create(:tree){|t| t.pos( x: 20, y: 22 )}
-	create(:tree){|t| t.pos( x: 21, y: 22 )}
-	create(:tree){|t| t.pos( x: 22, y: 22 )}
-	create(:tree){|t| t.pos( x: 23, y: 22 )}
-	create(:tree){|t| t.pos( x: 24, y: 22 )}
-	create(:tree){|t| t.pos( x: 25, y: 22 )}
-	create(:tree){|t| t.pos( x: 26, y: 22 )}
-	create(:tree){|t| t.pos( x: 27, y: 22 )}
-	create(:tree){|t| t.pos( x: 32, y: 22 )}
-	create(:tree){|t| t.pos( x: 33, y: 22 )}
-	create(:tree){|t| t.pos( x: 34, y: 22 )}
-	create(:tree){|t| t.pos( x: 35, y: 22 )}
-	create(:tree){|t| t.pos( x: 14, y: 23 )}
-	create(:tree){|t| t.pos( x: 14, y: 25 )}
-	create(:tree){|t| t.pos( x: 14, y: 26 )}
-	create(:tree){|t| t.pos( x: 15, y: 28 )}
-	create(:tree){|t| t.pos( x: 15, y: 29 )}
-	create(:tree){|t| t.pos( x: 15, y: 30 )}
-	create(:tree){|t| t.pos( x: 41, y: 30 )}
-	create(:tree){|t| t.pos( x: 42, y: 30 )}
-	create(:tree){|t| t.pos( x: 16, y: 31 )}
-	create(:tree){|t| t.pos( x: 40, y: 31 )}
-	create(:tree){|t| t.pos( x: 41, y: 31 )}
-	create(:tree){|t| t.pos( x: 17, y: 32 )}
-	create(:tree){|t| t.pos( x: 18, y: 32 )}
-	create(:tree){|t| t.pos( x: 37, y: 32 )}
-	create(:tree){|t| t.pos( x: 38, y: 32 )}
-	create(:tree){|t| t.pos( x: 39, y: 32 )}
-	create(:tree){|t| t.pos( x: 18, y: 33 )}
-	create(:tree){|t| t.pos( x: 20, y: 33 )}
-	create(:tree){|t| t.pos( x: 21, y: 33 )}
-	create(:tree){|t| t.pos( x: 23, y: 34 )}
-	create(:tree){|t| t.pos( x: 25, y: 34 )}
-	create(:tree){|t| t.pos( x: 28, y: 34 )}
-	create(:tree){|t| t.pos( x: 30, y: 34 )}
-	create(:tree){|t| t.pos( x: 32, y: 34 )}
-	create(:tree){|t| t.pos( x: 34, y: 34 )}
-	create(:stage_data){|t| t.pos( x: 0, y: 0 )}
+	create(:start) do |t| 
+		t.pos( x: 10, y: 10 )
+		t.add_data( eid: 0, name: 'start' )
+
+	end
+	create(:end) do |t| 
+		t.pos( x: 20, y: 10 )
+		t.add_data( eid: 1, name: 'end' )
+
+	end
+	create(:user) do |t| 
+		t.pos( x: 33, y: 16 )
+		t.add_data( eid: 2, name: 'none' )
+		t.create_path do |route|
+			route.add({ y: 16, x: 33, wait: 0 })
+			route.add({ y: 15, x: 33, wait: 0 })
+			route.add({ y: 14, x: 33, wait: 0 })
+			route.add({ y: 13, x: 33, wait: 0 })
+			route.add({ y: 12, x: 33, wait: 0 })
+			route.add({ y: 11, x: 33, wait: 0 })
+			route.add({ y: 11, x: 34, wait: 0 })
+			route.add({ y: 11, x: 35, wait: 0 })
+			route.add({ y: 11, x: 36, wait: 0 })
+		end
+	end
+	create(:user) do |t| 
+		t.pos( x: 39, y: 10 )
+		t.add_data( eid: 3, name: 'none' )
+		t.create_path do |route|
+			route.add({ y: 10, x: 39, wait: 0 })
+		end
+	end
 end

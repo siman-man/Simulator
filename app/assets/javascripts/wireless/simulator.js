@@ -340,7 +340,7 @@ var Simulator = {
         draw_object = Simulator.field[coord.y][coord.x]; 
 
         if( !this.create_route_mode ){
-          if( Simulator.target && ( Node.isServer(Simulator.target.type) || Simulator.target.type === 'user' ) && Simulator.operation_flag && draw_object.obj === undefined){
+          if( Simulator.target && ( Node.isServer(Simulator.target.type) || Node.isUser(Simulator.target.type) ) && Simulator.operation_flag && draw_object.obj === undefined){
           //console.log("server pos update =>");
           Simulator.target.obj.y = coord.y * gridSize;
           Simulator.target.obj.x = coord.x * gridSize;
@@ -379,10 +379,14 @@ var Simulator = {
           Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'server' };
           Propagation.calc(coord.x, coord.y);
           //View.update();
-        }else if( Simulator.target.type === 'user' ){
+        }else if( Node.isUser(Simulator.target.type) ){
+          var user = Simulator.target.obj;
           key = Simulator.key_map[coord.y][coord.x];
-          eid = Simulator.target.obj.eid;
-          Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'user' };
+          eid = user.eid;
+          if( user.path[0].y !== coord.y || user.path[0].x !== coord.x ){
+            user.path= [{ y: coord.y, x: coord.x, wait: 0 }];
+          }
+          Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: user, type: 'user' };
           Propagation.calc(coord.x, coord.y);
         }
       }

@@ -68,7 +68,7 @@ var Node = {
 	},
 
   isCloseRoute: function( route ){
-    var size = Object.keys(route).length,
+    var size = route.length,
         first = route[0],
         last = route[size-1],
         ny, nx;
@@ -143,19 +143,19 @@ var Node = {
     user.contact_list = {};
     user.circuit = [];
     user.route_list = [];
-    user.path = opt.path;
+    user.path = opt.path || [];
     user.step = 1;
     user.stop_time = 0;
     user.buffer_size = 1000;
-    if( user.path !== undefined ){
+    if( user.path.length !== 0 ){
       user.path_index = 0;
-      user.path_length = Object.keys(user.path).length;
+      user.path_length = user.path.length;
       user.close_path = this.isCloseRoute( user.path );
     }else{
-      user.path = {}
+      user.path = []
       user.path_index = 0;
       user.path_length = 1;
-      user.path[0] = { y: y, x: x, wait: 0 };
+      user.path.push({ y: y, x: x, wait: 0 });
     }
     user.delivery_predictability = {};
     user.speed = 1.5;
@@ -355,6 +355,11 @@ var Node = {
 
   isServer: function( type ){
     if( type === 'server' || type === 'start' || type === 'end' ) return true;
+    return false;
+  },
+
+  isUser: function( type ){
+    if( type === 'user' ) return true;
     return false;
   },
 
