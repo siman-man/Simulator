@@ -28,7 +28,7 @@ var MoveModel = {
     }
   },
 
-  traceMoveModel: function(user){
+  mapRouteMovement: function(user){
     if( user.path_length === 1 ) return;
 
     if( user.way_point === undefined ){

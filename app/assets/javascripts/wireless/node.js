@@ -30,6 +30,23 @@ var Node = {
     }
   },
 
+  direct_move_model: function(user, type){
+    switch(type){
+      case 0:
+        user.move_model = "RandomWayPoint";
+        break;
+      case 1:
+        user.move_model = "MapRouteMovement";
+        break;
+      case 2:
+        user.move_model = "RandomWalk";
+        break;
+      default:
+        user.move_model = "StationaryMovement";
+        break;
+    }
+  },
+
   direct_routing_protocol: function(node){
     switch(Simulator.protocol_type){
       case 'epidemic':
@@ -388,8 +405,8 @@ var Node = {
       case 'RandomWalk':
         MoveModel.randomWalk(user);
         break;
-      case 'traceMoveModel':
-        MoveModel.traceMoveModel(user);
+      case 'MapRouteMovement':
+        MoveModel.mapRouteMovement(user);
         break;
       default:
         MoveModel.randomWayPoint(user);

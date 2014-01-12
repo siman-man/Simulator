@@ -18,6 +18,10 @@ var Panel = {
 			}
 		});
 
+		$("#move_model").change(function(){
+			Panel.updateNodeMoveModel( $("#user_eid").val()|0, $("#move_model").val()|0);
+		});
+
 		$("#wait_time").change(function(){
 			if( View.selected_cell !== undefined ){
 				console.log("text change =>");
@@ -125,5 +129,11 @@ var Panel = {
   		$("#user_eid").val(obj.eid);
   		$("#user_name").val(obj.name);
 		}
+  },
+
+  updateNodeMoveModel: function( eid, type ){
+  	if( eid <= 1 ) return;
+  	var user = Node.node_list[eid];
+  	Node.direct_move_model( user, type );
   },
 };
