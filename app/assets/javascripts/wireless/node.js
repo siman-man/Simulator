@@ -11,6 +11,10 @@ var Node = {
 
     for( from_eid in this.node_list ){
       node = this.node_list[from_eid];
+      if( node.speed !== 0 ){
+        node.speed = gridSize / node.speed;
+      }
+
       if( node.path !== undefined ){
         node.close_path = this.isCloseRoute( node.path );
       }
@@ -175,7 +179,7 @@ var Node = {
       user.path.push({ y: y, x: x, wait: 0 });
     }
     user.delivery_predictability = {};
-    user.speed = 1.5;
+    user.speed = 10;
     user.move_model = "RandomWayPoint";
     //user.move_model = "RandomWalk";
     //user.move_model = "traceMoveModel";
@@ -219,6 +223,7 @@ var Node = {
     node.strage = {};
     node.buffer = [];
     node.path = [];
+    node.speed = 0;
     node.last_connect_time = {};
     node.delivery_predictability = {};
     node.routing_protocol = this.direct_routing_protocol(node);

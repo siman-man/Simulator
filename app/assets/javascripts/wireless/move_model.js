@@ -1,5 +1,7 @@
 var MoveModel = {
   user_speed: 1.5,
+  EPS: 1e-8,
+
   randomWayPoint: function(user){
   	user.way_point = user.way_point || this.directWayPoint(user);
 
@@ -224,10 +226,10 @@ var MoveModel = {
     var dx = user.way_point.x * gridSize - user.x,
         dy = user.way_point.y * gridSize - user.y;
 
-    if(dx > 0) user.x += user.speed;
-    if(dy > 0) user.y += user.speed;
-    if(dx < 0) user.x -= user.speed;
-    if(dy < 0) user.y -= user.speed;
+    if(dx > this.EPS) user.x += user.speed;
+    if(dy > this.EPS) user.y += user.speed;
+    if(dx < -this.EPS) user.x -= user.speed;
+    if(dy < -this.EPS) user.y -= user.speed;
   },
 
   moveToWayPoint: function(user, speed){
@@ -235,21 +237,21 @@ var MoveModel = {
         dx = point.x - user.x,
         dy = point.y - user.y;
 
-    if(dx > 0) user.x += user.speed;
-    if(dy > 0) user.y += user.speed;
-    if(dx < 0) user.x -= user.speed;
-    if(dy < 0) user.y -= user.speed;
+    if(dx > this.EPS) user.x += user.speed;
+    if(dy > this.EPS) user.y += user.speed;
+    if(dx < -this.EPS) user.x -= user.speed;
+    if(dy < -this.EPS) user.y -= user.speed;
 
-    if(user.x === point.x && user.y === point.y){
+    if( dx <= this.EPS && dy <= this.EPS ){
       user.route_list.shift();
     }
   },
 
   checkArrive: function(user){
-    var dx = user.x - user.way_point.x * gridSize,
-        dy = user.y - user.way_point.y * gridSize;
+    var dx = Math.abs(user.x - user.way_point.x * gridSize),
+        dy = Math.abs(user.y - user.way_point.y * gridSize);
     
-    return ( dx === 0 && dy === 0 )? true : false;
+    return ( dx <= this.EPS && dy <= this.EPS )? true : false;
   },
 
   createStopCount: function(){
