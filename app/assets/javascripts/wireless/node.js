@@ -98,6 +98,7 @@ var Node = {
     car.delivery_predictability = {};
     car.speed = 5;
     car.direct = 0;
+    car.buffer_size = 1000;
     
     var ratio_info = {};
     ratio_info[car.eid] = 1.0;
@@ -145,6 +146,7 @@ var Node = {
     user.path = opt.path;
     user.step = 1;
     user.stop_time = 0;
+    user.buffer_size = 1000;
     if( user.path !== undefined ){
       user.path_index = 0;
       user.path_length = Object.keys(user.path).length;
@@ -158,7 +160,7 @@ var Node = {
     user.delivery_predictability = {};
     user.speed = 1.5;
     user.move_model = "RandomWayPoint";
-    user.move_model = "RandomWalk";
+    //user.move_model = "RandomWalk";
     //user.move_model = "traceMoveModel";
 
     var ratio_info = {};
@@ -199,6 +201,7 @@ var Node = {
     node.y = y * View.gridSize;
     node.strage = {};
     node.buffer = [];
+    node.path = [];
     node.last_connect_time = {};
     node.delivery_predictability = {};
     node.routing_protocol = this.direct_routing_protocol(node);
@@ -219,6 +222,7 @@ var Node = {
     
     node.ob_type = type || 'server';
     node.eid = this.eid;
+    node.buffer_size = 1000;
     //node.path = {};
    	this.eid++;
 

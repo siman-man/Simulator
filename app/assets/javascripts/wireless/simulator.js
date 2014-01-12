@@ -341,15 +341,15 @@ var Simulator = {
 
         if( !this.create_route_mode ){
           if( Simulator.target && ( Node.isServer(Simulator.target.type) || Simulator.target.type === 'user' ) && Simulator.operation_flag && draw_object.obj === undefined){
-        //console.log("server pos update =>");
-        Simulator.target.obj.y = coord.y * gridSize;
-        Simulator.target.obj.x = coord.x * gridSize;
-        Simulator.target.obj.label.y = Simulator.target.obj.y;
-        Simulator.target.obj.label.x = Simulator.target.obj.x;
-        Simulator.target.x = coord.x;
-        Simulator.target.y = coord.y;
-        Propagation.calc(coord.x, coord.y);
-        //View.update();
+          //console.log("server pos update =>");
+          Simulator.target.obj.y = coord.y * gridSize;
+          Simulator.target.obj.x = coord.x * gridSize;
+          Simulator.target.obj.label.y = Simulator.target.obj.y;
+          Simulator.target.obj.label.x = Simulator.target.obj.x;
+          Simulator.target.x = coord.x;
+          Simulator.target.y = coord.y;
+          Propagation.calc(coord.x, coord.y);
+          //View.update();
         }else if( draw_object.obj === undefined && object_type !== 'user' ){
           console.log("mousemove - objectCheck =>");
           Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
