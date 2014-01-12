@@ -242,7 +242,7 @@ var MoveModel = {
     if(dx < -this.EPS) user.x -= user.speed;
     if(dy < -this.EPS) user.y -= user.speed;
 
-    if( dx <= this.EPS && dy <= this.EPS ){
+    if( Math.abs(dx) <= this.EPS && Math.abs(dy) <= this.EPS ){
       user.route_list.shift();
     }
   },

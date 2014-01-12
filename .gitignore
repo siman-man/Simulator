@@ -27,6 +27,7 @@ public/uploads
 **/*~
 *.*~
 *~
+db/*
 db/schema.rb
 public/assets/*
 reports/pdfs/*
