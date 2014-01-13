@@ -86,7 +86,7 @@ var Simulator = {
     Simulator.node_list = {};
     Street.clear();
     Home.clear();
-    Tree.clear();
+    Wall.clear();
     Office.clear();
     Node.clear();
     View.clear();
@@ -190,8 +190,8 @@ var Simulator = {
         case 'road':
         Street.create(x, y, true);
         break;
-        case 'tree':
-        Tree.create( x, y );
+        case 'wall':
+        Wall.create( x, y );
         break;
         case 'home':
         Home.create( x, y );
@@ -225,8 +225,8 @@ var Simulator = {
           case 'home':
           Home.remove( draw_object.obj );
           break;
-          case 'tree':
-          Tree.remove( draw_object.obj );
+          case 'wall':
+          Wall.remove( draw_object.obj );
           break;
           case 'office':
           Office.remove( draw_object.obj );

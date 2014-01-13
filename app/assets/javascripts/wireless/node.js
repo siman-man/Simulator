@@ -425,6 +425,7 @@ var Node = {
 	},
 
 	remove: function(node){
+    if( node.name === 'start' || node.name === 'end' ) return;
     console.log("remove node" + node.eid + " =>");
     var coord = View.point2coord( node.x, node.y ),
     		key = Simulator.key_map[coord.y][coord.x];
