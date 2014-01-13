@@ -206,7 +206,7 @@ var Node = {
     //View.update();
 
     Simulator.map.addChild(user);
-    Simulator.map.addChild(user.label);
+    //Simulator.map.addChild(user.label);
 
     key = Simulator.key_map[y][x];
     Simulator.node_map[key][user.eid] = { x: x, y: y, obj: user, type: 'user' };
@@ -261,7 +261,7 @@ var Node = {
 
    	node.contact_list = {};
     Simulator.map.addChild(node);
-    Simulator.map.addChild(node.label);
+    //Simulator.map.addChild(node.label);
 
     node.status = ServerStatus.init();
 

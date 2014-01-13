@@ -7,6 +7,8 @@ var Simulator = {
   node_map: {},
   field: [],
   key_map: [],
+  start_time: undefined,
+  end_time: undefined,
   seed: 1,
   replay: false,
   stage_type: 1,
@@ -138,8 +140,8 @@ var Simulator = {
   },
 
   updateTime: function(time){
-    /*
-    var mil = Simulator.time * 1000/30,
+    var now_time = new Date();
+    var mil = (now_time.getTime() - Simulator.start_time),
     sec = mil/1000 | 0,
     hour, min;
 
@@ -158,8 +160,8 @@ var Simulator = {
     if(min < 10) min = "0" + min;
     sec %= 60;
     if(sec < 10) sec = "0" + sec;
-    */
-    //$("span#time").html([hour, min, sec, mil].join(':'));
+    
+    $("span#real_time").html([hour, min, sec, mil].join(':'));
     $("span#time").html(Simulator.time);
   },
 

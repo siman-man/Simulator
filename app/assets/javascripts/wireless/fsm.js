@@ -14,6 +14,8 @@ var FSM = {
 
 			callbacks: {
 				onstart: function(event, from, to, user) {
+					Simulator.start_time = new Date();
+					Simulator.start_time = Simulator.start_time.getTime();
 					Simulator.direct_protocol_type(parseInt($("#protocol").val()));
 					Simulator.seed = $("#seed").val();
 					Message.message_num = parseInt($("#message_num").val());

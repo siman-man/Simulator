@@ -87,4 +87,39 @@ WebSimulator.define do
 			route.add({ y: 31, x: 49, wait: 0 })
 		end
 	end
+	create(:user) do |t| 
+		t.pos( x: 86, y: 79 )
+		t.add_data( eid: 12, name: 'none' )
+		t.create_path do |route|
+			route.add({ y: 79, x: 86, wait: 0 })
+		end
+	end
+	create(:user) do |t| 
+		t.pos( x: 47, y: 54 )
+		t.add_data( eid: 13, name: 'none' )
+		t.create_path do |route|
+			route.add({ y: 54, x: 47, wait: 0 })
+		end
+	end
+	create(:user) do |t| 
+		t.pos( x: 86, y: 55 )
+		t.add_data( eid: 14, name: 'none' )
+		t.create_path do |route|
+			route.add({ y: 55, x: 86, wait: 0 })
+		end
+	end
+	create(:user) do |t| 
+		t.pos( x: 62, y: 16 )
+		t.add_data( eid: 15, name: 'none' )
+		t.create_path do |route|
+			route.add({ y: 16, x: 62, wait: 0 })
+		end
+	end
+	create(:user) do |t| 
+		t.pos( x: 76, y: 15 )
+		t.add_data( eid: 16, name: 'none' )
+		t.create_path do |route|
+			route.add({ y: 15, x: 76, wait: 0 })
+		end
+	end
 end
