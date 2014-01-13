@@ -315,7 +315,7 @@ var Node = {
 
     for( eid in this.node_list ){
       node = this.node_list[eid];
-      node.label.text = Object.keys(node.strage).length;
+      //node.label.text = Object.keys(node.strage).length;
     
       coord = View.point2coord( node.x, node.y );
       connect_list = Propagation.calc(coord.x, coord.y);

@@ -7,6 +7,7 @@ $(document).ready(function(){
     Network.init();
     Simulator.init();
     Search.init();
+    Propagation.init();
     Street.init();
   }
 
