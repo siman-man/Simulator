@@ -52,6 +52,8 @@ var MoveModel = {
     }
     
     if(this.checkArrive(user)){
+      user.x = user.way_point.x * gridSize;
+      user.y = user.way_point.y * gridSize;
       if( user.way_point.wait === user.stop_time ){
         user.way_point = undefined;
         user.stop_time = 0;
@@ -149,10 +151,10 @@ var MoveModel = {
     while(true){
       x = Simulator.mersenne.random() * View.width * 1.0 | 0;
       y = Simulator.mersenne.random() * View.height * 1.0 | 0;
-      if( Simulator.field[y][x].type != 'tree' ) break;
+      if( Simulator.field[y][x].type != 'wall' ) break;
     }
 
-    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});
+    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y });
 
     if(user.route_list.length === 0){
       console.log('reload')
@@ -225,11 +227,15 @@ var MoveModel = {
   moveToNextPoint: function( user, speed ){
     var dx = user.way_point.x * gridSize - user.x,
         dy = user.way_point.y * gridSize - user.y;
-
-    if(dx > this.EPS) user.x += user.speed;
-    if(dy > this.EPS) user.y += user.speed;
-    if(dx < -this.EPS) user.x -= user.speed;
-    if(dy < -this.EPS) user.y -= user.speed;
+    if(dx > this.EPS){
+      user.x += user.speed;
+    }else if(dy > this.EPS){
+      user.y += user.speed;
+    }else if(dx < -this.EPS){
+      user.x -= user.speed;
+    }else if(dy < -this.EPS){
+      user.y -= user.speed;
+    }
   },
 
   moveToWayPoint: function(user, speed){
@@ -237,12 +243,19 @@ var MoveModel = {
         dx = point.x - user.x,
         dy = point.y - user.y;
 
-    if(dx > this.EPS) user.x += user.speed;
-    if(dy > this.EPS) user.y += user.speed;
-    if(dx < -this.EPS) user.x -= user.speed;
-    if(dy < -this.EPS) user.y -= user.speed;
+    if(dx > this.EPS){
+      user.x += user.speed;
+    }else if(dy > this.EPS){
+      user.y += user.speed;
+    }else if(dx < -this.EPS){
+      user.x -= user.speed;
+    }else if(dy < -this.EPS){
+      user.y -= user.speed;
+    }
 
     if( Math.abs(dx) <= this.EPS && Math.abs(dy) <= this.EPS ){
+      user.x = point.x;
+      user.y = point.y;
       user.route_list.shift();
     }
   },

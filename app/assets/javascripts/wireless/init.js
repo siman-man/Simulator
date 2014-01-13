@@ -6,6 +6,7 @@ $(document).ready(function(){
     View.init();
     Network.init();
     Simulator.init();
+    Search.init();
     Street.init();
   }
 

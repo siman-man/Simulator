@@ -206,7 +206,7 @@ var Node = {
     //View.update();
 
     Simulator.map.addChild(user);
-    //Simulator.map.addChild(user.label);
+    Simulator.map.addChild(user.label);
 
     key = Simulator.key_map[y][x];
     Simulator.node_map[key][user.eid] = { x: x, y: y, obj: user, type: 'user' };
@@ -261,7 +261,7 @@ var Node = {
 
    	node.contact_list = {};
     Simulator.map.addChild(node);
-    //Simulator.map.addChild(node.label);
+    Simulator.map.addChild(node.label);
 
     node.status = ServerStatus.init();
 
@@ -316,21 +316,19 @@ var Node = {
     for( eid in this.node_list ){
       node = this.node_list[eid];
       node.label.text = Object.keys(node.strage).length;
+    
+      coord = View.point2coord( node.x, node.y );
+      connect_list = Propagation.calc(coord.x, coord.y);
 
-      if(Simulator.map.contains(node)){     
-        coord = View.point2coord( node.x, node.y );
-        connect_list = Propagation.calc(coord.x, coord.y);
-
-        for( dest_eid in node.contact_list ){
-          if( connect_list[dest_eid] !== undefined ){
-            if( node.contact_list[dest_eid].current === 'close' ){
-              node.contact_list[dest_eid].connect(node, this.node_list[dest_eid]);
-            }
-            node.last_connect_time[dest_eid] = Simulator.time;
-            this.addEdge(node, this.node_list[dest_eid], "orange"); 
-          }else if( node.contact_list[dest_eid].current === 'establish' ){
-            node.contact_list[dest_eid].shutdown(node, this.node_list[dest_eid]);
+      for( dest_eid in node.contact_list ){
+        if( connect_list[dest_eid] !== undefined ){
+          if( node.contact_list[dest_eid].current === 'close' ){
+            node.contact_list[dest_eid].connect(node, this.node_list[dest_eid]);
           }
+          node.last_connect_time[dest_eid] = Simulator.time;
+          this.addEdge(node, this.node_list[dest_eid], "orange"); 
+        }else if( node.contact_list[dest_eid].current === 'establish' ){
+          node.contact_list[dest_eid].shutdown(node, this.node_list[dest_eid]);
         }
       }
     }

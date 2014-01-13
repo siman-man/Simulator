@@ -15,7 +15,7 @@ var Propagation = {
 		for( ypos = 0; ypos < View.height; ypos++ ){
       board[ypos] = [];
       for( xpos = 0; xpos < View.width; xpos++ ){
-        board[ypos][xpos] = { check: false, cost: 99999 };
+        board[ypos][xpos] = { check: false, cost: 999999 };
       }
     }
 
@@ -43,7 +43,6 @@ var Propagation = {
                 connect_list[eid] = true;
               }
             }
-
             if( board[y][x].cost <= this.limit ){
               View.propagation[y][x].flag = true;
               queue.push( { x: x, y: y, cost: board[y][x].cost } )
@@ -52,7 +51,6 @@ var Propagation = {
         }
       }
     }
-
     return connect_list;
 	}
 }
