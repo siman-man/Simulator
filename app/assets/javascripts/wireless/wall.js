@@ -4,12 +4,10 @@ var Wall = {
 
 	create: function(x, y){
 		console.log('wall created =>', y, x );
-		//var wall = new createjs.Bitmap('/assets/wall.gif');
 		var wall = new createjs.Shape();
 		wall.x = x * gridSize; 
 		wall.y = y * gridSize;
 
-    //wall.graphics.beginFill('rgba(46,139,87,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
     wall.graphics.beginFill('rgba(92,92,92,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
 
 		wall.id = this.wall_id;
