@@ -1,12 +1,13 @@
-
 var Propagation = {
 	limit: 4,
   dx: [ 1, 0,-1, 0, 1, 1,-1,-1],
   dy: [ 0, 1, 0,-1,-1, 1, 1,-1],
   board: [],
+  before_check_point: { x: -1, y: -1 },
 
   init: function(){
     var ypos, xpos;
+    this.before_check_point = { x: -1, y: -1 };
     for( ypos = 0; ypos < View.height; ypos++ ){
       this.board[ypos] = [];
       for( xpos = 0; xpos < View.width; xpos++ ){
@@ -15,19 +16,27 @@ var Propagation = {
     }
   },
 
-	calc: function(x, y){
-		var ypos, xpos,
+  clearBoard: function( y, x ){
+    var ny, nx, i;
+    this.board[y][x] = { check: false, cost: 999999 };
+    for( i = 0; i < 4; i++){
+      ny = y + this.dy[i];
+      nx = x + this.dx[i];
+      if( View.isInside( ny, nx ) && this.board[ny][nx].check ){
+        this.clearBoard( ny, nx );
+      }
+    }
+  },
+
+	calc: function( x, y ){
+		var ny, nx,
         connect_list = {},
         queue = new PriorityQueue(),
-        node, y, x, i, eid, key,
+        node, i, eid, key,
         cost;
 
-		for( ypos = 0; ypos < View.height; ypos++ ){
-      for( xpos = 0; xpos < View.width; xpos++ ){
-        if( this.board[ypos][xpos].check ){
-          this.board[ypos][xpos] = { check: false, cost: 999999 };
-        }
-      } 
+    if( this.before_check_point.x !== -1 ){
+      this.clearBoard( y, x );
     }
 
     this.board[y][x] = { check: true, cost: 0 };
@@ -41,28 +50,27 @@ var Propagation = {
       this.board[node.y][node.x].check = true;
 
       for(i = 0; i < 8; i++){
-        y = node.y + this.dy[i];
-        x = node.x + this.dx[i];
+        ny = node.y + this.dy[i];
+        nx = node.x + this.dx[i];
 
-        if( View.isInside( y, x ) ){
-          cost = node.cost + Simulator.field[y][x].pf;
-          if( cost < this.board[y][x].cost ){
-            this.board[y][x].cost = cost;
+        if( View.isInside( ny, nx ) ){
+          cost = node.cost + Simulator.field[ny][nx].pf;
+          if( cost < this.board[ny][nx].cost && cost <= this.limit ){
+            this.board[ny][nx].cost = cost;
           
-            key = Simulator.key_map[y][x];
+            key = Simulator.key_map[ny][nx];
             if( Object.keys(Simulator.node_map[key]).length !== 0 ){
               for( eid in Simulator.node_map[key] ){
                 connect_list[eid] = true;
               }
             }
-            if( this.board[y][x].cost <= this.limit ){
-              View.propagation[y][x].flag = true;
-              queue.push( { x: x, y: y, cost: this.board[y][x].cost } )
-            }
+            View.propagation[ny][nx].flag = true;
+            queue.push( { x: nx, y: ny, cost: this.board[ny][nx].cost } )
           } 
         }
       }
     }
+    this.before_check_point = { x: x, y: y };
     return connect_list;
 	}
 }

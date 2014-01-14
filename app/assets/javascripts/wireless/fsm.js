@@ -43,7 +43,7 @@ var FSM = {
 				onfinish: function(event, from, to){
 					console.log('finish simulation =>');
 					if( !Simulator.replay ){
-						Log.send({ 
+						Log.finish({ 
 							time: Simulator.time, 
 							type: 'finish', 
 							operation: "finish",
@@ -58,8 +58,6 @@ var FSM = {
 							},
 							msg: 'end'
 						});
-						alert('message');
-						window.location = '/result';
 					}else{
 						window.location = '/history';
 					}

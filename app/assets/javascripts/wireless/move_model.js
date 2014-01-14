@@ -11,8 +11,6 @@ var MoveModel = {
 
     if(this.checkArrive(user)){
       user.way_point = undefined;
-      Simulator.map.removeChild(Search.point);
-      Search.point = undefined;
     }
   },
 
@@ -25,8 +23,6 @@ var MoveModel = {
 
     if(this.checkArrive(user)){
       user.way_point = undefined;
-      Simulator.map.removeChild(Search.point);
-      Search.point = undefined;
     }
   },
 

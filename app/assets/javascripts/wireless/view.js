@@ -180,7 +180,7 @@ var View = {
 			vline = new createjs.Shape();
 			vline.graphics.beginStroke("rgba(0,0,0,0.9)");
 			vline.graphics.moveTo(0, i);
-			vline.graphics.lineTo(Simulator.canvas_width * 2, i);
+			vline.graphics.lineTo(View.width * gridSize, i);
 			Simulator.map.addChild(vline);
 			this.grid_lines.push(vline);
 		}
@@ -189,7 +189,7 @@ var View = {
 			hline = new createjs.Shape();
 			hline.graphics.beginStroke("rgba(0,0,0,0.9)");
 			hline.graphics.moveTo(i, 0);
-			hline.graphics.lineTo(i, Simulator.canvas_height*2);
+			hline.graphics.lineTo(i, View.height * gridSize );
 			Simulator.map.addChild(hline);
 			this.grid_lines.push(hline);
 		}

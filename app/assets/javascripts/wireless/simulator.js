@@ -106,8 +106,10 @@ var Simulator = {
       Simulator.moveUpdate();
       Simulator.scanUpdate();
       Simulator.communicationUpdate();
-      View.update();
-      if( $("#animation").is(":checked") ) Simulator.map.update(); 
+      if( $("#animation").is(":checked") ){
+        View.update();
+        Simulator.map.update(); 
+      }
       Simulator.finishCheck();
     }else{
       Simulator.map.update();

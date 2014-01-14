@@ -1,5 +1,4 @@
 var Search = {
-	point: undefined,
 	search_list: [],
 	dx: [ 1, 0,-1, 0, 1, 1,-1,-1],
   dy: [ 0, 1, 0,-1,-1, 1, 1,-1],

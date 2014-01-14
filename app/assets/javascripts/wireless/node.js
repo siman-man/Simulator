@@ -315,7 +315,7 @@ var Node = {
 
     for( eid in this.node_list ){
       node = this.node_list[eid];
-      //node.label.text = Object.keys(node.strage).length;
+      node.label.text = Object.keys(node.strage).length;
     
       coord = View.point2coord( node.x, node.y );
       connect_list = Propagation.calc(coord.x, coord.y);
@@ -326,7 +326,9 @@ var Node = {
             node.contact_list[dest_eid].connect(node, this.node_list[dest_eid]);
           }
           node.last_connect_time[dest_eid] = Simulator.time;
-          this.addEdge(node, this.node_list[dest_eid], "orange"); 
+          if( $("#animation").is(":checked") ){
+            this.addEdge(node, this.node_list[dest_eid], "orange"); 
+          }
         }else if( node.contact_list[dest_eid].current === 'establish' ){
           node.contact_list[dest_eid].shutdown(node, this.node_list[dest_eid]);
         }

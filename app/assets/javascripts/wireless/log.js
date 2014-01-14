@@ -29,5 +29,25 @@ var Log = {
         message: data.msg
       },
     });
+  },
+
+  finish: function( data ){
+    $.ajax({
+      type: "post",
+      url: "/logs",
+      data: {
+        time: data.time,
+        type: data.type,
+        operation: data.operation,
+        from: data.from,
+        dest: data.dest,
+        config: data.config,
+        message: data.msg
+      },
+      success: function(obj){
+        alert('message');
+        window.location = '/result';
+      }
+    });
   }
 }
