@@ -21,7 +21,7 @@ var FSM = {
 					Message.message_num = parseInt($("#message_num").val());
 					Message.init();
 					Node.init();
-					Log.send({ 
+					Log.init({ 
 						time: 0, 
 						type: 'init',
 						operation: "start",

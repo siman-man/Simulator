@@ -1,4 +1,6 @@
 var Log = {
+  queue: [],
+
 	create: function(time, host, dest, req, size){
 		$.ajax({
   		url: "/simulates",
@@ -12,38 +14,49 @@ var Log = {
   	});
 	},
 
+  init: function( data ){
+    this.queue.push(this.save(data));
+    $.ajax({
+      type: "post",
+      url: "/logs",
+      data: {data_list: this.queue},
+    });
+    this.queue = [];
+  },
+
   send: function( data ){
     if( data.operation === 'transmit' ){
       Simulator.total_send_message_num++;
     }
-    $.ajax({
-      type: "post",
-      url: "/logs",
-      data: {
-        time: data.time,
-        type: data.type,
-        operation: data.operation,
-        from: data.from,
-        dest: data.dest,
-        config: data.config,
-        message: data.msg
-      },
-    });
+    this.queue.push(this.save(data));
+    if( this.queue.length >= 10){
+      $.ajax({
+        type: "post",
+        url: "/logs",
+        data: {data_list: this.queue},
+      });
+      this.queue = [];
+    }
+  },
+
+  save: function(data){
+    return {
+      time: data.time,
+      type: data.type,
+      operation: data.operation,
+      from: data.from,
+      dest: data.dest,
+      config: data.config,
+      message: data.msg
+    }
   },
 
   finish: function( data ){
+    this.queue.push(this.save(data));
     $.ajax({
       type: "post",
       url: "/logs",
-      data: {
-        time: data.time,
-        type: data.type,
-        operation: data.operation,
-        from: data.from,
-        dest: data.dest,
-        config: data.config,
-        message: data.msg
-      },
+      data: {data_list: this.queue},
       success: function(obj){
         alert('message');
         window.location = '/result';
