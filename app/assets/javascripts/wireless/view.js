@@ -92,7 +92,7 @@ var View = {
 		this.route_grid[cell.y][cell.x] = { obj: undefined, exist: false };
 		if( this.route_id !== 0 ){
 			var ny, nx;
-			for(var i = 0; i < 4; i++){
+			for(var i = 0; i < 4; ++i){
 				ny = cell.y + this.dy[i];
 				nx = cell.x + this.dx[i];
 				if( this.route_grid[ny][nx].exist ){

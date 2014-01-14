@@ -22,7 +22,7 @@ var Search = {
 				queue = new PriorityQueue(),
     		sx = to.x * View.gridSize,
     		sy = to.y * View.gridSize,
-    		i, j,
+    		i, j, ny, nx,
     		cell, neighbor_list, neighbor,
     		h, s, c, elem;
 
@@ -49,18 +49,20 @@ var Search = {
 				break;
 			}
 
-			neighbor_list = this.getNeighbor(cell.x, cell.y);
+			//neighbor_list = this.getNeighbor(cell.x, cell.y);
 
-			for( i in neighbor_list ){
-				neighbor = neighbor_list[i];
+			for( i = 0; i < 4; ++i ){
+				ny = cell.y + this.dy[i];
+				nx = cell.x + this.dx[i];
+				//neighbor = neighbor_list[i];
 
-				if( this.check_list[neighbor.y][neighbor.x] !== this.check_count ){
-					h = Math.abs(neighbor.x - to.x) + Math.abs(neighbor.y - to.y);
-					c = cell.cost + neighbor.cost;
+				if( View.isInside( ny, nx ) && this.check_list[ny][nx] !== this.check_count ){
+					h = Math.abs(nx - to.x) + Math.abs(ny - to.y);
+					c = cell.cost + Simulator.field[ny][nx].cost;
 					s = c+h;
-					elem = { x: neighbor.x, y: neighbor.y, cost: c, dist: s, parent: { x: cell.x, y: cell.y } };
+					elem = { x: nx, y: ny, cost: c, dist: s, parent: { x: cell.x, y: cell.y } };
 					queue.push(elem);
-					this.check_list[neighbor.y][neighbor.x] = this.check_count;
+					this.check_list[ny][nx] = this.check_count;
 				}
 			}
 		}

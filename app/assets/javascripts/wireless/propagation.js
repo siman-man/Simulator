@@ -36,7 +36,7 @@ var Propagation = {
         cost;
 
     if( this.before_check_point.x !== -1 ){
-      this.clearBoard( y, x );
+      this.clearBoard( this.before_check_point.y, this.before_check_point.x );
     }
 
     this.board[y][x] = { check: true, cost: 0 };
@@ -49,7 +49,7 @@ var Propagation = {
       if( this.board[node.y][node.x].cost >= this.limit ) continue;
       this.board[node.y][node.x].check = true;
 
-      for(i = 0; i < 8; i++){
+      for(i = 0; i < 8; ++i){
         ny = node.y + this.dy[i];
         nx = node.x + this.dx[i];
 
@@ -64,8 +64,10 @@ var Propagation = {
                 connect_list[eid] = true;
               }
             }
-            View.propagation[ny][nx].flag = true;
-            queue.push( { x: nx, y: ny, cost: this.board[ny][nx].cost } )
+            if( this.board[ny][nx].cost <= this.limit ){
+              View.propagation[ny][nx].flag = true;
+              queue.push( { x: nx, y: ny, cost: this.board[ny][nx].cost } )
+            }
           } 
         }
       }
