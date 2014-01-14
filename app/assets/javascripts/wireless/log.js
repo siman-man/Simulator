@@ -58,7 +58,7 @@ var Log = {
       url: "/logs",
       data: {data_list: this.queue},
       success: function(obj){
-        alert('message');
+        alert('Simulation Finish!');
         window.location = '/result';
       }
     });
