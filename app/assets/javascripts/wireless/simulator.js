@@ -179,38 +179,41 @@ var Simulator = {
     if(operation_type === 0 && draw_object.obj === undefined){
       switch(object_type){
         case 'server':
-        console.log("Node create:server =>");
-        Node.create( x, y, 'server' );
-        break;
-        case 'user':
-        console.log("Node create:user =>");
-        key = Simulator.key_map[y][x];
-        if( Object.keys(Simulator.node_map[key]).length === 0 ){
-          Node.create( x, y, 'user', { type: 'normal' });
-        }
-        break;
-        case 'road':
-        Street.create(x, y, true);
-        break;
-        case 'wall':
-        Wall.create( x, y );
-        break;
-        case 'home':
-        Home.create( x, y );
-        break;
-        case 'car':
-        key = Simulator.key_map[y][x];
-        if( Object.keys(Simulator.node_map[key]).length === 0 ){
-          console.log("Node create:car =>");
-          Node.create( x, y, 'car', { type: 'normal' });
-        }
-          //Car.create( x, y );
+          console.log("Node create:server =>");
+          Node.create( x, y, 'server' );
           break;
-          case 'office':
+        case 'user':
+          console.log("Node create:user =>");
+          key = Simulator.key_map[y][x];
+          if( Object.keys(Simulator.node_map[key]).length === 0 ){
+            Node.create( x, y, 'user', { type: 'normal' });
+          }
+          break;
+        case 'road':
+          Street.create(x, y, true);
+          break;
+        case 'wall':
+          Wall.create( x, y );
+          break;
+        case 'home':
+          Home.create( x, y );
+          break;
+        case 'car':
+          key = Simulator.key_map[y][x];
+          if( Object.keys(Simulator.node_map[key]).length === 0 ){
+            console.log("Node create:car =>");
+            Node.create( x, y, 'car', { type: 'normal' });
+          }
+          break;
+        case 'office':
           Office.create( x, y );
-          case 'lake':
+          break;
+        case 'lake':
           Lake.create( x, y );
-          default:
+          break;
+        case 'tree':
+          Tree.create( x, y );
+        default:
           break;
         }
       }else if(operation_type === 2 && draw_object.obj !== undefined){

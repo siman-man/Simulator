@@ -1,12 +1,11 @@
 var MoveModel = {
-  user_speed: 1.5,
   EPS: 1e-8,
 
   randomWayPoint: function(user){
   	user.way_point = user.way_point || this.directWayPoint(user);
 
     if(user.way_point){
-      this.moveToWayPoint(user, this.user_speed);
+      this.moveToWayPoint(user);
     }
 
     if(this.checkArrive(user)){
@@ -18,7 +17,7 @@ var MoveModel = {
     user.way_point = user.way_point || this.directRandomWalkPoint(user);
 
     if(user.way_point){
-      this.moveToWayPoint(user, this.user_speed);
+      this.moveToWayPoint(user);
     }
 
     if(this.checkArrive(user)){
@@ -44,7 +43,7 @@ var MoveModel = {
     }
 
     if(user.way_point){
-      this.moveToNextPoint(user, this.user_speed);
+      this.moveToNextPoint(user);
     }
     
     if(this.checkArrive(user)){
@@ -78,7 +77,7 @@ var MoveModel = {
       user.way_point = user.way_point || this.directWayPointServer(user);
 
       if(user.way_point){ 
-        this.moveToWayPoint(user, 5);
+        this.moveToWayPoint(user);
         if(this.checkArrive(user)){
           user.way_point = undefined;
           user.state.rest(user);
@@ -103,7 +102,7 @@ var MoveModel = {
         }
         break;
       case 'commute':
-        this.moveToWayPoint(user, 5);
+        this.moveToWayPoint(user);
         if(this.checkArrive(user)){
           user.way_point = undefined;
           Simulator.map.removeChild(Search.point);
@@ -120,7 +119,7 @@ var MoveModel = {
         }
         break;
       case 'homecoming':
-        this.moveToWayPoint(user, 5);
+        this.moveToWayPoint(user);
         if(this.checkArrive(user)){
           user.way_point = undefined;
           Simulator.map.removeChild(Search.point);
@@ -220,7 +219,7 @@ var MoveModel = {
     return {x: x, y: y};
   },
 
-  moveToNextPoint: function( user, speed ){
+  moveToNextPoint: function( user ){
     var dx = user.way_point.x * gridSize - user.x,
         dy = user.way_point.y * gridSize - user.y;
     if(dx > this.EPS){
@@ -234,7 +233,7 @@ var MoveModel = {
     }
   },
 
-  moveToWayPoint: function(user, speed){
+  moveToWayPoint: function(user){
     var point = user.route_list[0],
         dx = point.x - user.x,
         dy = point.y - user.y;
