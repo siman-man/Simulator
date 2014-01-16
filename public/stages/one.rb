@@ -5,7 +5,7 @@ WebSimulator.define do
 
 	end
 	create(:end) do |t| 
-		t.pos( x: 20, y: 10 )
+		t.pos( x: 28, y: 8 )
 		t.add_data( eid: 1, name: 'end' )
 
 	end

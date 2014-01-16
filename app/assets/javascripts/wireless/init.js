@@ -1,13 +1,14 @@
 $(document).ready(function(){
-
+  console.log("ready =>");
   if( Simulator.stage_change === undefined ){
+    console.log('first init=>');
     Panel.init();
+    Propagation.init();
     View.drawGrid()
     View.init();
     Network.init();
     Simulator.init();
     Search.init();
-    Propagation.init();
     Street.init();
   }
 

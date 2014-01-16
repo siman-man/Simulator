@@ -85,24 +85,30 @@ class SimulatesController < ApplicationController
       @obj_list = Simulator.new.instance_eval { eval(str); @list }
     end
 
-    if params[:stage_edit].presence
-      @edit_mode = true
-
-      puts "create stage type #{@stage_type}"
-      str = ""
-      File.open("#{Rails.root}/public/stages/params[:filename].rb") do |file|
-        file.readlines.each do |line|
-          str += line
-        end
-      end
-
-      @obj_list = Simulator.new.instance_eval { eval(str); @list }
-    end
-
     respond_to do |format|
       format.html { render action: 'index' }
       format.js { render 'index' }
     end
+  end
+
+  def edit_stage
+    p 'edit stage mode'
+    @edit_mode = true
+    @stage_change = true
+
+    str = ""
+    filename = params["filename"]
+    puts "filename = #{filename}"
+    File.open("#{Rails.root}/public/stages/#{filename}.rb") do |file|
+      file.readlines.each do |line|
+        str += line
+      end
+    end
+
+    @file_name = filename
+    puts str
+
+    @obj_list = Simulator.new.instance_eval { eval(str); @list }
   end
   
   def stage_init
