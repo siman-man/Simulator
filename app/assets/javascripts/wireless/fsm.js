@@ -48,7 +48,8 @@ var FSM = {
 							type: 'finish', 
 							operation: "finish",
 							config: { 
-								seed: Simulator.seed, 
+								seed: Simulator.seed,
+								key: '2209348029348', 
 								stage_type: Simulator.stage_type,
 								finish_time: Simulator.time, 
 								message_num: Message.message_num,

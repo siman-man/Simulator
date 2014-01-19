@@ -2,11 +2,14 @@ require 'digest/sha2'
 
 class LogsController < ApplicationController
 	include LogsHelper
+	USER_TABLE = {}
+	CONFIG_TABLE = {}
 
 	def index
 	end
 
 	def record		
+		p params
 		params[:data_list].each do |key,data| 
 			if data[:type] == 'init'
 				set_file_name
@@ -35,7 +38,11 @@ class LogsController < ApplicationController
 
 	private
 		def set_file_name
-			@@file_name = Time.now.to_i
+			time = Time.now.to_f
+			filename = time.to_i
+			@@file_name = filename
+			key = Digest::SHA256.hexdigest(time.to_s)
+			USER_TABLE[key] = filename
 		end
 
 		def save_record(config)

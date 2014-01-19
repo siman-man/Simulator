@@ -170,7 +170,7 @@ var MoveModel = {
       length = Simulator.mersenne.random() * 20 | 0;
       x = coord.x + View.dx[direct] * length;
       y = coord.y + View.dy[direct] * length;
-      if( View.isInside( y, x ) && Simulator.field[y][x].type != 'tree' ) break;
+      if( View.isInside( y, x ) && Simulator.field[y][x].type != 'wall' ) break;
     }
 
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});

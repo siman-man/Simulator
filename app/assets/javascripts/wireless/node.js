@@ -15,7 +15,7 @@ var Node = {
         node.speed = gridSize / node.speed;
       }
 
-      if( node.path !== undefined ){
+      if( node.ob_type === 'user' && node.path !== undefined ){
         node.close_path = this.isCloseRoute( node.path );
       }
       for( dest_eid in this.node_list ){
@@ -179,7 +179,7 @@ var Node = {
       user.path.push({ y: y, x: x, wait: 0 });
     }
     user.delivery_predictability = {};
-    user.speed = 10;
+    user.speed = 30;
     user.move_model = "RandomWayPoint";
     //user.move_model = "RandomWalk";
     //user.move_model = "traceMoveModel";
@@ -197,7 +197,7 @@ var Node = {
     user.x = x * View.gridSize;
     user.y = y * View.gridSize;
 
-    user.label = new createjs.Text(0, "12px Arial", "white");
+    user.label = new createjs.Text(0, "14px Arial", "white");
     user.label.x = user.x;
     user.label.y = user.y;
     user.label.textBaseline = "top";
@@ -254,7 +254,7 @@ var Node = {
 
     node.drag = false;
 
-    node.label = new createjs.Text(0, "12px Arial", "white");
+    node.label = new createjs.Text(0, "14px Arial", "white");
     node.label.x = node.x;
     node.label.y = node.y;
     node.label.textBaseline = "top";

@@ -17,8 +17,8 @@ console.log('create map =>');
 		Node.create( x, y, 'end' );
 	<% when :user %>
 		Node.create(x, y, 'user', opt );
-	<% when :tree %>
-		Tree.create( x, y );
+	<% when :wall %>
+		Wall.create( x, y );
 	<% when :road %>
 		Street.create(x, y);
 	<% when :car %>

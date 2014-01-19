@@ -62,5 +62,5 @@ var Log = {
         window.location = '/result';
       }
     });
-  }
+  },
 }

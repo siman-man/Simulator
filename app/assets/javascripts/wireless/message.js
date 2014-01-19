@@ -1,5 +1,5 @@
 var Message = {
-	message_size: 5,
+	message_size: 1,
 	message_num: 1,
 
 	init: function(){
