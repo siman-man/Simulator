@@ -215,28 +215,29 @@ var Simulator = {
           Tree.create( x, y );
         default:
           break;
-        }
-      }else if(operation_type === 2 && draw_object.obj !== undefined){
-        console.log("remove object =>");
-        switch(object_type){
-          case 'server':
+      }
+    }else if(operation_type === 2 && draw_object.obj !== undefined){
+      console.log("remove object =>");
+      switch(object_type){
+        case 'server':
           Node.remove( draw_object.obj );
           break;
-          case 'user':
+        case 'user':
           Node.remove( draw_object.obj );
-          case 'road':
+        case 'road':
           Street.remove( draw_object.obj );
           break;
-          case 'home':
+        case 'home':
           Home.remove( draw_object.obj );
           break;
-          case 'wall':
+        case 'wall':
           Wall.remove( draw_object.obj );
           break;
-          case 'office':
+        case 'office':
           Office.remove( draw_object.obj );
-          case 'lake':
-          Lake.remove( draw_object );
+          break;
+        case 'lake':
+          Lake.remove( draw_object.obj );
           break;
         }
       }else if(draw_object.obj !== undefined){
@@ -337,17 +338,17 @@ var Simulator = {
       Simulator.press_flag = true;
     },
 
-    onmousemove: function(e) {
-      if( Simulator.press_flag ){
-        var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
-        y = e.clientY - canvas.offsetTop + document.body.scrollTop,
-        coord = View.point2coord(x, y),
-        operation_type = e.button,
-        object_type = $("input[name='draw_object']:checked").val(),
-        draw_object = Simulator.field[coord.y][coord.x]; 
+  onmousemove: function(e) {
+    if( Simulator.press_flag ){
+      var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
+      y = e.clientY - canvas.offsetTop + document.body.scrollTop,
+      coord = View.point2coord(x, y),
+      operation_type = e.button,
+      object_type = $("input[name='draw_object']:checked").val(),
+      draw_object = Simulator.field[coord.y][coord.x]; 
 
-        if( !this.create_route_mode ){
-          if( Simulator.target && ( Node.isServer(Simulator.target.type) || Node.isUser(Simulator.target.type) ) && Simulator.operation_flag && draw_object.obj === undefined){
+      if( !this.create_route_mode ){
+        if( Simulator.target && ( Node.isServer(Simulator.target.type) || Node.isUser(Simulator.target.type) ) && Simulator.operation_flag && draw_object.obj === undefined){
           //console.log("server pos update =>");
           Simulator.target.obj.y = coord.y * gridSize;
           Simulator.target.obj.x = coord.x * gridSize;
@@ -359,6 +360,8 @@ var Simulator = {
           //View.update();
         }else if( draw_object.obj === undefined && object_type !== 'user' ){
           console.log("mousemove - objectCheck =>");
+          Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
+        }else if( draw_object.obj !== undefined && operation_type === 2 ){
           Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
         }
       }else{
