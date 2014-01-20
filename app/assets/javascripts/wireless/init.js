@@ -1,44 +1,51 @@
 $(document).ready(function(){
-  console.log("ready =>");
-  if( Simulator.stage_change === undefined ){
-    console.log('first init=>');
-    Panel.init();
-    Propagation.init();
-    View.drawGrid()
-    View.init();
-    Network.init();
-    Simulator.init();
-    Search.init();
-    Street.init();
-  }
+  Init.init();
+});
 
-  var route = [{ y: 5, x: 5 }, { y: 5, x: 6 }];
+var Init = {
+  init: function(){
+    console.log("ready =>");
+    if( Simulator.stage_change === undefined ){
+      console.log('first init=>');
+      Panel.init();
+      Propagation.init();
+      View.drawGrid()
+      View.init();
+      Network.init();
+      Simulator.init();
+      Search.init();
+      Street.init();
+    }
+
+    var route = [{ y: 5, x: 5 }, { y: 5, x: 6 }];
   //View.route_view(route);
 
-  Simulator.canvas.addEventListener('mousedown', Simulator.onmousedown, false);
-  Simulator.canvas.addEventListener('mousemove', Simulator.onmousemove, false);
-  Simulator.canvas.addEventListener('mouseup', Simulator.onmouseup, false);
+    Simulator.canvas.addEventListener('mousedown', Simulator.onmousedown, false);
+    Simulator.canvas.addEventListener('mousemove', Simulator.onmousemove, false);
+    Simulator.canvas.addEventListener('mouseup', Simulator.onmouseup, false);
+    Simulator.canvas.addEventListener("mousewheel" , Simulator.onmousewheel, false);
 
-  Simulator.canvas.addEventListener("contextmenu", function(e){
-    e.preventDefault();
-  }, false);
+    Simulator.canvas.addEventListener("contextmenu", function(e){
+      e.preventDefault();
+    }, false);
 
-  if( Simulator.stage_change === undefined ){
-    console.log('non edit mode =>');
-    if( Simulator.edit_mode ){
-      Node.create( 10, 10, 'start' );
-      Node.create( 20, 10, 'end' );
+    if( Simulator.stage_change === undefined ){
+      console.log('non edit mode =>');
+      if( Simulator.edit_mode ){
+        Node.create( 10, 10, 'start' );
+        Node.create( 20, 10, 'end' );
+      }else{
+        console.log($("#stage_type option:selected").text());
+        $.ajax({
+          type: "post",
+          url: "/stage_init",
+          data: {
+            stage_type: $("#stage_type option:selected").text()
+          },
+        });
+      }
     }else{
-      console.log($("#stage_type option:selected").text());
-      $.ajax({
-        type: "post",
-        url: "/stage_init",
-        data: {
-          stage_type: $("#stage_type option:selected").text()
-        },
-      });
+      $("#filename").val(Simulator.file_name);
     }
-  }else{
-    $("#filename").val(Simulator.file_name);
-  }
-});
+  },
+}

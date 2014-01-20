@@ -3,12 +3,17 @@
  */
 
 var Panel = {
+	speed_select: undefined,
+	speed_slider: undefined,
+
 	init: function(){
 		$('.panel').draggable();
 		$('.accordion').accordion({
 			collapsible: true,
 			heightStyle: "fill",
 		});
+
+		this.userSpeedController();
 
 		$("#node_info").change(function(){
 			if( $("#node_info").is(":checked") ){
@@ -45,6 +50,10 @@ var Panel = {
       if(!$("#create_route").is(":checked")){
       	View.clear_route();
       }
+		});
+
+		$("#message_num").change(function(){
+			Node.node_list[0].label.text = $("#message_num").val()|0;
 		});
 
 		$("#user_name").change(function(){
@@ -111,9 +120,37 @@ var Panel = {
 			}
 		});
 
+		$('#redraw').click(function(){
+			//gridSize = 20;
+			//View.clearGrid();
+			//View.drawGrid();
+			//$("#canvas").remove();
+			//$("#canvas_field").append('<canvas id=\'canvas\' width="1000" height="1000"></canvas>');
+		});
+
 		$('#file-input').change(function() {
       $('#cover').html($(this).val());
   	});
+	},
+
+	userSpeedController: function(){
+		this.select = $( "#minbeds" );
+   	this.slider = $( "<div id='slider'></div>" ).insertAfter( this.select ).slider({
+      min: 1,
+      max: 10,
+      range: "min",
+      value: this.select[0].selectedIndex + 1,
+      slide: function( event, ui ) {
+      	var eid = $("#user_eid").val();
+      	Node.changeSpeed( eid, ui.value );
+        Panel.select[0].selectedIndex = ui.value-1;
+      }
+    });
+    $( "#minbeds" ).change(function(){
+    	var eid = $("#user_eid").val();
+    	Node.changeSpeed( eid, Panel.selectedIndex+1 );
+      Panel.slider.slider( "value", Panel.selectedIndex+1 );
+    });
 	},
 
   radioClear: function(){
@@ -128,6 +165,8 @@ var Panel = {
   		$("#create_route").attr("checked",false);
   		$("#user_eid").val(obj.eid);
   		$("#user_name").val(obj.name);
+  		Panel.select[0].selectedIndex = Simulator.route_user.speed-1;
+  		Panel.slider.slider( "value", Simulator.route_user.speed );
 		}
   },
 

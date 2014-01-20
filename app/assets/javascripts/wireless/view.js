@@ -1,4 +1,4 @@
-var gridSize = 25;
+var gridSize = 30;
 
 var View = {
 	packet_color: "yellow",
@@ -52,8 +52,9 @@ var View = {
 			shape = new createjs.Shape();
       shape.graphics.beginFill('rgba(255,0,0,0.2)').drawRect(coord.x*gridSize, coord.y*gridSize, gridSize, gridSize);
       shape.label = new createjs.Text( coord.wait, "12px Arial", "black");
-    	shape.label.x = coord.x * gridSize;
-    	shape.label.y = coord.y * gridSize;
+      shape.label.textAlign = "center";
+    	shape.label.x = coord.x * gridSize + gridSize/2|0;
+    	shape.label.y = coord.y * gridSize + gridSize/5|0;
     	shape.label.textBaseline = "top";
       Simulator.map.addChild(shape);
       Simulator.map.addChild(shape.label);
@@ -69,8 +70,9 @@ var View = {
 		shape = new createjs.Shape();
     shape.graphics.beginFill('rgba(255,0,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
     shape.label = new createjs.Text(0, "12px Arial", "black");
-   	shape.label.x = x * gridSize;
-    shape.label.y = y * gridSize;
+    shape.label.textAlign = "center";
+   	shape.label.x = x * gridSize + gridSize/2|0;
+    shape.label.y = y * gridSize + gridSize/5|0;
     shape.label.textBaseline = "top";
     Simulator.map.addChild(shape);
     Simulator.map.addChild(shape.label);
@@ -202,7 +204,7 @@ var View = {
 	clearGrid: function(){
 		var line, i;
 		for( i in View.grid_lines ){
-			line = View.lines[i];
+			line = View.grid_lines[i];
 			Simulator.map.removeChild(line);
 			delete line;
 		}

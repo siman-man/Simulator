@@ -53,34 +53,36 @@
 
   <% end %>
   <%= render 'user_status' %>
-  <canvas id='canvas' width="1000" height="1000"></canvas>
+  <div id="canvas_field">
+    <canvas id='canvas' width="1500" height="1000"></canvas>
+  </div>
 </div>
 
 <%= render 'include_file' %>
 
 <script>
 <% if defined?(@data) %>
-console.log(<%= @data[:seed] %>);
-Simulator.seed = <%= @data[:seed].to_i %>;
-Simulator.replay = true;
-Simulator.edit_mode = false;
+  console.log(<%= @data[:seed] %>);
+  Simulator.seed = <%= @data[:seed].to_i %>;
+  Simulator.replay = true;
+  Simulator.edit_mode = false;
 <% end %>
 
 <% if defined?(@edit_mode) %>
-Simulator.edit_mode = true;
+  Simulator.edit_mode = true;
 <% end %>
 
 <% if defined?(@stage_change) %>
-console.log("stage change =>");
-Panel.init();
-View.drawGrid()
-View.init();
-Propagation.init();
-Network.init();
-Simulator.init();
-Street.init();
-Simulator.stage_change = true;
-Simulator.file_name = "<%= @file_name %>"
+  console.log("stage change =>");
+  Panel.init();
+  View.drawGrid()
+  View.init();
+  Propagation.init();
+  Network.init();
+  Simulator.init();
+  Street.init();
+  Simulator.stage_change = true;
+  Simulator.file_name = "<%= @file_name %>"
 
 <% @obj_list.each do |obj| %>
 var x, y;

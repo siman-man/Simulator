@@ -28,6 +28,7 @@ var Config = {
 				x: coord.x, 
 				eid: node.eid, 
 				name: node.name,
+				speed: node.speed,
 				move_model: node.move_model,
 				path: this.path2string(node.path),
 			}))

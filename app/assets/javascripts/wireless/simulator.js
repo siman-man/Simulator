@@ -352,8 +352,8 @@ var Simulator = {
           //console.log("server pos update =>");
           Simulator.target.obj.y = coord.y * gridSize;
           Simulator.target.obj.x = coord.x * gridSize;
-          Simulator.target.obj.label.y = Simulator.target.obj.y;
-          Simulator.target.obj.label.x = Simulator.target.obj.x;
+          Simulator.target.obj.label.y = Simulator.target.obj.y + gridSize/5|0;
+          Simulator.target.obj.label.x = Simulator.target.obj.x + gridSize/2|0;
           Simulator.target.x = coord.x;
           Simulator.target.y = coord.y;
           Propagation.calc(coord.x, coord.y);
@@ -400,12 +400,14 @@ var Simulator = {
           Propagation.calc(coord.x, coord.y);
         }
       }
-    }else{
-
     }
-      Simulator.target = undefined;
-      Simulator.operation_flag = false;
-      Simulator.press_flag = false;
-      Simulator.create_route_mode = false;
+    Simulator.target = undefined;
+    Simulator.operation_flag = false;
+    Simulator.press_flag = false;
+    Simulator.create_route_mode = false;
+  },
+
+  onmousewheel: function(e){
+    console.log('wheel =>');
   },
 }

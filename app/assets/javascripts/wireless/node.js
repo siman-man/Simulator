@@ -154,7 +154,7 @@ var Node = {
 	createUser: function( x, y, opt ){
     var user = new createjs.Shape(),
     		key;
-    user.graphics.beginFill('rgba(255,59,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
+    user.graphics.beginFill('rgba(0,0,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
     user.ob_type = 'user';
     user.type = 'normal';
@@ -179,7 +179,7 @@ var Node = {
       user.path.push({ y: y, x: x, wait: 0 });
     }
     user.delivery_predictability = {};
-    user.speed = 30;
+    user.speed = opt.speed || 10;
     user.move_model = "RandomWayPoint";
     //user.move_model = "RandomWalk";
     //user.move_model = "traceMoveModel";
@@ -198,8 +198,9 @@ var Node = {
     user.y = y * View.gridSize;
 
     user.label = new createjs.Text(0, "14px Arial", "white");
-    user.label.x = user.x;
-    user.label.y = user.y;
+    user.label.textAlign = "center";
+    user.label.x = user.x + gridSize/2|0;
+    user.label.y = user.y + gridSize/5|0;
     user.label.textBaseline = "top";
 
     Propagation.calc(x, y);
@@ -231,11 +232,11 @@ var Node = {
     switch(type){
       case 'start':
         node.name = "start";
-      	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+      	node.graphics.beginFill('rgba(218,0,10,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
       	break;
       case 'end':
         node.name = "end";
-      	node.graphics.beginFill('rgba(0,0,128,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+      	node.graphics.beginFill('rgba(10,0,218,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
       	break;
       default:
         node.name = "none";
@@ -254,9 +255,11 @@ var Node = {
 
     node.drag = false;
 
-    node.label = new createjs.Text(0, "14px Arial", "white");
-    node.label.x = node.x;
-    node.label.y = node.y;
+    var message_num = (type === 'start')? $("#message_num").val()|0 : 0;
+    node.label = new createjs.Text(message_num, "14px Arial", "white");
+    node.label.textAlign = "center";
+    node.label.y = node.y + gridSize/5|0;
+    node.label.x = node.x + gridSize/2|0;
     node.label.textBaseline = "top";
 
    	node.contact_list = {};
@@ -300,8 +303,8 @@ var Node = {
         key = Simulator.key_map[coord.y][coord.x];
         Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'car' };
       }
-      node.label.y = node.y;
-      node.label.x = node.x;
+      node.label.y = node.y + gridSize/5|0;
+      node.label.x = node.x + gridSize/2|0;
 		}
 	},
 
@@ -417,6 +420,12 @@ var Node = {
         MoveModel.randomWayPoint(user);
         break;
     }
+  },
+
+  changeSpeed: function( eid, speed ){
+    var node = this.node_list[eid];
+    if( node === undefined || this.isServer( node.ob_type )) return;
+    node.speed = speed;
   },
 
 	clear: function(){
