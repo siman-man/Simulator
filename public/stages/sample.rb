@@ -1,56 +1,61 @@
 WebSimulator.define do
 	create(:start) do |t| 
-		t.pos( x: 10, y: 10 )
-		t.add_data( eid: 0, name: 'start' )
+		t.pos( x: 10, y: 6 )
+		t.add_data( eid: 0, name: 'start', speed: 0 )
 
 	end
 	create(:end) do |t| 
-		t.pos( x: 90, y: 90 )
-		t.add_data( eid: 1, name: 'end' )
-	end
+		t.pos( x: 36, y: 28 )
+		t.add_data( eid: 1, name: 'end', speed: 0 )
 
-	create(:user) do |t| 
-		t.pos( x: 10, y: 10 )
-		t.add_data( eid: 2, name: 'A' )
 	end
-
 	create(:user) do |t| 
-		t.pos( x: 20, y: 20 )
-		t.add_data( eid: 3, name: 'B' )
+		t.pos( x: 31, y: 11 )
+		t.add_data( eid: 2, name: 'none', speed: 10 )
+		t.create_path do |route|
+			route.add({ y: 11, x: 31, wait: 0 })
+		end
 	end
-
 	create(:user) do |t| 
-		t.pos( x: 30, y: 30 )
-		t.add_data( eid: 4, name: 'C' )
+		t.pos( x: 21, y: 11 )
+		t.add_data( eid: 3, name: 'none', speed: 10 )
+		t.create_path do |route|
+			route.add({ y: 11, x: 21, wait: 0 })
+		end
 	end
-
 	create(:user) do |t| 
-		t.pos( x: 40, y: 40 )
-		t.add_data( eid: 5, name: 'D' )
+		t.pos( x: 12, y: 23 )
+		t.add_data( eid: 4, name: 'none', speed: 10 )
+		t.create_path do |route|
+			route.add({ y: 23, x: 12, wait: 0 })
+		end
 	end
-
 	create(:user) do |t| 
-		t.pos( x: 40, y: 40 )
-		t.add_data( eid: 6, name: 'E' )
+		t.pos( x: 4, y: 27 )
+		t.add_data( eid: 5, name: 'none', speed: 10 )
+		t.create_path do |route|
+			route.add({ y: 27, x: 4, wait: 0 })
+		end
 	end
-
 	create(:user) do |t| 
-		t.pos( x: 50, y: 50 )
-		t.add_data( eid: 7, name: 'F' )
+		t.pos( x: 17, y: 29 )
+		t.add_data( eid: 6, name: 'none', speed: 10 )
+		t.create_path do |route|
+			route.add({ y: 29, x: 17, wait: 0 })
+		end
 	end
-
 	create(:user) do |t| 
-		t.pos( x: 60, y: 60 )
-		t.add_data( eid: 8, name: 'A' )
+		t.pos( x: 30, y: 22 )
+		t.add_data( eid: 7, name: 'none', speed: 10 )
+		t.create_path do |route|
+			route.add({ y: 22, x: 30, wait: 0 })
+		end
 	end
-
 	create(:user) do |t| 
-		t.pos( x: 70, y: 70 )
-		t.add_data( eid: 9, name: 'A' )
-	end
-
-	create(:user) do |t| 
-		t.pos( x: 80, y: 80 )
-		t.add_data( eid: 10, name: 'A' )
+		t.pos( x: 15, y: 14 )
+		t.add_data( eid: 8, name: 'none', speed: 10 )
+		t.create_path do |route|
+			route.add({ y: 14, x: 15, wait: 0 })
+		end
 	end
 end

@@ -10,12 +10,15 @@ class LogsController < ApplicationController
 
 	def record		
 		p params
+		file_key = params["key"].to_i
+		puts "key = #{file_key}"
+		p USER_TABLE
 		params[:data_list].each do |key,data| 
 			if data[:type] == 'init'
-				set_file_name
+				set_file_name(file_key)
 			end
 
-			TD.event.post( @@file_name, time: data[:time], operation: data[:operation],
+			TD.event.post( file_key, time: data[:time], operation: data[:operation],
 				from: data[:from], dest: data[:dest], message: data[:message])
 
 			if data[:type] == 'finish'
@@ -25,24 +28,24 @@ class LogsController < ApplicationController
 	end
 
 	def result
-	 	if defined?(@@file_name)
-			@result = collect_data(@@file_name)
+		p params[:key]
+	 	if USER_TABLE.has_key?(params[:key].to_i)
+	 		filename = USER_TABLE.delete(params[:key].to_i)
+	 		p filename
+			@result = collect_data(filename)
 			@result = @result.merge(@@config)
 			dir_name = @@config[:dir_name]
-			file_name = @@config[:file_name]
-			save_data( @result, dir_name, file_name )
+			filename = @@config[:file_name]
+			save_data( @result, dir_name, filename )
 		else
 			redirect_to root_path
 		end
 	end
 
 	private
-		def set_file_name
-			time = Time.now.to_f
-			filename = time.to_i
-			@@file_name = filename
-			key = Digest::SHA256.hexdigest(time.to_s)
-			USER_TABLE[key] = filename
+		def set_file_name(key)
+			puts "set key = #{key}"
+			USER_TABLE[key] = key
 		end
 
 		def save_record(config)

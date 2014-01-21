@@ -1,7 +1,3 @@
-$(document).ready(function(){
-  Init.init();
-});
-
 var Init = {
   init: function(){
     console.log("ready =>");
@@ -49,3 +45,7 @@ var Init = {
     }
   },
 }
+
+$(document).ready(function(){
+  Init.init();
+});

@@ -19,7 +19,10 @@ var Log = {
     $.ajax({
       type: "post",
       url: "/logs",
-      data: {data_list: this.queue},
+      data: {
+        key: Simulator.user_id,
+        data_list: this.queue
+      },
     });
     this.queue = [];
   },
@@ -33,7 +36,10 @@ var Log = {
       $.ajax({
         type: "post",
         url: "/logs",
-        data: {data_list: this.queue},
+        data: {
+          key: Simulator.user_id,
+          data_list: this.queue
+        },
       });
       this.queue = [];
     }
@@ -56,10 +62,13 @@ var Log = {
     $.ajax({
       type: "post",
       url: "/logs",
-      data: {data_list: this.queue},
+      data: {
+        key: Simulator.user_id,
+        data_list: this.queue
+      },
       success: function(obj){
         alert('Simulation Finish!');
-        window.location = '/result';
+        window.location = '/result' + '?key=' + Simulator.user_id;
       }
     });
   },

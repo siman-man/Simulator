@@ -14,6 +14,7 @@ var FSM = {
 
 			callbacks: {
 				onstart: function(event, from, to, user) {
+					Simulator.user_id = Date.now();
 					Simulator.start_time = new Date();
 					Simulator.start_time = Simulator.start_time.getTime();
 					Simulator.direct_protocol_type(parseInt($("#protocol").val()));
@@ -22,7 +23,7 @@ var FSM = {
 					Message.init();
 					Node.init();
 					Log.init({ 
-						time: 0, 
+						time: 0,
 						type: 'init',
 						operation: "start",
 						msg: 'start'
@@ -49,7 +50,6 @@ var FSM = {
 							operation: "finish",
 							config: { 
 								seed: Simulator.seed,
-								key: '2209348029348', 
 								stage_type: Simulator.stage_type,
 								finish_time: Simulator.time, 
 								message_num: Message.message_num,

@@ -6,6 +6,7 @@ var Simulator = {
   packet_list: {},
   node_map: {},
   field: [],
+  user_id: 0,
   key_map: [],
   start_time: undefined,
   end_time: undefined,

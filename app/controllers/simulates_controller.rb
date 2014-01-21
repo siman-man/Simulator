@@ -7,14 +7,13 @@ class SimulatesController < ApplicationController
     @stage_type = 1
     p params
     if params[:time].presence
-      params.delete(:controller)
-      params.delete(:action)
+      params.reject!{|key| [:controller,:action].include?(key)}
+      #params.delete(:controller)
+      #params.delete(:action)
       create_log(params)
     end
 
-    if params[:edit_mode].presence
-      @edit_mode = true
-    end
+    @edit_mode = true if params[:edit_mode].presence
 
     if params[:stage_select]
       p 'stage select'
