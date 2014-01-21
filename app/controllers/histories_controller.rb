@@ -7,9 +7,9 @@ class HistoriesController < ApplicationController
 
 	def show
 		history = History.find(params[:id])
-		send_file = history[:dir_name] + "/send_" + history[:file_name]
-		receive_file = history[:dir_name] + "/receive_" + history[:file_name]
-		each_send_file = history[:dir_name] + "/each_send_" + history[:file_name]
+		send_file = history[:dir_name] + "/send_" + history[:filename]
+		receive_file = history[:dir_name] + "/receive_" + history[:filename]
+		each_send_file = history[:dir_name] + "/each_send_" + history[:filename]
 		@node_list = create_node_list( history[:node_num] )
 		@send_data = tsf2json(send_file)
 		@receive_data = tsf2json(receive_file)

@@ -3,7 +3,8 @@ require 'digest/sha2'
 class LogsController < ApplicationController
 	include LogsHelper
 	USER_TABLE = {}
-	CONFIG_TABLE = {}
+	FD_TABLE = {}
+	FN_TABLE = {}
 
 	def index
 	end
@@ -11,35 +12,26 @@ class LogsController < ApplicationController
 	def record		
 		p params
 		file_key = params["key"].to_i
-		puts "key = #{file_key}"
-		p USER_TABLE
+
+		if FN_TABLE.has_key?(file_key)
+			FD_TABLE[file_key] = File.open(FN_TABLE[file_key],'a')
+		end
 		params[:data_list].each do |key,data| 
 			if data[:type] == 'init'
 				set_file_name(file_key)
+				FN_TABLE[file_key] = "#{Rails.root}/log/#{file_key}.log"
+				FD_TABLE[file_key] = File.open(FN_TABLE[file_key],'w')
 			end
-
-			TD.event.post( file_key, time: data[:time], operation: data[:operation],
-				from: data[:from], dest: data[:dest], message: data[:message])
 
 			if data[:type] == 'finish'
-				save_record(data[:config])
+				config = data.delete(:config)
+				FD_TABLE[file_key].write(hash2ltsv(data)+"\n")
+				save_record(config, file_key)
+			else
+				FD_TABLE[file_key].write(hash2ltsv(data)+"\n")
 			end
 		end
-	end
-
-	def result
-		p params[:key]
-	 	if USER_TABLE.has_key?(params[:key].to_i)
-	 		filename = USER_TABLE.delete(params[:key].to_i)
-	 		p filename
-			@result = collect_data(filename)
-			@result = @result.merge(@@config)
-			dir_name = @@config[:dir_name]
-			filename = @@config[:file_name]
-			save_data( @result, dir_name, filename )
-		else
-			redirect_to root_path
-		end
+		FD_TABLE[file_key].close
 	end
 
 	private
@@ -48,25 +40,29 @@ class LogsController < ApplicationController
 			USER_TABLE[key] = key
 		end
 
-		def save_record(config)
+		def save_record(config, file_key)
 			p config
-			@@config = Hash.new
-			@@config[:seed] = config["seed"].to_i
-			@@config[:stage_type] = config["stage_type"].to_i
-			@@config[:finish_time] = config["finish_time"].to_i
-			@@config[:message_num] = config["message_num"].to_i
-			@@config[:total_send_message_num] = config["total_send_message_num"].to_i
-			@@config[:protocol] = config["protocol"]
-			@@config[:node_num] = config["node_num"]
-			@@config[:dir_name] = "#{Rails.root}/data/#{Time.now.strftime("%04Y/%02m/%02d")}"
-			@@config[:file_name] = "#{Time.now.strftime("%H%M%S")}.tsv"
-			@@config[:file_path] = ""
+			config_data = Hash.new
+			config_data[:seed] = config["seed"].to_i
+			config_data[:stage_type] = config["stage_type"]
+			config_data[:finish_time] = config["finish_time"].to_i
+			config_data[:message_num] = config["message_num"].to_i
+			config_data[:total_send_message_num] = config["total_send_message_num"].to_i
+			config_data[:protocol] = config["protocol"]
+			config_data[:node_num] = config["node_num"]
+			config_data[:dir_name] = "#{Rails.root}/data/#{Time.now.strftime("%04Y/%02m/%02d")}"
+			config_data[:filename] = "#{Time.now.strftime("%H%M%S")}.tsv"
+			config_data[:file_path] = ""
 
-			record = History.new( seed: @@config[:seed], stage_type: @@config[:stage_type], clear_time: @@config[:finish_time],
-														message_num: @@config[:message_num], protocol: @@config[:protocol],
-														node_num: @@config[:node_num],
-														total_send_message_num: @@config[:total_send_message_num], 
-														dir_name: @@config[:dir_name], file_name: @@config[:file_name] )
+			record = History.new( seed: config_data[:seed], stage_type: config_data[:stage_type], clear_time: config_data[:finish_time],
+														message_num: config_data[:message_num], protocol: config_data[:protocol],
+														node_num: config_data[:node_num],
+														total_send_message_num: config_data[:total_send_message_num], 
+														dir_name: config_data[:dir_name], filename: config_data[:filename] )
+
+			result = collect_data(file_key)
+			result = result.merge(config_data)
+			save_data( result, config_data[:dir_name], config_data[:filename] )
 			if record.save!
 				puts "Create new record!"
 			end
@@ -82,7 +78,6 @@ class LogsController < ApplicationController
 			save_send_data( result[:transmit], result[:send_file] )
 			save_recieve_data( result[:receive], result[:receive_file] )
 			save_each_send_data( result[:each_transmit], result[:each_send_file] )
-			#save_each_receive_data( result[:each_receive_], result[:each_receive_file] )
 		end
 
 		def save_send_data( send_data, file_name )

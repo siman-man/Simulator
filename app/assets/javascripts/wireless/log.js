@@ -1,5 +1,6 @@
 var Log = {
   queue: [],
+  limit_size: 30,
 
 	create: function(time, host, dest, req, size){
 		$.ajax({
@@ -32,7 +33,7 @@ var Log = {
       Simulator.total_send_message_num++;
     }
     this.queue.push(this.save(data));
-    if( this.queue.length >= 10){
+    if( this.queue.length >= Log.limit_size){
       $.ajax({
         type: "post",
         url: "/logs",
@@ -68,7 +69,8 @@ var Log = {
       },
       success: function(obj){
         alert('Simulation Finish!');
-        window.location = '/result' + '?key=' + Simulator.user_id;
+        window.location = '/history';
+        //window.location = '/result' + '?key=' + Simulator.user_id;
       }
     });
   },

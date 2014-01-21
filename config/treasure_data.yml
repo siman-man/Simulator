@@ -1,4 +1,0 @@
-development:
-  agent: localhost:24224
-  tag: simulation
-  debug_mode: true

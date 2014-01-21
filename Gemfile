@@ -18,10 +18,7 @@ gem 'less-rails'
 gem 'sass-rails'
 gem 'execjs'
 gem 'uglifier', '>= 1.0.3'
-gem 'td-logger'
 gem 'remotipart'
-gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
-  :github => 'anjlab/bootstrap-rails'
 
 gem 'pry-rails'
 gem 'kaminari'
