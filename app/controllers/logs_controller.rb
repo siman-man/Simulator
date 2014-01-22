@@ -14,24 +14,27 @@ class LogsController < ApplicationController
 		file_key = params["key"].to_i
 
 		if FN_TABLE.has_key?(file_key)
-			FD_TABLE[file_key] = File.open(FN_TABLE[file_key],'a')
+			#FD_TABLE[file_key] = File.open(FN_TABLE[file_key],'a')
 		end
 		params[:data_list].each do |key,data| 
 			if data[:type] == 'init'
 				set_file_name(file_key)
-				FN_TABLE[file_key] = "#{Rails.root}/log/#{file_key}.log"
-				FD_TABLE[file_key] = File.open(FN_TABLE[file_key],'w')
+				#FN_TABLE[file_key] = "#{Rails.root}/log/#{file_key}.log"
+				#FD_TABLE[file_key] = File.open(FN_TABLE[file_key],'w')
 			end
 
+			TD.event.post( file_key, time: data[:time], operation: data[:operation],
+               			from: data[:from], dest: data[:dest], message: data[:message])
+
 			if data[:type] == 'finish'
-				config = data.delete(:config)
-				FD_TABLE[file_key].write(hash2ltsv(data)+"\n")
-				save_record(config, file_key)
+				#config = data.delete(:config)
+				#FD_TABLE[file_key].write(hash2ltsv(data)+"\n")
+				save_record(data[:config], file_key)
 			else
-				FD_TABLE[file_key].write(hash2ltsv(data)+"\n")
+				#FD_TABLE[file_key].write(hash2ltsv(data)+"\n")
 			end
 		end
-		FD_TABLE[file_key].close
+		#FD_TABLE[file_key].close
 	end
 
 	private

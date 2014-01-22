@@ -1,38 +1,50 @@
-history show
-<%= content_tag(:p, link_to("Back", history_path, { class: "btn btn-primary"})) %>
-
-<%= javascript_include_tag "log/result" %>
-<%= javascript_include_tag "log/show" %>
-
-<script>
-var test = <%= @send_data.to_json.html_safe %>
-var	show = <%= @receive_data.to_json.html_safe %>
-Show.nodes_list = <%= @node_list.to_json.html_safe %>
-Show.edges_list = <%= @each_send_data.to_json.html_safe %>
-
-Result.vertical(test);
-Result.vertical(show);
-</script>
-
 <style>
-
-.link {
-	fill: none;
-	stroke: #666;
-	stroke-width: 1.5px;
+#protocol_list {
+  margin-top: 30px;
 }
 
-.node circle {
-	fill: #ccc;
-	stroke: #fff;
-	stroke-width: 1.5px;
+.head {
+  font-size: 18px;
 }
-
-text {
-	font: 10px sans-serif;
-	pointer-events: none;
+.button_list {
+  border: none;
+  background: transparent;
 }
 
 </style>
+<%= javascript_include_tag 'log/data_list' %>
+<%= javascript_include_tag "log/result" %>
+<%= javascript_include_tag "log/show" %>
+<%= javascript_include_tag "log/click_event" %>
+<%= javascript_include_tag "log/init" %>
 
-<canvas id='my_canvas' width="1000" height="800"></canvas>
+<script>
+DataList.node_list = <%= @node_list.to_json.html_safe %>
+DataList.edge_list = <%= @each_send_data.to_json.html_safe %>
+DataList.user_list = <%= @users_data.to_json.html_safe %>
+DataList.view_id = <%= @view_id %>
+console.log(DataList.view_id);
+</script>
+
+<div id="protocol_list" class="container">
+  <div class="row row-offcanvas row-offcanvas-right">
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group">
+        <%= link_to("一覧に戻る", history_path, class: "list-group-item" ) %>
+        <a href="#" id='connection_network' class="list-group-item">グラフ</a>
+        <a href="#" class="list-group-item">送信数</a>
+        <a href="#" id='recieve_num', class="list-group-item">受信数</a>
+        <%= form_tag(history_path, { remote: true, multipart: true }) do %>
+          <%= submit_tag("送信", { class: "list-group-item"}) %>
+        <% end %>
+      </div>
+    </div><!--/span-->
+    <div id="show_result" class="col-xs-12 col-sm-9">
+      <%= render @view %>
+    </div><!--/span-->
+  </div><!--/row-->
+  <hr>
+  <footer>
+    <p>&copy; Company 2013</p>
+  </footer>
+</div><!--/.container-->

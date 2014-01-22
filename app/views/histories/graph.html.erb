@@ -1,0 +1,37 @@
+<%= content_tag(:p, link_to("Back", history_path, { class: "btn btn-primary"})) %>
+
+<%= javascript_include_tag "log/result" %>
+<%= javascript_include_tag "log/show" %>
+
+<script>
+var test = <%= @send_data.to_json.html_safe %>
+var	show = <%= @receive_data.to_json.html_safe %>
+DataList.node_list = <%= @node_list.to_json.html_safe %>
+DataList.edge_list = <%= @each_send_data.to_json.html_safe %>
+
+Result.vertical(test);
+Result.vertical(show);
+</script>
+
+<style>
+
+.link {
+	fill: none;
+	stroke: #666;
+	stroke-width: 1.5px;
+}
+
+.node circle {
+	fill: #ccc;
+	stroke: #fff;
+	stroke-width: 1.5px;
+}
+
+text {
+	font: 10px sans-serif;
+	pointer-events: none;
+}
+
+</style>
+
+<canvas id='my_canvas' width="1000" height="800"></canvas>

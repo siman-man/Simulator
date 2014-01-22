@@ -9,11 +9,26 @@ module WirelessesHelper
     TD.event.post('simulator', data)
   end
 
+  def hash2tlsv(hash)
+    hash.to_a.map{|e| e.join(':')}.join(' ')
+  end
+
+  def create_node_data(user_data, filename)
+    puts "create node data"
+    p user_data
+    File.open("#{Rails.root}/public/users/#{filename}.dat", "w") do |file|
+      user_data.each do |data|
+        file.write(hash2tlsv(data)+"\n")
+      end
+    end
+  end
+
   def create_field_data(data_list, filename = "sample")
     if File.exist?("#{Rails.root}/public/stages/#{filename}.rb")
       #filename = filename + Time.now.strftime("%Y%m%d%H%M%S")   
     end
     stage_data = Hash.new
+    user_data = []
     stage_data[:filename] = filename
     File.open("#{Rails.root}/public/stages/#{filename}.rb", "w") do |file|
 
@@ -28,6 +43,7 @@ module WirelessesHelper
           info["x"] = 0
           info["y"] = 0
         elsif ["user", "start", "end"].include?(info["type"])
+          user_data << { eid: info["eid"], name: info["name"], speed: info["speed"] }
           path = ( info["type"] == "user")? create_path(info["path"]) : ""
           file.write("\tcreate(:#{info["type"]}) do |t| 
 \t\tt.pos( x: #{info["x"]}, y: #{info["y"]} )
@@ -48,6 +64,7 @@ module WirelessesHelper
       
       file.write("end\n")
     end
+    create_node_data(user_data, filename)
     p stage_data
   end
 

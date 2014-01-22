@@ -160,7 +160,7 @@ var Node = {
     user.type = 'normal';
     user.eid = opt.eid || this.eid;
     this.eid++;
-    user.name = opt.name || "none";
+    user.name = opt.name || "node" + (user.eid-1);
     user.contact_list = {};
     user.circuit = [];
     user.route_list = [];

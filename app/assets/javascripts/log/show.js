@@ -1,10 +1,3 @@
-$(document).ready( function(){
-	//Result.vertical([{ label:"0", value: 10}, { label:"1", value: 5 }]);
-	//Result.vertical();
-	
-	Show.init();
-});
-
 var Show = {
 	stage: undefined,
 	press_flag: false,
@@ -16,29 +9,33 @@ var Show = {
 
 	init: function(){
 		this.canvas = document.getElementById('my_canvas');
+		this.node_list = [];
+		this.edge_list = [];
+		this.line_list = [];
 
   	this.canvas.addEventListener('mousemove', this.onmousemove, false);
   	this.canvas.addEventListener('mouseup', this.onmouseup, false);
 
-		this.stage = new createjs.Stage(document.getElementById('my_canvas'));
+		this.stage = new createjs.Stage(this.canvas);
 		createjs.Ticker.setFPS(30);
+    DataList.event_tag = "tick";
+    DataList.event_func = function(event){
+      Show.clearLine();
+      Show.updateEdge();
+      Show.updateText();
+      Show.stage.update();
+    }
     //createjs.Ticker.addEventListener("tick", this.handleTick);
-    createjs.Ticker.addEventListener("tick", function(event){
-    	Show.clearLine();
-    	Show.updateEdge();
-			Show.stage.update();
-    });
+    createjs.Ticker.addEventListener(DataList.event_tag, DataList.event_func);
     console.log('world');
-		console.log(this.nodes_list);
-		for( var id in this.nodes_list ){
+		for( var id in DataList.node_list ){
 			this.createNode( id, Math.random()*800|0 + 50, Math.random()*500|0 +50 )
 		}
-		for( var id in this.edges_list ){
-			var edge = this.edges_list[id];
+		for( var id in DataList.edge_list ){
+			var edge = DataList.edge_list[id];
 			console.log(edge);
 			this.edge_list.push({ source: edge.source, target: edge.target, value: edge.value });
 		}
-		console.log(this.edges_list);
 	},
 
 	handleTick: function(event) {
@@ -47,6 +44,14 @@ var Show = {
 
   update: function(){
   	console.log('hello world');
+  },
+
+  updateText: function(){
+    for( var eid in this.node_list ){
+      var node = this.node_list[eid];
+      Show.stage.removeChild(node.label);
+      Show.stage.addChild(node.label);  
+    }
   },
 
   clearLine: function(){
@@ -70,8 +75,16 @@ var Show = {
  		var node = new createjs.Shape();
  		node.x = x;
  		node.y = y;
- 		node.type = 'node';
+ 		node.ob_type = 'node';
  		node.addEventListener('mousedown', this.onmousedown, false);
+ 		node.name = DataList.user_list[id].name;
+
+ 		node.label = new createjs.Text(node.name, "18px Arial", "black");
+    node.label.textAlign = "center";
+    node.label.x = node.x;
+    node.label.y = node.y;
+    node.label.textBaseline = "top";
+ 		
  		if( id == 0 ){
 			node.graphics.beginFill('rgba(0,255,59,1.0)').drawCircle(0, 0, this.r);
  		}else if( id == 1 ){
@@ -80,6 +93,7 @@ var Show = {
  			node.graphics.beginFill('rgba(0,59,255,1.0)').drawCircle(0, 0, this.r);
  		}
     Show.stage.addChild(node);
+    Show.stage.addChild(node.label);
     this.node_list.push(node);
  	},
 
@@ -93,7 +107,7 @@ var Show = {
  				cos = dx / dist,
  				sin = dy / dist;
 
-		line.graphics.setStrokeStyle(value).beginStroke("rgba(0,0,0,0.9)");
+		line.graphics.setStrokeStyle(value).beginStroke("rgba(152,251,152,1.0)");
 		line.graphics.moveTo( source.x - this.r * cos, source.y - this.r * sin );
 		line.graphics.lineTo( target.x + this.r * cos, target.y + this.r * sin );
 		this.line_list.push(line);
@@ -108,12 +122,15 @@ var Show = {
 
  	onmousemove: function(e){
  		if( Show.press_flag ){
- 			var x = e.clientX - Show.canvas.offsetLeft + document.body.scrollLeft,
-       		y = e.clientY - Show.canvas.offsetTop + document.body.scrollTop,
+ 			var rect = Show.canvas.getBoundingClientRect(),
+ 					x = e.clientX - rect.left,
+       		y = e.clientY - rect.top,
        		node = Show.target;
 
      	node.x = x;
       node.y = y;
+      node.label.x = x;
+      node.label.y = y;
 			console.log('hello');
  		}
  	},

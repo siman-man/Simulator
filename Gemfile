@@ -1,24 +1,25 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails'
 
 group :development do
-  gem 'sqlite3', '1.3.7'
+  gem 'sqlite3'
 end
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-ui-bootstrap-rails'
-gem 'coffee-rails', '~> 4.0.0.beta1'
+gem 'coffee-rails'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'sass-rails'
+gem 'td-logger'
 gem 'execjs'
-gem 'uglifier', '>= 1.0.3'
+gem 'uglifier'
 gem 'remotipart'
+gem 'anjlab-bootstrap-rails', :require => 'bootstrap-rails',
+    :github => 'anjlab/bootstrap-rails'
 
 gem 'pry-rails'
 gem 'kaminari'
@@ -31,8 +32,8 @@ group :assets do
 end
 
 group :production do
-  gem 'pg', '0.15.1'
-  gem 'rails_12factor', '0.0.2'
+  gem 'pg'
+  gem 'rails_12factor'
 end
 
 
@@ -40,7 +41,7 @@ end
 gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.0.1'
+gem 'jbuilder'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

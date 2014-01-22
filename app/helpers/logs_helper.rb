@@ -19,7 +19,7 @@ module LogsHelper
     File.open( file_name, 'r' ) do |file|
       file.readlines.each do |line|
         str = line.chomp.split(' ')[2..-1].join(' ')
-        data = Hash[str.split(' ').map{|str| 
+        data = Hash[str.delete('{}"').split(',').map{|str| 
           d = str.split(':') 
           d[0] = d[0].to_sym
           d
