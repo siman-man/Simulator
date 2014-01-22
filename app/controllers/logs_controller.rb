@@ -79,7 +79,7 @@ class LogsController < ApplicationController
 			result[:each_receive_file] = dir_name + "/each_receive_#{file_name}"
 
 			save_send_data( result[:transmit], result[:send_file] )
-			save_recieve_data( result[:receive], result[:receive_file] )
+			save_receive_data( result[:receive], result[:receive_file] )
 			save_each_send_data( result[:each_transmit], result[:each_send_file] )
 		end
 
@@ -91,9 +91,9 @@ class LogsController < ApplicationController
 			end
 		end
 
-		def save_recieve_data( recieve_data, file_name )
+		def save_receive_data( receive_data, file_name )
 			File.open( file_name, 'w' ) do |file|
-				recieve_data.each do |data|
+				receive_data.each do |data|
 					file.write("#{data[:label]}\t#{data[:value]}\n")
 				end
 			end

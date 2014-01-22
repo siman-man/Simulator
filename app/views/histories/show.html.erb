@@ -22,6 +22,7 @@
 DataList.node_list = <%= @node_list.to_json.html_safe %>
 DataList.edge_list = <%= @each_send_data.to_json.html_safe %>
 DataList.user_list = <%= @users_data.to_json.html_safe %>
+DataList.recieve_data = <%= @recieve_data.to_json.html_safe %>
 DataList.view_id = <%= @view_id %>
 console.log(DataList.view_id);
 </script>
@@ -34,9 +35,6 @@ console.log(DataList.view_id);
         <a href="#" id='connection_network' class="list-group-item">グラフ</a>
         <a href="#" class="list-group-item">送信数</a>
         <a href="#" id='recieve_num', class="list-group-item">受信数</a>
-        <%= form_tag(history_path, { remote: true, multipart: true }) do %>
-          <%= submit_tag("送信", { class: "list-group-item"}) %>
-        <% end %>
       </div>
     </div><!--/span-->
     <div id="show_result" class="col-xs-12 col-sm-9">

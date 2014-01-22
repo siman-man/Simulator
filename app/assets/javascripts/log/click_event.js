@@ -1,13 +1,13 @@
 var ClickEvent = {
 	init: function(){
-		$("#recieve_num").click(function(){
+		$("#receive_num").click(function(){
 			createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
-			console.log('recieve_num');
+			console.log('receive_num');
 			$.ajax({
       	type: "post",
       	url: "/view_update",
       	data: {
-        	page: 'recieve_data'
+        	page: 'receive_data'
       	},
     	});
 		});

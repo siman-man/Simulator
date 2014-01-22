@@ -5,9 +5,9 @@ module LogsHelper
     @finish_time = 0
     @total_emit = 0
     @transmit_num = Hash.new(0)
-    @recieve_num = Hash.new(0)
+    @receive_num = Hash.new(0)
     @each_transmit_num = Hash.new{|h,k| h[k] = Hash.new(0) }
-    @each_recieve_num = Hash.new{|h,k| h[k] = Hash.new(0) }
+    @each_receive_num = Hash.new{|h,k| h[k] = Hash.new(0) }
   end
 
   def collect_data( key )
@@ -37,7 +37,7 @@ module LogsHelper
 
   def data_order
     @transmit_num = Hash[@transmit_num.sort_by{|k,v| k}]
-    @recieve_num = Hash[@recieve_num.sort_by{|k,v| k}]
+    @receive_num = Hash[@receive_num.sort_by{|k,v| k}]
   end
 
   def collect_result
