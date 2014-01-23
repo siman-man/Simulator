@@ -35,11 +35,11 @@ var Simulator = {
     this.mersenne = new MersenneTwister(this.seed);
     var x, y, key;
 
-    for( y = 0; y < View.height; y++ ){
+    for( y = 0; y < View.height; ++y ){
       this.field[y] = [];
       this.key_map[y] = [];
 
-      for( x = 0; x < View.width; x++ ){
+      for( x = 0; x < View.width; ++x ){
         this.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
         key = Simulator.point2key( x, y );
         this.key_map[y][x] = key;
@@ -50,13 +50,6 @@ var Simulator = {
     this.state = FSM.simulator();
     this.end_flag = false;
 
-    /*
-    if( config === undefined && !Simulator.replay ){
-      Node.create( 10, 10, 'start' );
-      Node.create( 20, 10, 'end' );
-    }
-    */
-
     createjs.Ticker.setFPS(this.per_frame);
     createjs.Ticker.addEventListener("tick", this.handleTick);
     Simulator.map.update();
@@ -66,16 +59,16 @@ var Simulator = {
   direct_protocol_type: function( type ){
     switch(type){
       case 0:
-      this.protocol_type = 'epidemic';
-      break;
+        this.protocol_type = 'epidemic';
+        break;
       case 1:
-      this.protocol_type = 'spray_and_wait';
-      break;
+        this.protocol_type = 'spray_and_wait';
+        break;
       case 2:
-      this.protocol_type = 'pro_phet';
-      break;
+        this.protocol_type = 'pro_phet';
+        break;
       default:
-      this.protocol_type = 'epidemic';
+        this.protocol_type = 'epidemic';
     }
   },
 
@@ -118,7 +111,6 @@ var Simulator = {
 
   moveUpdate: function(){
     Node.move();
-    Car.update();
   },
 
   scanUpdate: function(){
@@ -343,23 +335,22 @@ var Simulator = {
   onmousemove: function(e) {
     if( Simulator.press_flag ){
       var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
-      y = e.clientY - canvas.offsetTop + document.body.scrollTop,
-      coord = View.point2coord(x, y),
-      operation_type = e.button,
-      object_type = $("input[name='draw_object']:checked").val(),
-      draw_object = Simulator.field[coord.y][coord.x]; 
+          y = e.clientY - canvas.offsetTop + document.body.scrollTop,
+          coord = View.point2coord(x, y),
+          operation_type = e.button,
+          object_type = $("input[name='draw_object']:checked").val(),
+          draw_object = Simulator.field[coord.y][coord.x],
+          target = Simulator.target;
 
       if( !this.create_route_mode ){
-        if( Simulator.target && ( Node.isServer(Simulator.target.type) || Simulator.target.type === 'user' ) && Simulator.operation_flag && draw_object.obj === undefined){
-          //console.log("server pos update =>");
-          Simulator.target.obj.y = coord.y * gridSize;
-          Simulator.target.obj.x = coord.x * gridSize;
-          Simulator.target.obj.label.y = Simulator.target.obj.y + gridSize/5|0;
-          Simulator.target.obj.label.x = Simulator.target.obj.x + gridSize/2|0;
-          Simulator.target.x = coord.x;
-          Simulator.target.y = coord.y;
+        if( target && ( Node.isServer(target.type) || target.type === 'user' ) && Simulator.operation_flag && draw_object.obj === undefined){
+          target.obj.y = coord.y * gridSize;
+          target.obj.x = coord.x * gridSize;
+          target.obj.label.y = target.obj.y + gridSize/5|0;
+          target.obj.label.x = target.obj.x + gridSize/2|0;
+          target.x = coord.x;
+          target.y = coord.y;
           Propagation.calc(coord.x, coord.y);
-          //View.update();
         }else if( draw_object.obj === undefined && !Node.isUser(object_type) && !Node.isServer(object_type) ){
           console.log("mousemove - objectCheck =>");
           Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
@@ -381,24 +372,25 @@ var Simulator = {
   onmouseup: function(e){
     console.log("onmouseup =>");
     if( !Simulator.create_route_mode ){
-      if( Simulator.target && e.button !== 2 ){
-        var coord = View.point2coord( Simulator.target.obj.x, Simulator.target.obj.y ),
-        key, eid;
-        if( Node.isServer(Simulator.target.type) ){
-          Simulator.field[coord.y][coord.x] = Simulator.target;
+      var target = Simulator.target;
+      if( target && e.button !== 2 ){
+        var coord = View.point2coord( target.obj.x, target.obj.y ),
+            key, 
+            eid;
+        if( Node.isServer(target.type) ){
+          Simulator.field[coord.y][coord.x] = target;
           key = Simulator.key_map[coord.y][coord.x];
-          eid = Simulator.target.obj.eid;
-          Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: Simulator.target.obj, type: 'server' };
+          eid = target.obj.eid;
+          Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: target.obj, type: target.type };
           Propagation.calc(coord.x, coord.y);
-          //View.update();
-        }else if( Simulator.target.type === 'user' ){
-          var user = Simulator.target.obj;
+        }else if( target.type === 'user' ){
+          var user = target.obj;
           key = Simulator.key_map[coord.y][coord.x];
           eid = user.eid;
           if( user.path[0].y !== coord.y || user.path[0].x !== coord.x ){
             user.path= [{ y: coord.y, x: coord.x, wait: 0 }];
           }
-          Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: user, type: 'user' };
+          Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: user, type: user.type };
           Propagation.calc(coord.x, coord.y);
         }
       }

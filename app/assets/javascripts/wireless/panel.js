@@ -180,11 +180,20 @@ var Panel = {
   model2value: function( move_model ){
   	console.log(move_model);
   	switch(move_model){
-  		case 'StationaryMovement':
+  		case 'RandomWayPoint':
   			return 0;
   			break;
   		case 'MapRouteMovement':
   			return 1;
+  			break;
+  		case 'RandomWalk':
+  			return 2;
+  			break;
+  		case 'StationaryMovement':
+  			return 3;
+  			break;
+  		case 'CarMovement':
+  			return 4;
   			break;
   	}
   },

@@ -40,10 +40,16 @@ var Node = {
         user.move_model = "RandomWayPoint";
         break;
       case 1:
-        user.move_model = "MapRouteMovement";
+        user.move_model = "RandomWalk";
         break;
       case 2:
-        user.move_model = "RandomWalk";
+        user.move_model = "MapRouteMovement";
+        break;
+      case 3:
+        user.move_model = "StationaryMovement";
+        break;
+      case 4:
+        user.move_model = "CarMovement";
         break;
       default:
         user.move_model = "StationaryMovement";
@@ -103,44 +109,16 @@ var Node = {
   },
 
   createCar: function( x, y, opt ){
+    opt.color = 'rgba(0,59,255,1.0)';
+    opt.speed = 3;
     console.log('create car =>');
-    var car = new createjs.Shape(),
+    var car = this.createAgent(x,y,opt),
         key;
     car.graphics.beginFill('rgba(0,59,255,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
-    car.type = 'car';
-    car.eid = opt.eid || this.eid;
-    this.eid++;
-    car.contact_list = {};
-    car.circuit = [];
-    car.route_list = [];
-    car.path = {};
-    car.name = opt.name || "node" + (car.eid-1);
-    car.delivery_predictability = {};
-    car.speed = opt.speed || 5;
     car.direct = 0;
-    car.buffer_size = 1000;
-    
-    var ratio_info = {};
-    ratio_info[car.eid] = 1.0;
-    car.delivery_predictability[car.eid] = ratio_info;
-
-    car.last_connect_time = {};
-    car.strage = {};
-    car.buffer = [];
-
-    car.routing_protocol = this.direct_routing_protocol(car);
-
-    car.x = x * View.gridSize;
-    car.y = y * View.gridSize;
-
-    car.label = new createjs.Text(0, "12px Arial", "white");
-    car.label.x = car.x;
-    car.label.y = car.y;
-    car.label.textBaseline = "top";
 
     Propagation.calc(x, y);
-    //View.update();
 
     Simulator.map.addChild(car);
     Simulator.map.addChild(car.label);
@@ -153,66 +131,64 @@ var Node = {
 
   createAgent: function( x, y, opt ){
     var agent = new createjs.Shape();
-    user.graphics.beginFill(opt.color).drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
+    if( this.isServer(opt.type)){
+      agent.graphics.beginFill(opt.color).drawRect( 0, 0, gridSize, gridSize);
+    }else{
+      agent.graphics.beginFill(opt.color).drawCircle(gridSize/2, gridSize/2, gridSize/2);
+    }
     agent.eid = opt.eid || this.eid;
     this.eid++;
+    agent.type = opt.type;
     agent.name = opt.name || "node" + (agent.eid-1);
     agent.contact_list = {};
+    agent.buffer_size = opt.buffer_size || 1000;
+    agent.speed = opt.speed || 10;
+    agent.x = x * gridSize;
+    agent.y = y * gridSize;
+
+    agent.label = new createjs.Text(0, "14px Arial", "white");
+    agent.label.textAlign = "center";
+    agent.label.x = agent.x + gridSize/2|0;
+    agent.label.y = agent.y + gridSize/5|0;
+    agent.label.textBaseline = "top";
+
+    agent.move_model = opt.move_model || "StationaryMovement";
+
+    agent.route_list = [];
+    agent.path = opt.path || [];
+
+    var ratio_info = {};
+    ratio_info[agent.eid] = 1.0;
+    agent.delivery_predictability = {};
+    agent.delivery_predictability[agent.eid] = ratio_info;
+
+    agent.routing_protocol = this.direct_routing_protocol(agent);
+
+    agent.last_connect_time = {};
+    agent.strage = {};
+    agent.buffer = [];
+    return agent;
   },
 
 	createUser: function( x, y, opt ){
-    var user = new createjs.Shape(),
+    opt.color = 'rgba(0,0,0,1.0)';
+    opt.speed = 10;
+    var user = this.createAgent( x, y, opt),
     		key;
-    user.graphics.beginFill('rgba(0,0,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
-    
-    user.type = 'user';
-    user.eid = opt.eid || this.eid;
-    this.eid++;
-    user.name = opt.name || "node" + (user.eid-1);
-    user.contact_list = {};
-    user.circuit = [];
-    user.route_list = [];
-    user.path = opt.path || [];
+
     user.step = 1;
     user.stop_time = 0;
-    user.buffer_size = 1000;
+    user.path_index = 0;
     if( user.path.length !== 0 ){
-      user.path_index = 0;
       user.path_length = user.path.length;
       user.close_path = this.isCloseRoute( user.path );
     }else{
       user.path = []
-      user.path_index = 0;
       user.path_length = 1;
       user.path.push({ y: y, x: x, wait: 0 });
     }
-    user.delivery_predictability = {};
-    user.speed = opt.speed || 10;
-    user.move_model = opt.move_model || "RandomWayPoint";
-    //user.move_model = "RandomWalk";
-    //user.move_model = "traceMoveModel";
-
-    var ratio_info = {};
-    ratio_info[user.eid] = 1.0;
-    user.delivery_predictability[user.eid] = ratio_info;
-
-    user.last_connect_time = {};
-    user.strage = {};
-    user.buffer = [];
-
-    user.routing_protocol = this.direct_routing_protocol(user);
-
-    user.x = x * View.gridSize;
-    user.y = y * View.gridSize;
-
-    user.label = new createjs.Text(0, "14px Arial", "white");
-    user.label.textAlign = "center";
-    user.label.x = user.x + gridSize/2|0;
-    user.label.y = user.y + gridSize/5|0;
-    user.label.textBaseline = "top";
 
     Propagation.calc(x, y);
-    //View.update();
 
     Simulator.map.addChild(user);
     Simulator.map.addChild(user.label);
@@ -224,54 +200,29 @@ var Node = {
 	},
 
 	createNode: function( x, y, opt ){
-    var node = new createjs.Shape(),
-        key;
-
-    node.x = x * View.gridSize;
-    node.y = y * View.gridSize;
-    node.strage = {};
-    node.buffer = [];
-    node.path = [];
-    node.speed = 0;
-    node.last_connect_time = {};
-    node.delivery_predictability = {};
-    node.routing_protocol = this.direct_routing_protocol(node);
-
     switch(opt.type){
       case 'start':
-        node.name = "start";
-      	node.graphics.beginFill('rgba(218,0,10,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+        opt.name = "start";
+      	opt.color = 'rgba(218,0,10,1.0)';
       	break;
       case 'end':
-        node.name = "end";
-      	node.graphics.beginFill('rgba(10,0,218,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+        opt.name = "end";
+        opt.color = 'rgba(10,0,218,1.0)';
       	break;
       default:
-        node.name = "none";
-      	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+        opt.name = "none";
+        opt.color = 'rgba(255,0,0,1.0)';
     }
+
+    var node = this.createAgent(x,y,opt),
+        key;
     
-    node.type = opt.type || 'server';
-    node.eid = this.eid;
-    node.buffer_size = 1000;
-    node.move_model = "StationaryMovement";
-    //node.path = {};
-   	this.eid++;
-
-    var ratio_info = {};
-    ratio_info[node.eid] = 1.0;
-    node.delivery_predictability[node.eid] = ratio_info;
-
     node.drag = false;
 
-    var message_num = (opt.type === 'start')? $("#message_num").val()|0 : 0;
-    node.label = new createjs.Text(message_num, "14px Arial", "white");
-    node.label.textAlign = "center";
-    node.label.y = node.y + gridSize/5|0;
-    node.label.x = node.x + gridSize/2|0;
-    node.label.textBaseline = "top";
+    if( opt.type === 'start' ){
+      node.label.text = $("#message_num").val()|0;
+    }
 
-   	node.contact_list = {};
     Simulator.map.addChild(node);
     Simulator.map.addChild(node.label);
 
@@ -282,7 +233,6 @@ var Node = {
     Simulator.node_map[key][node.eid] = { x: x, y: y, obj: node, type: 'server' };
     Simulator.field[y][x] = { x: x, y: y, obj: node, type: node.type, cost: 1, pf: 1 };
     Propagation.calc(x, y);
-    //View.update();
 
     console.log("create node" + node.eid + " =>");
 	},
@@ -295,23 +245,15 @@ var Node = {
 		for( eid in this.node_list ){
 			node = this.node_list[eid];
 
-			if( node.type === 'user' ){
+			if( this.isUser(node.type) ){
 				coord = View.point2coord( node.x, node.y );
 				key = Simulator.key_map[coord.y][coord.x];
 				delete Simulator.node_map[key][node.eid];
 				this.moveUser(node);
 				coord = View.point2coord( node.x, node.y );
 				key = Simulator.key_map[coord.y][coord.x];
-      	Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'user' };
-			}else if( node.type === 'car'){
-        coord = View.point2coord( node.x, node.y );
-        key = Simulator.key_map[coord.y][coord.x];
-        delete Simulator.node_map[key][node.eid];
-        Car.move(node);
-        coord = View.point2coord( node.x, node.y );
-        key = Simulator.key_map[coord.y][coord.x];
-        Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'car' };
-      }
+      	Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: node.type };
+			}
       node.label.y = node.y + gridSize/5|0;
       node.label.x = node.x + gridSize/2|0;
 		}
@@ -408,9 +350,6 @@ var Node = {
     View.connection_line.push(line);
 	},
 
-	clearEdge: function(node){
- 	},
-
 	moveUser: function(user){
     switch(user.move_model){
       case 'RandomWayPoint':
@@ -421,6 +360,11 @@ var Node = {
         break;
       case 'MapRouteMovement':
         MoveModel.mapRouteMovement(user);
+        break;
+      case 'StationaryMovement':
+        MoveModel.stationaryMovement(user);
+      case 'CarMovement':
+        MoveModel.carMovement(user);
         break;
       default:
         MoveModel.randomWayPoint(user);

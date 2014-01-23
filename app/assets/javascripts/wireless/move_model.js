@@ -58,6 +58,75 @@ var MoveModel = {
     }
   },
 
+  carMovement: function(car){
+    var direct = car.direct,
+        coord = View.point2coordCar(car.x, car.y, car.direct),
+        road;
+
+    switch(direct){
+      case 0:
+        obj = Simulator.field[coord.y][coord.x+1];
+        if(obj && obj.type == 'road'){
+          car.x += car.speed;
+        }else{
+          if( this.isRoad( coord.y+1, coord.x ) ){
+            car.direct = 1;
+          }else if( this.isRoad( coord.y-1, coord.x )){
+            car.direct = 3;
+          }else{
+            car.direct = 2;
+          }
+        }
+        break;
+      case 1:
+        obj = Simulator.field[coord.y+1][coord.x];
+        if(obj && obj.type == 'road'){
+          car.y += car.speed;
+        }else{
+          if( this.isRoad( coord.y, coord.x+1 ) ){
+            car.direct = 0;
+          }else if( this.isRoad( coord.y, coord.x-1 )){
+            car.direct = 2;
+          }else{
+            car.direct = 3;
+          }
+        }
+        break;
+      case 2:
+        obj = Simulator.field[coord.y][coord.x-1];
+        if(obj && obj.type == 'road'){
+          car.x -= car.speed;
+        }else{
+          if( this.isRoad( coord.y+1, coord.x ) ){
+            car.direct = 1;
+          }else if( this.isRoad( coord.y-1, coord.x )){
+            car.direct = 3;
+          }else{
+            car.direct = 0;
+          }
+        }
+        break;
+      case 3:
+        obj = Simulator.field[coord.y-1][coord.x];
+        if(obj && obj.type == 'road'){
+          car.y -= car.speed;
+        }else{
+          if( this.isRoad( coord.y, coord.x+1 ) ){
+            car.direct = 0;
+          }else if( this.isRoad( coord.y, coord.x-1 )){
+            car.direct = 2;
+          }else{
+            car.direct = 1;
+          }
+        }
+        break;
+    }
+  },
+
+  stationaryMovement: function(user){
+    return 0;
+  },
+
   setRoute: function(user, to){
     var coord = View.point2coord( user.x, user.y );
 
@@ -143,6 +212,10 @@ var MoveModel = {
       user.y = point.y;
       user.route_list.shift();
     }
+  },
+
+  isRoad: function( y, x ){
+    return Simulator.field[y][x].type === 'road';
   },
 
   checkArrive: function(user){
