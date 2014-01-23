@@ -8,14 +8,18 @@ class HistoriesController < ApplicationController
 	def show
 		history = History.find(params[:id])
 		send_file = history[:dir_name] + "/send_" + history[:filename]
+		send_count_file = history[:dir_name] + "/send_count_" + history[:filename]
 		receive_file = history[:dir_name] + "/receive_" + history[:filename]
 		each_send_file = history[:dir_name] + "/each_send_" + history[:filename]
 		users_data_file = File.expand_path("#{history[:stage_type]}.dat", Rails.root + 'public/users')
 		@node_list = create_node_list( history[:node_num] )
 		@send_data = tsf2json(send_file)
+		@send_count = ltsv2json(send_count_file)
 		@receive_data = tsf2json(receive_file)
 		@each_send_data = edge2json(each_send_file)
 		@users_data = ltsv2json(users_data_file)
+		@send_count = @send_count.map{|e| {time: e["time"].to_i, value: e["value"].to_i}}
+		p @send_count
 		@view_id = params[:id]
 		@view = 'connection_network'
 	end

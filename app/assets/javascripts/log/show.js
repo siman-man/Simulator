@@ -12,6 +12,8 @@ var Show = {
 		this.node_list = [];
 		this.edge_list = [];
 		this.line_list = [];
+    this.max_value = Result.getMaxValue(DataList.edge_list);
+    console.log(this.max_value);
 
   	this.canvas.addEventListener('mousemove', this.onmousemove, false);
   	this.canvas.addEventListener('mouseup', this.onmouseup, false);
@@ -79,10 +81,10 @@ var Show = {
  		node.addEventListener('mousedown', this.onmousedown, false);
  		node.name = DataList.user_list[id].name;
 
- 		node.label = new createjs.Text(node.name, "18px Arial", "black");
+ 		node.label = new createjs.Text(node.name, "20px Arial", "black");
     node.label.textAlign = "center";
     node.label.x = node.x;
-    node.label.y = node.y;
+    node.label.y = node.y - this.r*2.5;
     node.label.textBaseline = "top";
  		
  		if( id == 0 ){
@@ -105,14 +107,38 @@ var Show = {
  				dy = source.y - target.y,
  				dist = Math.sqrt( dx*dx + dy*dy ),
  				cos = dx / dist,
- 				sin = dy / dist;
+ 				sin = dy / dist,
+        thin = (value/this.max_value)*10,
+        color = this.directEdgeColor(thin) || "black";
 
-		line.graphics.setStrokeStyle(value).beginStroke("rgba(152,251,152,1.0)");
+		line.graphics.setStrokeStyle(thin).beginStroke(color);
 		line.graphics.moveTo( source.x - this.r * cos, source.y - this.r * sin );
 		line.graphics.lineTo( target.x + this.r * cos, target.y + this.r * sin );
 		this.line_list.push(line);
 		Show.stage.addChild(line);
  	},
+
+  directEdgeColor: function(value){
+    if( value >= 9 ){
+      return "green";
+    }else if( value >= 8 ){
+      return "rgba(50, 205, 50,1)";
+    }else if( value >= 7 ){
+      return "rgba(154, 205, 50, 1)";
+    }else if( value >= 6 ){
+      return "rgba(218, 165, 32,1)";
+    }else if( value >= 5 ){
+      return "rgba(240, 230, 140,1)";
+    }else if( value >= 4 ){
+      return "rgba(255, 165, 0, 1)";
+    }else if( value >= 3){
+      return "rgba(255, 99, 71,1)";
+    }else if( value >= 2){
+      return "rgba(255, 69, 0, 1)"
+    }else{
+      return "red";
+    }
+  },
 
  	onmousedown: function(e){
  		console.log('onmousedown =>');
@@ -130,7 +156,7 @@ var Show = {
      	node.x = x;
       node.y = y;
       node.label.x = x;
-      node.label.y = y;
+      node.label.y = node.y - Show.r*2.5;
 			console.log('hello');
  		}
  	},

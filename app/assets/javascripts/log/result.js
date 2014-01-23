@@ -98,7 +98,6 @@ var Result = {
     .attr("fill", color(0))
     .attr("stroke", color(0));
 
-
     //Labels
     var labels = vis.selectAll("g.bar")
     .append("svg:text")
@@ -153,20 +152,13 @@ var Result = {
     .attr("stroke", "black");
   },
 
-  vertical: function(dataset){
-  	var dataset = dataset || [{ label:"1990", value:16}, 
-  	{ label:"1991", value:56}, 
-  	{ label:"1992", value:7},
-  	{ label:"1993", value:77},
-  	{ label:"1994", value:22},
-  	{ label:"1995", value:16},
-  	];
-
+  vertical: function(dataset, opt){
   	var margin = {top: 20, right: 20, bottom: 40, left: 40},
-  	width = 400 - margin.left - margin.right,
-  	height = 400 - margin.top - margin.bottom;
+  	    width = 800 - margin.left - margin.right,
+  	    height = 500 - margin.top - margin.bottom;
 
   	var formatPercent = d3.format("");
+    var max_value = this.getMaxValue(dataset);
 
   	var x = d3.scale.ordinal()
   	.rangeRoundBands([0, width], .1)
@@ -174,28 +166,21 @@ var Result = {
   		return d.label;
   	}));
 
-    /*
-  	var y = d3.scale.linear()
-  	.domain([0, d3.max(dataset, function(d){ return d.value; })])
-  	.nice()
-  	.range([height, 0]);
-    */
     var y = d3.scale.linear()
-    .domain([0, d3.max(dataset, function(d){ return 30; })])
+    .domain([0, d3.max(dataset, function(d){ return max_value * 1.1 | 0; })])
     .nice()
     .range([height, 0]);
 
   	var xAxis = d3.svg.axis()
   	.scale(x)
   	.orient("bottom")
-  	.tickFormat(formatPercent);
 
   	var yAxis = d3.svg.axis()
   	.scale(y)
   	.orient("left")
   	.tickFormat(formatPercent);
 
-  	var svg = d3.select("body").append("svg")
+  	var svg = d3.select("#show_result").append("svg")
   	.attr("width", width + margin.left + margin.right)
   	.attr("height", height + margin.top + margin.bottom)
   	.append("g")
@@ -207,23 +192,96 @@ var Result = {
         .call(xAxis)
         .append("text")
         .attr("y", 30)
-        .attr("x", width / 2)
+        .attr("x", width * 0.6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Node number")
+        .text(opt.xlabel)
 
       svg.append("g")
       .attr("class", "y axis")
       .call(yAxis)
+      .append("text")
+        .text(opt.ylabel)
 
     svg.selectAll(".bar")
         .data(dataset)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d, i){ return x(d.label) })
+        .attr("x", function(d){ return x(d.label) })
         .attr("width", x.rangeBand())
         .attr("y", function(d){ return y(d.value) })
         .attr("height", function(d){ return height - y(d.value) })
         .style("fill", "teal") 
+  },
+
+  lineChart: function(dataset, opt){
+    console.log("line chart=>");
+    //dataset = [{ time: 0, value: 3},{ time: 1, value: 2},{ time:2, value: 10}];
+    var margin = {top: 20, right: 20, bottom: 50, left: 50},
+        width = 800 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    var max_value = this.getMaxValue(dataset);
+
+    var x = d3.scale.linear()
+    .domain([0, d3.max(dataset, function(d) { return d.time; })])
+    .range([0, width]);
+
+    var y = d3.scale.linear()
+    .domain([0, d3.max(dataset, function(d){ return d.value+5 })])
+    .nice()
+    .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+    var line = d3.svg.line()
+    .x(function(d) { return x(d.time); })
+    .y(function(d) { return y(d.value); });
+
+    var svg = d3.select("#show_result").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("y", 30)
+      .attr("x", width * 0.5)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text(opt.xlabel);
+
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text(opt.ylabel);
+
+    svg.append("path")
+      .attr("class", "line")
+      .attr("d", line(dataset));
+  },
+
+  getMaxValue: function(dataset){
+    var i, data, max_value = 0;
+    for( i in dataset ){
+      data = dataset[i];
+      max_value = Math.max( max_value, data.value );
+    }
+    return max_value;
   },
 }

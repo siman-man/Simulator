@@ -1,0 +1,31 @@
+<style>
+
+body {
+  font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+</style>
+
+<script>
+	var opt = {};
+	opt.ylabel = "送信数";
+	opt.xlabel = "Time"
+	Result.lineChart(DataList.send_count, opt);
+</script>

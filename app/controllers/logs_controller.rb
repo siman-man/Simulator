@@ -63,7 +63,10 @@ class LogsController < ApplicationController
 														total_send_message_num: config_data[:total_send_message_num], 
 														dir_name: config_data[:dir_name], filename: config_data[:filename] )
 
-			result = collect_data(file_key)
+			users_data_file = File.expand_path("#{config[:stage_type]}.dat", Rails.root + 'public/users')
+			users_data = user2json(users_data_file)
+			
+			result = collect_data(file_key, users_data)
 			result = result.merge(config_data)
 			save_data( result, config_data[:dir_name], config_data[:filename] )
 			if record.save!
@@ -79,20 +82,31 @@ class LogsController < ApplicationController
 			result[:each_receive_file] = dir_name + "/each_receive_#{file_name}"
 
 			save_send_data( result[:transmit], result[:send_file] )
+			save_send_count( result[:send_count], result[:finish_time], dir_name + "/send_count_#{file_name}" )
 			save_receive_data( result[:receive], result[:receive_file] )
 			save_each_send_data( result[:each_transmit], result[:each_send_file] )
 		end
 
-		def save_send_data( send_data, file_name )
-			File.open( file_name, 'w' ) do |file|
+		def save_send_count( send_count, finish_time, filename )
+			count = 0
+			File.open( filename, "w") do |file|
+				(0..finish_time).each do |time|
+					count += send_count[time.to_s]
+					file.write("time:#{time}\tvalue:#{count}\n")
+				end
+			end
+		end
+
+		def save_send_data( send_data, filename )
+			File.open( filename, 'w' ) do |file|
 				send_data.each do |data|
 					file.write("#{data[:label]}\t#{data[:value]}\n")
 				end
 			end
 		end
 
-		def save_receive_data( receive_data, file_name )
-			File.open( file_name, 'w' ) do |file|
+		def save_receive_data( receive_data, filename )
+			File.open( filename, 'w' ) do |file|
 				receive_data.each do |data|
 					file.write("#{data[:label]}\t#{data[:value]}\n")
 				end

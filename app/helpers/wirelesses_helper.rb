@@ -15,7 +15,6 @@ module WirelessesHelper
 
   def create_node_data(user_data, filename)
     puts "create node data"
-    p user_data
     File.open("#{Rails.root}/public/users/#{filename}.dat", "w") do |file|
       user_data.each do |data|
         file.write(hash2tlsv(data)+"\n")

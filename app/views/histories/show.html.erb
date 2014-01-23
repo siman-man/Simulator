@@ -22,7 +22,9 @@
 DataList.node_list = <%= @node_list.to_json.html_safe %>
 DataList.edge_list = <%= @each_send_data.to_json.html_safe %>
 DataList.user_list = <%= @users_data.to_json.html_safe %>
-DataList.recieve_data = <%= @recieve_data.to_json.html_safe %>
+DataList.receive_data = <%= @receive_data.to_json.html_safe %>
+DataList.send_data = <%= @send_data.to_json.html_safe %>
+DataList.send_count = <%= @send_count.to_json.html_safe %>
 DataList.view_id = <%= @view_id %>
 console.log(DataList.view_id);
 </script>
@@ -32,9 +34,10 @@ console.log(DataList.view_id);
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
       <div class="list-group">
         <%= link_to("一覧に戻る", history_path, class: "list-group-item" ) %>
-        <a href="#" id='connection_network' class="list-group-item">グラフ</a>
-        <a href="#" class="list-group-item">送信数</a>
-        <a href="#" id='recieve_num', class="list-group-item">受信数</a>
+        <a href="#" id='connection_network' class="list-group-item">ネットワーク</a>
+        <a href="#" id='send_num' class="list-group-item">送信数</a>
+        <a href="#" id='receive_num', class="list-group-item">受信数</a>
+        <a href="#" id='send_count', class="list-group-item">通信数</a>
       </div>
     </div><!--/span-->
     <div id="show_result" class="col-xs-12 col-sm-9">
