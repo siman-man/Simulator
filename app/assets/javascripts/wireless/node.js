@@ -157,6 +157,7 @@ var Node = {
     agent.eid = opt.eid || this.eid;
     this.eid++;
     agent.name = opt.name || "node" + (agent.eid-1);
+    agent.contact_list = {};
   },
 
 	createUser: function( x, y, opt ){
@@ -412,9 +413,6 @@ var Node = {
 
 	moveUser: function(user){
     switch(user.move_model){
-      case 'worker':
-        MoveModel.worker(user);
-        break;
       case 'RandomWayPoint':
         MoveModel.randomWayPoint(user);
         break;

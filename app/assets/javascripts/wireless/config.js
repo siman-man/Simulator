@@ -38,7 +38,6 @@ var Config = {
 
 		console.log( data );
 		return data;
-		//Config.send( data );
 	},
 
 	send: function( data ){

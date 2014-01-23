@@ -24,7 +24,7 @@ WebSimulator.define do
 	end
 	create(:car) do |t| 
 		t.pos( x: 10, y: 7 )
-		t.add_data( eid: 2, name: 'node1', speed: 5, move_model: 'undefined' )
+		t.add_data( eid: 2, name: 'car1', speed: 5, move_model: 'undefined' )
 
 	end
 	create(:user) do |t| 

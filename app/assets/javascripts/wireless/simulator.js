@@ -88,7 +88,6 @@ var Simulator = {
     Street.clear();
     Home.clear();
     Wall.clear();
-    Office.clear();
     Node.clear();
     View.clear();
     
@@ -206,9 +205,6 @@ var Simulator = {
             Node.create( x, y, { type: 'car' });
           }
           break;
-        case 'office':
-          Office.create( x, y );
-          break;
         case 'lake':
           Lake.create( x, y );
           break;
@@ -237,9 +233,6 @@ var Simulator = {
           break;
         case 'wall':
           Wall.remove( draw_object.obj );
-          break;
-        case 'office':
-          Office.remove( draw_object.obj );
           break;
         case 'lake':
           Lake.remove( draw_object.obj );

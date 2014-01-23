@@ -9,7 +9,6 @@ var Lake = {
 		lake.x = x * gridSize; 
 		lake.y = y * gridSize;
 
-    //lake.graphics.beginFill('rgba(46,139,87,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
     lake.graphics.beginFill('rgba(128,255,212,0.98)').drawRect(0, 0, View.gridSize, View.gridSize);
 
 		lake.id = this.lake_id;
@@ -33,7 +32,7 @@ var Lake = {
 		this.lake_list = {};
 	},
 
-	remove: function( lake ){
+	remove: function(lake){
 		var coord = View.point2coord( lake.x, lake.y );
 		console.log('lake remove =>', coord.y, coord.x );
 

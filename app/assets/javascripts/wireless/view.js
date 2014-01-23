@@ -153,16 +153,6 @@ var View = {
 		View.drawConnectionLine();
 	},
 
-	movePacket: function(packet, speed){
-		var dest = packet.dest,
-				dx = (dest.x) - packet.x,
-				dy = (dest.y) - packet.y,
-				radian = Math.atan2(dy, dx);
-
-		packet.x += Math.cos(radian) * speed;
-		packet.y += Math.sin(radian) * speed;
-	},
-
 	drawConnectionLine: function(){
 		var i, line;
 		for( i in View.connection_line ){
@@ -177,7 +167,6 @@ var View = {
 			line = View.connection_line[i];
 			Simulator.map.removeChild(line);
 		}
-
 		View.connection_line = [];
 	},
 

@@ -13,9 +13,6 @@ var Init = {
       Street.init();
     }
 
-    var route = [{ y: 5, x: 5 }, { y: 5, x: 6 }];
-  //View.route_view(route);
-
     Simulator.canvas.addEventListener('mousedown', Simulator.onmousedown, false);
     Simulator.canvas.addEventListener('mousemove', Simulator.onmousemove, false);
     Simulator.canvas.addEventListener('mouseup', Simulator.onmouseup, false);
