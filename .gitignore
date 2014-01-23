@@ -30,4 +30,6 @@ public/uploads
 db/*
 db/schema.rb
 public/assets/*
+public/stages/*
+public/users/*
 reports/pdfs/*
