@@ -84,6 +84,8 @@ class SimulatesController < ApplicationController
       @obj_list = Simulator.new.instance_eval { eval(str); @list }
     end
 
+    @obj_list ||= []
+
     respond_to do |format|
       format.html { render action: 'index' }
       format.js { render 'index' }
@@ -125,6 +127,8 @@ class SimulatesController < ApplicationController
 
       @obj_list = Simulator.new.instance_eval { eval(str); @list }
     end
+
+    @obj_list ||= []
 
     respond_to do |format|
       format.js { render 'index' }
