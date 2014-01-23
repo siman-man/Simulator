@@ -15,7 +15,7 @@ var Node = {
         node.speed = gridSize / node.speed;
       }
 
-      if( node.ob_type === 'user' && node.path !== undefined ){
+      if( node.type === 'user' && node.path !== undefined ){
         node.close_path = this.isCloseRoute( node.path );
       }
       for( dest_eid in this.node_list ){
@@ -68,22 +68,22 @@ var Node = {
     }
   },
 
-	create: function( x, y, type, opt ){
-		switch(type){
+	create: function( x, y, opt ){
+		switch(opt.type){
 			case 'user':
 				this.createUser( x, y, opt );
 				break;
 			case 'server':
-				this.createNode( x, y, type );
+				this.createNode( x, y, opt );
         break;
 			case 'start':
-				this.createNode( x, y, type );
+				this.createNode( x, y, opt );
 				break;
 			case 'end':
-				this.createNode( x, y, type );
+				this.createNode( x, y, opt );
 				break;
       case 'car':
-        this.createCar( x, y, type );
+        this.createCar( x, y, opt );
         break;
 		};
 	},
@@ -102,22 +102,22 @@ var Node = {
     return false;
   },
 
-  createCar: function( x, y, type ){
+  createCar: function( x, y, opt ){
     console.log('create car =>');
     var car = new createjs.Shape(),
         key;
     car.graphics.beginFill('rgba(0,59,255,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
-    car.ob_type = 'car';
-    car.type = type || 'normal';
-    car.eid = this.eid;
+    car.type = 'car';
+    car.eid = opt.eid || this.eid;
     this.eid++;
     car.contact_list = {};
     car.circuit = [];
     car.route_list = [];
     car.path = {};
+    car.name = opt.name || "node" + (car.eid-1);
     car.delivery_predictability = {};
-    car.speed = 5;
+    car.speed = opt.speed || 5;
     car.direct = 0;
     car.buffer_size = 1000;
     
@@ -151,13 +151,20 @@ var Node = {
     this.node_list[car.eid] = car;
   },
 
+  createAgent: function( x, y, opt ){
+    var agent = new createjs.Shape();
+    user.graphics.beginFill(opt.color).drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
+    agent.eid = opt.eid || this.eid;
+    this.eid++;
+    agent.name = opt.name || "node" + (agent.eid-1);
+  },
+
 	createUser: function( x, y, opt ){
     var user = new createjs.Shape(),
     		key;
     user.graphics.beginFill('rgba(0,0,0,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
     
-    user.ob_type = 'user';
-    user.type = 'normal';
+    user.type = 'user';
     user.eid = opt.eid || this.eid;
     this.eid++;
     user.name = opt.name || "node" + (user.eid-1);
@@ -215,7 +222,7 @@ var Node = {
     this.node_list[user.eid] = user;
 	},
 
-	createNode: function( x, y, type ){
+	createNode: function( x, y, opt ){
     var node = new createjs.Shape(),
         key;
 
@@ -229,7 +236,7 @@ var Node = {
     node.delivery_predictability = {};
     node.routing_protocol = this.direct_routing_protocol(node);
 
-    switch(type){
+    switch(opt.type){
       case 'start':
         node.name = "start";
       	node.graphics.beginFill('rgba(218,0,10,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
@@ -243,7 +250,7 @@ var Node = {
       	node.graphics.beginFill('rgba(255,0,0,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
     }
     
-    node.ob_type = type || 'server';
+    node.type = opt.type || 'server';
     node.eid = this.eid;
     node.buffer_size = 1000;
     node.move_model = "StationaryMovement";
@@ -256,7 +263,7 @@ var Node = {
 
     node.drag = false;
 
-    var message_num = (type === 'start')? $("#message_num").val()|0 : 0;
+    var message_num = (opt.type === 'start')? $("#message_num").val()|0 : 0;
     node.label = new createjs.Text(message_num, "14px Arial", "white");
     node.label.textAlign = "center";
     node.label.y = node.y + gridSize/5|0;
@@ -272,7 +279,7 @@ var Node = {
     this.node_list[node.eid] = node;
     key = Simulator.key_map[y][x];
     Simulator.node_map[key][node.eid] = { x: x, y: y, obj: node, type: 'server' };
-    Simulator.field[y][x] = { x: x, y: y, obj: node, type: node.ob_type, cost: 1, pf: 1 };
+    Simulator.field[y][x] = { x: x, y: y, obj: node, type: node.type, cost: 1, pf: 1 };
     Propagation.calc(x, y);
     //View.update();
 
@@ -287,7 +294,7 @@ var Node = {
 		for( eid in this.node_list ){
 			node = this.node_list[eid];
 
-			if( node.ob_type === 'user' ){
+			if( node.type === 'user' ){
 				coord = View.point2coord( node.x, node.y );
 				key = Simulator.key_map[coord.y][coord.x];
 				delete Simulator.node_map[key][node.eid];
@@ -295,7 +302,7 @@ var Node = {
 				coord = View.point2coord( node.x, node.y );
 				key = Simulator.key_map[coord.y][coord.x];
       	Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: 'user' };
-			}else if( node.ob_type === 'car'){
+			}else if( node.type === 'car'){
         coord = View.point2coord( node.x, node.y );
         key = Simulator.key_map[coord.y][coord.x];
         delete Simulator.node_map[key][node.eid];
@@ -385,7 +392,7 @@ var Node = {
   },
 
   isUser: function( type ){
-    if( type === 'user' ) return true;
+    if( type === 'user' || type === 'car' ) return true;
     return false;
   },
 
@@ -425,7 +432,7 @@ var Node = {
 
   changeSpeed: function( eid, speed ){
     var node = this.node_list[eid];
-    if( node === undefined || this.isServer( node.ob_type )) return;
+    if( node === undefined || this.isServer( node.type )) return;
     node.speed = speed;
   },
 
@@ -441,6 +448,7 @@ var Node = {
     		key = Simulator.key_map[coord.y][coord.x];
 
     Simulator.map.removeChild(node);
+    Simulator.map.removeChild(node.label);
     delete this.node_list[node.eid];
     delete Simulator.node_map[key][node.eid];
     Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };

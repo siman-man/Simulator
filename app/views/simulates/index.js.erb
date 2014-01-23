@@ -10,19 +10,19 @@ console.log('create map =>');
 	y = <%= obj[:y] %>
 	<% case obj[:type] %>
 	<% when :server %>
-		Node.create(x, y, 'server');
+		Node.create(x, y, opt );
 	<% when :start %>
-		Node.create( x, y, 'start' );
+		Node.create( x, y, opt );
 	<% when :end %>
-		Node.create( x, y, 'end' );
+		Node.create( x, y, opt );
 	<% when :user %>
-		Node.create(x, y, 'user', opt );
+		Node.create(x, y, opt );
 	<% when :wall %>
 		Wall.create( x, y );
 	<% when :road %>
 		Street.create(x, y);
 	<% when :car %>
-		Node.create(x, y, 'car', { type: 'normal' } );
+		Node.create(x, y, opt );
 	<% else %>	
 	<% end %>
 <% end %>

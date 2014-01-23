@@ -1,7 +1,6 @@
 var Car = {
 	car_id: 0,
 	car_list: {},
-	speed: 5,
 
 	create: function(x, y){
 		console.log('car created');
@@ -35,16 +34,6 @@ var Car = {
 		}
 	},
 
-	imageUpdate: function(){
-		var id, car;
-
-		for( id in this.car_list ){
-			car = this.car_list[id];
-			Simulator.map.removeChild(car);
-			Simulator.map.addChild(car);
-		}
-	},
-
 	moveCar: function( car, dy, dx ){
 		car.y += dy;
 		car.x += dx;
@@ -63,7 +52,7 @@ var Car = {
 			case 0:
 				obj = Simulator.field[coord.y][coord.x+1];
 				if(obj && obj.type == 'road'){
-					car.x += this.speed;
+					car.x += car.speed;
 				}else{
 					if( this.isRoad( coord.y+1, coord.x ) ){
 						car.direct = 1;
@@ -77,7 +66,7 @@ var Car = {
 			case 1:
 				obj = Simulator.field[coord.y+1][coord.x];
 				if(obj && obj.type == 'road'){
-					car.y += this.speed;
+					car.y += car.speed;
 				}else{
 					if( this.isRoad( coord.y, coord.x+1 ) ){
 						car.direct = 0;
@@ -91,7 +80,7 @@ var Car = {
 			case 2:
 				obj = Simulator.field[coord.y][coord.x-1];
 				if(obj && obj.type == 'road'){
-					car.x -= this.speed;
+					car.x -= car.speed;
 				}else{
 					if( this.isRoad( coord.y+1, coord.x ) ){
 						car.direct = 1;
@@ -105,7 +94,7 @@ var Car = {
 			case 3:
 				obj = Simulator.field[coord.y-1][coord.x];
 				if(obj && obj.type == 'road'){
-					car.y -= this.speed;
+					car.y -= car.speed;
 				}else{
 					if( this.isRoad( coord.y, coord.x+1 ) ){
 						car.direct = 0;

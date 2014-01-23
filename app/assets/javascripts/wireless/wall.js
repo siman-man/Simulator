@@ -12,7 +12,7 @@ var Wall = {
 
 		wall.id = this.wall_id;
 		this.wall_id++;
-		wall.ob_type = 'wall';
+		wall.type = 'wall';
 
 		Simulator.map.addChild(wall);
 		Simulator.field[y][x] = { x: x, y: y, obj: wall, type: 'wall', cost: 100, pf: 3 };

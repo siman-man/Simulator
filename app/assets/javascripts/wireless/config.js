@@ -3,7 +3,7 @@ var Config = {
 		var y, x, key,
 			 	node_list,
 			 	eid, data = [],
-			 	ob_type,
+			 	type,
 			 	node,
 			 	coord,
 			 	obj;
@@ -11,10 +11,10 @@ var Config = {
 		for( y = 0; y < View.height; y++ ){
 			for( x = 0; x < View.width; x++ ){
 				obj = Simulator.field[y][x];
-				ob_type = obj.type;
-				if( ob_type !== 'normal' && ob_type !== 'start' && ob_type !== 'end' && ob_type !== 'server'){
+				type = obj.type;
+				if( type !== 'normal' && !Node.isServer(type) && !Node.isUser(type) ){
 					console.log(Simulator.field[y][x]);
-					data.push( this.create_data( ob_type, { y: y, x: x }))
+					data.push( this.create_data( type, { y: y, x: x }))
 				}
 			}
 		}
@@ -22,8 +22,8 @@ var Config = {
 		for( eid in Node.node_list ){
 			node = Node.node_list[eid];
 			coord = View.point2coord( node.x, node.y );
-			console.log(Node.node_list[eid].ob_type);
-			data.push( this.create_data( node.ob_type, { 
+			console.log(Node.node_list[eid].type);
+			data.push( this.create_data( node.type, { 
 				y: coord.y, 
 				x: coord.x, 
 				eid: node.eid, 

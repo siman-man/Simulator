@@ -1,4 +1,4 @@
-var gridSize = 10;
+var gridSize = 25;
 
 var View = {
 	packet_color: "yellow",

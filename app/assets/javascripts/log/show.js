@@ -77,7 +77,7 @@ var Show = {
  		var node = new createjs.Shape();
  		node.x = x;
  		node.y = y;
- 		node.ob_type = 'node';
+ 		node.type = 'node';
  		node.addEventListener('mousedown', this.onmousedown, false);
  		node.name = DataList.user_list[id].name;
 

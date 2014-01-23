@@ -28,8 +28,8 @@ var Init = {
     if( Simulator.stage_change === undefined ){
       console.log('non edit mode =>');
       if( Simulator.edit_mode ){
-        Node.create( 10, 10, 'start' );
-        Node.create( 20, 10, 'end' );
+        Node.create( 10, 10, { type: 'start' });
+        Node.create( 20, 10, { type: 'end' });
       }else{
         console.log($("#stage_type option:selected").text());
         $.ajax({

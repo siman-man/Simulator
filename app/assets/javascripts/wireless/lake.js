@@ -14,7 +14,7 @@ var Lake = {
 
 		lake.id = this.lake_id;
 		this.lake_id++;
-		lake.ob_type = 'lake';
+		lake.type = 'lake';
 
 		Simulator.map.addChild(lake);
 		Simulator.field[y][x] = { x: x, y: y, obj: lake, type: 'lake', cost: 1000, pf: 3 };

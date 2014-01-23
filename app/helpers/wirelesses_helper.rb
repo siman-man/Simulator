@@ -41,7 +41,7 @@ module WirelessesHelper
         if info["type"] == "stage_data"
           info["x"] = 0
           info["y"] = 0
-        elsif ["user", "start", "end"].include?(info["type"])
+        elsif ["user", "car", "server","start","end"].include?(info["type"])
           user_data << { eid: info["eid"], name: info["name"], speed: info["speed"] }
           path = ( info["type"] == "user")? create_path(info["path"]) : ""
           file.write("\tcreate(:#{info["type"]}) do |t| 

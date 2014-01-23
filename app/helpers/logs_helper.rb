@@ -47,6 +47,7 @@ module LogsHelper
     result = Hash.new
 
     result[:total_emit] = @total_emit
+    puts "transmit data => #{@transmit_num}"
     result[:transmit] = @transmit_num.map{|key, value| { label: @user_list[key]["name"], value: value }}
     result[:receive] = @receive_num.map{|key, value| { label: @user_list[key]["name"], value: value }}
     result[:finish_time] = @finish_time
