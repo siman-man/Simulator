@@ -180,7 +180,7 @@ var Node = {
     }
     user.delivery_predictability = {};
     user.speed = opt.speed || 10;
-    user.move_model = "RandomWayPoint";
+    user.move_model = opt.move_model || "RandomWayPoint";
     //user.move_model = "RandomWalk";
     //user.move_model = "traceMoveModel";
 
@@ -246,6 +246,7 @@ var Node = {
     node.ob_type = type || 'server';
     node.eid = this.eid;
     node.buffer_size = 1000;
+    node.move_model = "StationaryMovement";
     //node.path = {};
    	this.eid++;
 

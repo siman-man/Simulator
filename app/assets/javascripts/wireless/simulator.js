@@ -274,8 +274,10 @@ var Simulator = {
         }
 
         if( obj_data !== undefined ){
-          if( Object.keys(obj_data.obj.path).length === 0 ){
+          console.log("obj path", obj_data.obj.path.length);
+          if( obj_data.obj.path.length === 0 ){
             View.route_top = { y: coord.y, x: coord.x };
+            console.log("mouse down: route top =>", View.route_top);
           }
           Panel.updateNodeData( obj_data.obj );
         }
@@ -317,6 +319,7 @@ var Simulator = {
           }
         }else if( this.create_route_mode ){
           if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
+            console.log("paint route=>");
             View.paint_route( coord.y, coord.x );
           }else if( operation_type === 0 ){
             if( View.selected_cell ){

@@ -35,11 +35,19 @@ var View = {
 
 	check_connect: function( y, x ){
 		var ny, nx, i, cnt = 0;
-		if( this.route_id === 0 && Simulator.isEmpty( y, x )) return true;
+		console.log(View.route_id);
+		console.log(this.route_top);
+		if( View.route_id === 0 && Simulator.isEmpty( y, x )){
+			console.log("first check clear =>");
+			return true;
+		}
 		for( i = 0; i < 4; i++ ){
 			ny = y + this.dy[i];
 			nx = x + this.dx[i];
-			if( this.route_top.y === ny && this.route_top.x === nx ) return true;
+			if( this.route_top.y === ny && this.route_top.x === nx ){
+				console.log("second check clear =>");
+				return true;
+			}
 		}
 		return false;
 	},
@@ -60,9 +68,10 @@ var View = {
       Simulator.map.addChild(shape.label);
       this.route_list[this.route_id] = { y: coord.y, x: coord.x, obj: shape, id: i };
  	    this.route_grid[coord.y][coord.x] = { path_id: this.route_id, y: coord.y, x: coord.x, obj: shape, exist: true };
-    	this.route_id++;
+    	View.route_id++;
     	this.route_top = { y: coord.y, x: coord.x };
 		}
+		console.log("route top =>",this.route_top)
 	},
 
 	paint_route: function( y, x ){
@@ -80,13 +89,14 @@ var View = {
     this.route_list[this.route_id] = { y: y, x: x, obj: shape };
     Simulator.route_user.path[this.route_id] = { y: y, x: x, wait: 0 };
     Simulator.route_user.path_length = Object.keys(Simulator.route_user.path).length;
-    this.route_id++;
-    this.route_top = { y: y, x: x };
+    View.route_id++;
+    View.route_top = { y: y, x: x };
+    console.log("paint_route: route top =>", View.route_top);
 	},
 
 	delete_route: function(){
-		this.route_id--;
-		var cell = this.route_list[this.route_id];
+		View.route_id--;
+		var cell = this.route_list[View.route_id];
 		Simulator.map.removeChild(cell.obj);
 		Simulator.map.removeChild(cell.obj.label);
 		delete Simulator.route_user.path[this.route_id]

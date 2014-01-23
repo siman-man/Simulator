@@ -137,7 +137,7 @@ var Panel = {
 		this.select = $( "#minbeds" );
    	this.slider = $( "<div id='slider'></div>" ).insertAfter( this.select ).slider({
       min: 1,
-      max: 10,
+      max: 15,
       range: "min",
       value: this.select[0].selectedIndex + 1,
       slide: function( event, ui ) {
@@ -165,6 +165,7 @@ var Panel = {
   		$("#create_route").attr("checked",false);
   		$("#user_eid").val(obj.eid);
   		$("#user_name").val(obj.name);
+  		$("#move_model").val(Panel.model2value(obj.move_model));
   		Panel.select[0].selectedIndex = Simulator.route_user.speed-1;
   		Panel.slider.slider( "value", Simulator.route_user.speed );
 		}
@@ -174,5 +175,17 @@ var Panel = {
   	if( eid <= 1 ) return;
   	var user = Node.node_list[eid];
   	Node.direct_move_model( user, type );
+  },
+
+  model2value: function( move_model ){
+  	console.log(move_model);
+  	switch(move_model){
+  		case 'StationaryMovement':
+  			return 0;
+  			break;
+  		case 'MapRouteMovement':
+  			return 1;
+  			break;
+  	}
   },
 };

@@ -154,7 +154,7 @@ var Result = {
 
   vertical: function(dataset, opt){
   	var margin = {top: 20, right: 20, bottom: 40, left: 40},
-  	    width = 800 - margin.left - margin.right,
+  	    width = 600 - margin.left - margin.right,
   	    height = 500 - margin.top - margin.bottom;
 
   	var formatPercent = d3.format("");

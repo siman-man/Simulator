@@ -49,8 +49,7 @@ SprayAndWait.prototype = {
 			}else{
 				message.size--;
 				if( message.size === 0 ){
-					dest.strage[message.id] = message.data;
-					dest.strage[message.id].ftoken = message.ftoken;
+					dest.strage[message.id] = message;
 					this.node.strage[message.id].ftoken = message.ftoken;
 					dest.label.text = Object.keys(dest.strage).length;
 					this.node.buffer.shift();
@@ -67,7 +66,6 @@ SprayAndWait.prototype = {
 	},
 
 	check: function( dest, message ){
-
 		if( this.node.contact_list[dest.eid].current === 'close' ) return true;
 		if( dest.strage[message.id] !== undefined ) return true;
 
