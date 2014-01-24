@@ -13,7 +13,6 @@ module LogsHelper
 
   def collect_data( key, user_list )
     init
-    p user_list
     @user_list = user_list
 
     result = []
@@ -39,8 +38,8 @@ module LogsHelper
   end
 
   def data_order
-    @transmit_num = Hash[@transmit_num.sort_by{|k,v| k}]
-    @receive_num = Hash[@receive_num.sort_by{|k,v| k}]
+    @transmit_num = Hash[@transmit_num.sort_by{|key,value| key.to_s.delete("node").to_i}]
+    @receive_num = Hash[@receive_num.sort_by{|key,value| key.to_s.delete("node").to_i}]
   end
 
   def collect_result

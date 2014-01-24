@@ -91,8 +91,10 @@ class LogsController < ApplicationController
 			count = 0
 			File.open( filename, "w") do |file|
 				(0..finish_time).each do |time|
-					count += send_count[time.to_s]
-					file.write("time:#{time}\tvalue:#{count}\n")
+					if send_count[time.to_s] > 0
+						count += send_count[time.to_s]
+						file.write("time:#{time}\tvalue:#{count}\n")
+					end
 				end
 			end
 		end

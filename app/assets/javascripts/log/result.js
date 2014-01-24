@@ -21,7 +21,7 @@ var Result = {
     bottom_margin = 0;
 
 
-    var w = 500,                        //width
+    var w = 800,                        //width
         h = 500,                        //height
         color = function(id) { return '#00b3dc' };
 
@@ -154,7 +154,7 @@ var Result = {
 
   vertical: function(dataset, opt){
   	var margin = {top: 20, right: 20, bottom: 40, left: 40},
-  	    width = 600 - margin.left - margin.right,
+  	    width = dataset.length*50 - margin.left - margin.right,
   	    height = 500 - margin.top - margin.bottom;
 
   	var formatPercent = d3.format("");
@@ -163,7 +163,7 @@ var Result = {
   	var x = d3.scale.ordinal()
   	.rangeRoundBands([0, width], .1)
   	.domain(dataset.map(function(d){
-  		return d.label;
+  		return d.label.replace("node","N");
   	}));
 
     var y = d3.scale.linear()
@@ -207,7 +207,7 @@ var Result = {
         .data(dataset)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d){ return x(d.label) })
+        .attr("x", function(d){ return x(d.label.replace("node","N")) })
         .attr("width", x.rangeBand())
         .attr("y", function(d){ return y(d.value) })
         .attr("height", function(d){ return height - y(d.value) })
@@ -217,7 +217,7 @@ var Result = {
   lineChart: function(dataset, opt){
     console.log("line chart=>");
     //dataset = [{ time: 0, value: 3},{ time: 1, value: 2},{ time:2, value: 10}];
-    var margin = {top: 20, right: 20, bottom: 50, left: 50},
+    var margin = {top: 20, right: 20, bottom: 50, left: 70},
         width = 800 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 

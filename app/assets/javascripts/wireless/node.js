@@ -171,6 +171,7 @@ var Node = {
   },
 
 	createUser: function( x, y, opt ){
+    opt.move_model = "RandomWayPoint";
     opt.color = 'rgba(0,0,0,1.0)';
     opt.speed = 10;
     var user = this.createAgent( x, y, opt),

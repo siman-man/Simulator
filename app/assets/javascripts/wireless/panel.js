@@ -23,9 +23,7 @@ var Panel = {
 			}
 		});
 
-		$("#move_model").change(function(){
-			Panel.updateNodeMoveModel( $("#user_eid").val()|0, $("#move_model").val()|0);
-		});
+		this.moveModelChanged();
 
 		$("#wait_time").change(function(){
 			if( View.selected_cell !== undefined ){
@@ -56,35 +54,15 @@ var Panel = {
 			Node.node_list[0].label.text = $("#message_num").val()|0;
 		});
 
-		$("#user_name").change(function(){
-			var eid = $("#user_eid").val(),
-					name = $("#user_name").val();
-			console.log(Node.node_list[eid]);
-			if( name.length > 0 ){
-				Node.node_list[eid].name = name;
-			}
-		}); 
+		this.userNameChanged();
 		
-		$("#stage_type").change(function(){		
-			console.log($("#stage_type option:selected").text());
-			$.ajax({
-				type: "post",
-  			url: "/stage_init",
- 				data: {
-    			stage_type: $("#stage_type option:selected").text()
-  			},
-  		});
-		});
+		this.stageTypeChanged();
 
 		$("#stage_write").click(function(){
 			console.log('hello');
 			$("#node_num").val(Object.keys(Node.node_list).length);
 			$("#field_data").val(Config.output())
 			//Config.output();
-		});
-
-		$('.option_label').click(function() {
-			$(this).prev().click();
 		});
 
 		$('#button2').attr('disabled', 'disabled');
@@ -163,14 +141,44 @@ var Panel = {
 		}
   },
 
+  moveModelChanged: function(){
+		$("#move_model").change(function(){
+			Panel.updateNodeMoveModel( $("#user_eid").val()|0, $("#move_model").val()|0);
+		});
+  },
+
+  stageTypeChanged: function(){
+		$("#stage_type").change(function(){		
+			console.log($("#stage_type option:selected").text());
+			$.ajax({
+				type: "post",
+  			url: "/stage_init",
+ 				data: {
+    			stage_type: $("#stage_type option:selected").text()
+  			},
+  		});
+		});
+  },
+
   updateNodeMoveModel: function( eid, type ){
   	if( eid <= 1 ) return;
   	var user = Node.node_list[eid];
   	Node.direct_move_model( user, type );
   },
 
+  userNameChanged: function(){
+		$("#user_name").change(function(){
+			var eid = $("#user_eid").val(),
+					name = $("#user_name").val();
+			console.log(Node.node_list[eid]);
+			if( name.length > 0 ){
+				Node.node_list[eid].name = name;
+			}
+		}); 
+  },
+
   model2value: function( move_model ){
-  	console.log(move_model);
+  	console.log("move model => ", move_model);
   	switch(move_model){
   		case 'RandomWayPoint':
   			return 0;
