@@ -1,5 +1,7 @@
-eid:0 name:start speed:10
-eid:1 name:end speed:10
-eid:2 name:node1 speed:10
-eid:3 name:node2 speed:10
-eid:4 name:node3 speed:10
+eid:0	name:start	speed:10
+eid:1	name:end	speed:10
+eid:2	name:node1	speed:10
+eid:3	name:node2	speed:10
+eid:4	name:runner	speed:5
+eid:5	name:node4	speed:10
+eid:6	name:node5	speed:10

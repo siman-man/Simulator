@@ -7,6 +7,8 @@ module LogsHelper
     @transmit_num = Hash.new(0)
     @receive_num = Hash.new(0)
     @send_count = Hash.new(0)
+    @send_user_count = Hash.new{|hash, key| hash[key] = []}
+    @receive_user_count = Hash.new{|hash, key| hash[key] = []}
     @each_transmit_num = Hash.new{|h,k| h[k] = Hash.new(0) }
     @each_receive_num = Hash.new{|h,k| h[k] = Hash.new(0) }
   end
@@ -14,6 +16,8 @@ module LogsHelper
   def collect_data( key, user_list )
     init
     @user_list = user_list
+    puts "user_list = #{@user_list}"
+    @name_list = @user_list.map{|k,v| [k, v["name"]]}.to_h
 
     result = []
     file_name = search_file(key)
@@ -51,6 +55,9 @@ module LogsHelper
     result[:receive] = @receive_num.map{|key, value| { label: @user_list[key]["name"], value: value }}
     result[:finish_time] = @finish_time
     result[:send_count] = @send_count
+    result[:send_user_count] = @send_user_count
+    result[:receive_user_count] = @receive_user_count
+    result[:name_list] = @name_list
 
     each_send = []
     @each_transmit_num.each do |from, data|
@@ -76,7 +83,7 @@ module LogsHelper
   end
 
   def hash2ltsv(hash)
-    hash.to_a.map{|e| e.join(':')}.join(' ')
+    hash.to_a.map{|e| e.join(':')}.join("\t")
   end
 
   def user2json( filename )
@@ -95,6 +102,8 @@ module LogsHelper
     case data[:operation]
     when 'init'
     when 'transmit'
+      @send_user_count[data[:time]] << @name_list[data[:from]]
+      @receive_user_count[data[:time]] << @name_list[data[:dest]]
       @send_count[data[:time]] += 1
       @total_emit += 1
       @transmit_num[data[:from]] += 1

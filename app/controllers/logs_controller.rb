@@ -68,22 +68,27 @@ class LogsController < ApplicationController
 			
 			result = collect_data(file_key, users_data)
 			result = result.merge(config_data)
+			@name_list = result[:name_list]
+			puts "name_list = #{@name_list}"
 			save_data( result, config_data[:dir_name], config_data[:filename] )
 			if record.save!
 				puts "Create new record!"
 			end
 		end
 
-		def save_data( result, dir_name, file_name )
+		def save_data( result, dir_name, filename )
 			FileUtils.mkdir_p dir_name unless FileTest.exist? dir_name
-			result[:send_file] = dir_name + "/send_#{file_name}"
-			result[:receive_file] = dir_name + "/receive_#{file_name}"
-			result[:each_send_file] = dir_name + "/each_send_#{file_name}"
-			result[:each_receive_file] = dir_name + "/each_receive_#{file_name}"
+			result[:send_file] = dir_name + "/send_#{filename}"
+			result[:receive_file] = dir_name + "/receive_#{filename}"
+			result[:receive_user_file] = dir_name + "/receive_user_count_#{filename}"
+			result[:each_send_file] = dir_name + "/each_send_#{filename}"
+			result[:each_receive_file] = dir_name + "/each_receive_#{filename}"
 
 			save_send_data( result[:transmit], result[:send_file] )
-			save_send_count( result[:send_count], result[:finish_time], dir_name + "/send_count_#{file_name}" )
+			save_send_count( result[:send_count], result[:finish_time], dir_name + "/send_count_#{filename}" )
+			save_send_user_count( result[:send_user_count], result[:finish_time], dir_name + "/send_user_count_#{filename}")
 			save_receive_data( result[:receive], result[:receive_file] )
+			save_receive_user_count( result[:receive_user_count], result[:finish_time], result[:receive_user_file])
 			save_each_send_data( result[:each_transmit], result[:each_send_file] )
 		end
 
@@ -107,10 +112,45 @@ class LogsController < ApplicationController
 			end
 		end
 
+		def save_send_user_count( send_user_count, finish_time, filename )
+			count_list = Hash.new(0)
+			@name_list.each{|k,v| count_list[v] = 0}
+			puts "send_user_count = #{send_user_count}"
+			File.open( filename, 'w') do |file|
+				file.write("time:0\t"+@name_list.values.map{|name| name+":0" }.join("\t")+"\n")
+				(0..finish_time).each do |time|
+					user_list = send_user_count[time.to_s]
+					if user_list.size > 0
+						user_list.each do |name|
+							count_list[name] += 1
+						end
+						file.write("time:#{time}\t"+count_list.map{|k,v| "#{k}:#{v}"}.join("\t")+"\n")
+					end
+				end
+			end
+		end
+
 		def save_receive_data( receive_data, filename )
 			File.open( filename, 'w' ) do |file|
 				receive_data.each do |data|
 					file.write("#{data[:label]}\t#{data[:value]}\n")
+				end
+			end
+		end
+
+		def save_receive_user_count( receive_user_count, finish_time, filename )
+			count_list = Hash.new(0)
+			@name_list.each{|k,v| count_list[v] = 0}
+			File.open( filename, 'w') do |file|
+				file.write("time:0\t"+@name_list.values.map{|name| name+":0" }.join("\t")+"\n")
+				(0..finish_time).each do |time|
+					user_list = receive_user_count[time.to_s]
+					if user_list.size > 0
+						user_list.each do |name|
+							count_list[name] += 1
+						end
+						file.write("time:#{time}\t"+count_list.map{|k,v| "#{k}:#{v}"}.join("\t")+"\n")
+					end
 				end
 			end
 		end

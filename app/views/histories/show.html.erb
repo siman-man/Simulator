@@ -15,6 +15,7 @@
 <%= javascript_include_tag 'log/data_list' %>
 <%= javascript_include_tag "log/result" %>
 <%= javascript_include_tag "log/show" %>
+<%= javascript_include_tag "log/line_chart" %>
 <%= javascript_include_tag "log/click_event" %>
 <%= javascript_include_tag "log/init" %>
 
@@ -25,7 +26,11 @@ DataList.user_list = <%= @users_data.to_json.html_safe %>
 DataList.receive_data = <%= @receive_data.to_json.html_safe %>
 DataList.send_data = <%= @send_data.to_json.html_safe %>
 DataList.send_count = <%= @send_count.to_json.html_safe %>
+DataList.send_user_count = <%= @send_user_count.to_json.html_safe %>
+DataList.receive_user_count = <%= @receive_user_count.to_json.html_safe %>
 DataList.view_id = <%= @view_id %>
+DataList.finish_time = <%= @finish_time %>
+DataList.message_num = <%= @message_num %>
 console.log(DataList.view_id);
 </script>
 
@@ -38,6 +43,8 @@ console.log(DataList.view_id);
         <a href="#" id='send_num' class="list-group-item">送信数</a>
         <a href="#" id='receive_num', class="list-group-item">受信数</a>
         <a href="#" id='send_count', class="list-group-item">通信数</a>
+        <a href="#" id='user_send_count', class='list-group-item'>ユーザ別送信数</a>
+        <a href="#" id='user_receive_count', class='list-group-item'>ユーザ別受信数</a>
       </div>
     </div><!--/span-->
     <div id="show_result" class="col-xs-12 col-sm-9">

@@ -216,6 +216,7 @@ var Result = {
 
   lineChart: function(dataset, opt){
     console.log("line chart=>");
+    console.log(dataset);
     //dataset = [{ time: 0, value: 3},{ time: 1, value: 2},{ time:2, value: 10}];
     var margin = {top: 20, right: 20, bottom: 50, left: 70},
         width = 800 - margin.left - margin.right,

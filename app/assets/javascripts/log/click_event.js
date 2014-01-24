@@ -47,5 +47,29 @@ var ClickEvent = {
       	},
     	});
 		});
+
+    $("#user_send_count").click(function(){
+      createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
+      console.log('user_send_count');
+      $.ajax({
+        type: "post",
+        url: "/view_update",
+        data: {
+          page: 'user_send_count'
+        },
+      });
+    });
+
+    $("#user_receive_count").click(function(){
+      createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
+      console.log('user_send_count');
+      $.ajax({
+        type: "post",
+        url: "/view_update",
+        data: {
+          page: 'user_receive_count'
+        },
+      });
+    });
 	},
 }

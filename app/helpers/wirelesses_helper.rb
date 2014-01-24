@@ -9,15 +9,15 @@ module WirelessesHelper
     TD.event.post('simulator', data)
   end
 
-  def hash2tlsv(hash)
-    hash.to_a.map{|e| e.join(':')}.join(' ')
+  def hash2ltsv(hash)
+    hash.to_a.map{|e| e.join(':')}.join("\t")
   end
 
   def create_node_data(user_data, filename)
     puts "create node data"
     File.open("#{Rails.root}/public/users/#{filename}.dat", "w") do |file|
       user_data.each do |data|
-        file.write(hash2tlsv(data)+"\n")
+        file.write(hash2ltsv(data)+"\n")
       end
     end
   end

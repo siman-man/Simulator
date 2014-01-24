@@ -25,7 +25,7 @@ module HistoriesHelper
 		data = []
 		File.open( filename, 'r' ) do |file|
 			file.readlines.each do |line|
-				data << line.split(' ').map{|e| e.split(':')}.to_h
+				data << line.chomp.split("\t").map{|e| e.split(':')}.to_h
 			end
 		end
 		p data

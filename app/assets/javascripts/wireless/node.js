@@ -196,7 +196,7 @@ var Node = {
 
     key = Simulator.key_map[y][x];
     Simulator.node_map[key][user.eid] = { x: x, y: y, obj: user, type: 'user' };
-
+    console.log(user);
     this.node_list[user.eid] = user;
 	},
 
