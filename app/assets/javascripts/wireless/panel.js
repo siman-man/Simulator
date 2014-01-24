@@ -120,14 +120,6 @@ var Panel = {
 			}
 		});
 
-		$('#redraw').click(function(){
-			//gridSize = 20;
-			//View.clearGrid();
-			//View.drawGrid();
-			//$("#canvas").remove();
-			//$("#canvas_field").append('<canvas id=\'canvas\' width="1000" height="1000"></canvas>');
-		});
-
 		$('#file-input').change(function() {
       $('#cover').html($(this).val());
   	});
