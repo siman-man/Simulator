@@ -1,12 +1,13 @@
 var LineChart = {
-	multi: function( data, opt ){
+	multi: function(){
 		console.log(DataList.finish_time);
+		console.log(DataList.graph_data);
 		var margin = {top: 20, right: 80, bottom: 50, left: 70},
 		width = 960 - margin.left - margin.right,
 		height = 500 - margin.top - margin.bottom;
 
 		var x = d3.scale.linear()
-		.domain(d3.extent(data, function(d) { return +d.time; }))
+		.domain(d3.extent(DataList.graph_data, function(d) { return +d.time; }))
 		.range([0, width]);
 
 		var y = d3.scale.linear()
@@ -27,22 +28,20 @@ var LineChart = {
 		.x(function(d) { return x(d.time); })
 		.y(function(d) { return y(d.count); });
 
-		var svg = d3.select("#show_result").append("svg")
+		var svg = d3.select("#line_chart").append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		color.domain(d3.keys(data[0]).filter(function(key) { console.log(key);return key !== "time"; }));
+		color.domain(d3.keys(DataList.graph_data[0]).filter(function(key) { return (LineChart.filter(key)); }));
 
 		var cities = color.domain().map(function(name) {
 			console.log("name =>", name);
 			return {
 				name: name,
-				values: data.map(function(d) {
-					console.log("data =>", d);
+				values: DataList.graph_data.map(function(d) {
 					var key = name+"";
-					console.log("count =>", d[key]||0);
 					return {time: +d.time, count: +d[key]||0};
 				})
 			};
@@ -62,7 +61,7 @@ var LineChart = {
       .attr("x", width * 0.5)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text(opt.xlabel);
+      .text(DataList.xlabel);
 
 		svg.append("g")
 			.attr("class", "y axis")
@@ -72,7 +71,7 @@ var LineChart = {
 			.attr("y", 6)
 			.attr("dy", ".71em")
 			.style("text-anchor", "end")
-			.text(opt.ylabel);
+			.text(DataList.ylabel);
 
 		var city = svg.selectAll(".city")
 			.data(cities)
@@ -90,5 +89,10 @@ var LineChart = {
 			.attr("x", 3)
 			.attr("dy", ".35em")
 			.text(function(d) { return d.name; });
-	}
+	},
+
+	filter: function(key){
+		console.log(CheckBox.filter);
+		return 0 <= CheckBox.filter.indexOf(key);
+	},
 }

@@ -95,6 +95,7 @@ class LogsController < ApplicationController
 		def save_send_count( send_count, finish_time, filename )
 			count = 0
 			File.open( filename, "w") do |file|
+				file.write("time:0\tvalue:0\n")
 				(0..finish_time).each do |time|
 					if send_count[time.to_s] > 0
 						count += send_count[time.to_s]

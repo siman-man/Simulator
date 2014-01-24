@@ -1,5 +1,4 @@
 <style>
-
 body {
   font: 14px sans-serif;
 }
@@ -23,9 +22,18 @@ body {
 
 </style>
 
+<div id="line_chart">
+</div>
+
+<div id="checkbox_field">
+</div>
+
 <script>
-	var opt = {}
-	opt.ylabel = "送信数";
-	opt.xlabel = "Time"
-	LineChart.multi(DataList.send_user_count, opt);
+	DataList.ylabel = "送信数";
+	DataList.xlabel = "Time"
+  DataList.graph_data = DataList.send_user_count;
+  CheckBox.create_list(DataList.user_list);
+  CheckBox.setEvent();
+  CheckBox.filterUpdate();
+	LineChart.multi();
 </script>

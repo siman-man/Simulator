@@ -126,10 +126,11 @@ class SimulatesController < ApplicationController
       end
 
       @obj_list = Simulator.new.instance_eval { eval(str); @list }
+      puts "obj_list = #{@obj_list}"
     end
 
     @obj_list ||= []
-
+    puts "obj_list = #{@obj_list}"
     respond_to do |format|
       format.js { render 'index' }
     end

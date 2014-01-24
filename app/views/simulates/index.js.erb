@@ -5,7 +5,6 @@ console.log('create map =>');
 	var x, y;
 	console.log("create =>");
 	var opt = <%= obj.to_json.html_safe %>
-	console.log(opt);
 	x = <%= obj[:x] %>
 	y = <%= obj[:y] %>
 	<% case obj[:type] %>

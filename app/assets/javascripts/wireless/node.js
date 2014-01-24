@@ -173,7 +173,7 @@ var Node = {
 	createUser: function( x, y, opt ){
     opt.move_model = "RandomWayPoint";
     opt.color = 'rgba(0,0,0,1.0)';
-    opt.speed = 10;
+    opt.speed = opt.speed || 10;
     var user = this.createAgent( x, y, opt),
     		key;
 
@@ -196,7 +196,6 @@ var Node = {
 
     key = Simulator.key_map[y][x];
     Simulator.node_map[key][user.eid] = { x: x, y: y, obj: user, type: 'user' };
-    console.log(user);
     this.node_list[user.eid] = user;
 	},
 

@@ -157,7 +157,6 @@ var Show = {
       node.y = y;
       node.label.x = x;
       node.label.y = node.y - Show.r*2.5;
-			console.log('hello');
  		}
  	},
 
