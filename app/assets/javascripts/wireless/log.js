@@ -74,4 +74,15 @@ var Log = {
       }
     });
   },
+
+  transmit_message: function( from, dest, data ){
+    return message = {
+      time: Simulator.time,
+      type: 'normal',
+      operation: 'transmit',
+      from: from.eid,
+      dest: dest.eid,
+      created_at: data.created_at
+    };
+  },
 }

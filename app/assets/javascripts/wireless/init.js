@@ -4,7 +4,7 @@ var Init = {
     if( Simulator.stage_change === undefined ){
       console.log('first init=>');
       Panel.init();
-      View.drawGrid()
+      View.drawGrid();
       View.init();
       Propagation.init();
       Network.init();

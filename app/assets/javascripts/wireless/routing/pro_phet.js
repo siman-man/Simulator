@@ -22,12 +22,20 @@ ProPHET.prototype = {
 		this.transmit();
 	},
 
-	get_key: function( obj ){
-		return ( obj === undefined )? -1 : Object.keys(obj)[0]|0;
-	},
-	
-	get_ratio: function( obj ){
-		return ( obj === undefined )? 0.0 : obj[Object.keys(obj)[0]];
+	get_best_eid: function( eid ){
+		var from, 
+				best_eid = -1, 
+				best_value = 0.0, 
+				dp;
+
+		for( from in this.node.delivery_predictability ){
+			dp = this.node.delivery_predictability[from];
+			if( dp[eid] > best_value ){
+				best_value = dp[eid];
+				best_eid = from;
+			}
+		}
+		return +best_eid;
 	},
 
 	aging_check: function(){
@@ -38,43 +46,46 @@ ProPHET.prototype = {
 		for( eid in this.node.last_connect_time ){
 			last_time = this.node.last_connect_time[eid];
 			diff_time = Simulator.time - last_time;
-			if( this.node.eid !== eid && last_time !== 0 && diff_time % time_unit === 0 ){
-				this.node.delivery_predictability[this.node.eid][eid] = this.node.delivery_predictability[eid] * Math.pow( this.gamma, diff_time / time_unit ); 
+			if( this.node.eid !== +eid && last_time !== 0 && diff_time % time_unit === 0 ){
+				this.node.delivery_predictability[this.node.eid][eid] = this.node.delivery_predictability[this.node.eid][eid] * Math.pow( this.gamma, diff_time / time_unit ); 
 			}
 		}
 	},
 
+	deep_copy: function( data ){
+		var obj = {},
+				key;
+
+		for( key in data ){
+			obj[key] = data[key];
+		}
+		return obj;
+	},
+
 	connect: function( to ){
 		var dp = this.node.delivery_predictability,
-				eid, P_a_b, P_b_c, P_a_c, P_a_c_old;
+				eid, P_a_b, P_b_c, P_a_c, P_a_c_old,
+				my_eid = this.node.eid;
 
-		if( this.node.eid === 0 ) console.log( dp );
+		dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid] );
+		console.log("first =>", dp[my_eid][to.eid]);
+		dp[to.eid] = this.deep_copy(to.delivery_predictability[to.eid]);
+		P_a_b = dp[my_eid][to.eid];
+		for( eid in to.delivery_predictability[to.eid] ){
+			if( +eid === my_eid ) continue;
 
-		if( dp[to.eid] === undefined ){
-			dp[to.eid] = {};
-			var ratio_info = {};
-			ratio_info[to.eid] = this.first_connection( 0.0 );
-			dp[to.eid] = ratio_info;
-		}else{
-			P_a_b = this.get_ratio(dp[to.eid]);
-			for( eid in to.delivery_predictability ){
-				P_a_c_old = this.get_ratio(dp[eid]);
-				P_b_c = this.get_ratio(to.delivery_predictability[eid]);
+			P_a_c_old = dp[my_eid][eid] || 0.0;
+			P_b_c = to.delivery_predictability[to.eid][eid] || 0.0;
 
-				P_a_c = this.update_predictability( P_a_b, P_b_c );
+			P_a_c = this.update_predictability( P_a_b, P_b_c );
 
-				if( this.node.eid == 0 && eid == 1 ){
-					console.log( P_a_c, P_a_b, P_a_c );
-				}
+			console.log( P_a_b, P_b_c, P_a_c );
 
-				if( P_a_c_old < P_a_c || eid == to.eid ){
-					var obj = {};
-					obj[to.eid] = P_a_c;
-					dp[eid] = obj;
-				}
+			if( P_a_c_old < P_a_c ){
+				dp[my_eid][eid] = P_a_c;
 			}
 		}
-
+	
 		var message_diff = [],
 				message_id,
 				i;
@@ -88,7 +99,8 @@ ProPHET.prototype = {
 	},
 
 	first_connection: function( old ){
-		return old + ( 1 - this.delta - old ) * this.P_encounter( Simulator.time );
+		old = old || 0.0;
+		return old + ( 1.0 - this.delta - old ) * this.P_encounter( Simulator.time );
 	},
 
 	aging: function( old, k ){
@@ -150,15 +162,14 @@ ProPHET.prototype = {
 				strageB = dest.strage,
 				message_id,
 				diff= [],
-				dp = this.node.delivery_predictability,
-				best_eid = this.get_key( dp[1] );
+				best_eid = this.get_best_eid( 1 );
 
-				if( this.node.eid === 0 ){
-					console.log('best eid = ', best_eid, 'dest.eid = ', dest.eid );
-				}
+		if( this.node.eid === 0 ){
+			console.log('best eid = ', best_eid, 'dest.eid = ', dest.eid );
+		}
 
 		for( message_id in strageA ){
-			if( strageB[message_id] === undefined && best_eid == dest.eid ){
+			if( strageB[message_id] === undefined && best_eid === dest.eid ){
 				diff.push(message_id);
 			}
 		}

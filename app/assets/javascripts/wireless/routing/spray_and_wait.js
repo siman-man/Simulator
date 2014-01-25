@@ -53,13 +53,7 @@ SprayAndWait.prototype = {
 					this.node.strage[message.id].ftoken = message.ftoken;
 					dest.label.text = Object.keys(dest.strage).length;
 					this.node.buffer.shift();
-					Log.send({ 
-						time: Simulator.time, 
-						type: 'normal', 
-						operation: 'transmit',
-						from: this.node.eid, 
-						dest: dest.eid 
-					});
+					Log.send(Log.transmit_message( this.node, dest, message ));
 				}
 			}
 		}
