@@ -1,5 +1,5 @@
 var NHopForwarding = function(node, limit){
-	limit = limit || 2;
+	limit = limit || 3;
 	this.node = node;
 	this.limit = limit-1;
 };
@@ -40,20 +40,13 @@ NHopForwarding.prototype = {
 					dest.strage[message.id] = message;
 					dest.label.text = Object.keys(dest.strage).length;
 					this.node.buffer.shift();
-					Log.send({ 
-						time: Simulator.time, 
-						type: 'normal', 
-						operation: 'transmit',
-						from: this.node.eid, 
-						dest: dest.eid 
-					});
+					Log.send(Log.transmit_message( this.node, dest, message ));
 				}
 			}
 		}
 	},
 
 	check: function( dest, message ){
-
 		if( this.node.contact_list[dest.eid].current === 'close' ) return true;
 		if( dest.strage[message.id] !== undefined ) return true;
 
@@ -67,7 +60,7 @@ NHopForwarding.prototype = {
 				diff= [];
 
 		for( message_id in strageA ){
-			if( strageB[message_id] === undefined && ( dest.eid === 1 || strageA[message_id].hop < this.limit) ){
+			if( strageB[message_id] === undefined && ( dest.eid === 1 || strageA[message_id].hop_count < this.limit) ){
 				diff.push(message_id);
 			}
 		}

@@ -1,0 +1,28 @@
+<style>
+
+body {
+  font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: steelblue;
+}
+
+</style>
+
+<div id="area_chart">
+</div>
+
+<script>
+	DataList.ylabel = "Time";
+	DataList.xlabel = "Message ID"
+  DataList.graph_data = DataList.latency;
+	AreaChart.single();
+</script>

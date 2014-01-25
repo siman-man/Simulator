@@ -69,7 +69,7 @@ var Node = {
         return new ProPHET(node);
         break;
       case 'n_hop_forwarding':
-        return new NHopForwarding(node, 10);
+        return new NHopForwarding(node);
         break;
       default:
         return new Epidemic(node);

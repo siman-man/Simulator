@@ -53,6 +53,9 @@ var Log = {
       operation: data.operation,
       from: data.from,
       dest: data.dest,
+      created_at: data.created_at,
+      message_id: data.message_id,
+      hop_count: data.hop_count,
       config: data.config,
       message: data.msg
     }
@@ -80,6 +83,9 @@ var Log = {
       time: Simulator.time,
       type: 'normal',
       operation: 'transmit',
+      message_id: data.id,
+      hop_count: data.hop_count,
+      created_at: data.created_at,
       from: from.eid,
       dest: dest.eid,
       created_at: data.created_at

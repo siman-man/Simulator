@@ -11,6 +11,8 @@ module LogsHelper
     @receive_user_count = Hash.new{|hash, key| hash[key] = []}
     @each_transmit_num = Hash.new{|h,k| h[k] = Hash.new(0) }
     @each_receive_num = Hash.new{|h,k| h[k] = Hash.new(0) }
+    @hop_count = Hash.new(0)
+    @latency = Hash.new(0)
   end
 
   def collect_data( key, user_list )
@@ -58,6 +60,8 @@ module LogsHelper
     result[:send_user_count] = @send_user_count
     result[:receive_user_count] = @receive_user_count
     result[:name_list] = @name_list
+    result[:hop_count] = @hop_count
+    result[:latency] = @latency
 
     each_send = []
     @each_transmit_num.each do |from, data|
@@ -111,6 +115,12 @@ module LogsHelper
       @each_transmit_num[data[:from]][data[:dest]] += 1
       @each_receive_num[data[:dest]][data[:from]] += 1
       @finish_time = data[:time]
+
+      if data[:dest] == "1"
+        p data
+        @hop_count[data[:message_id]] = data[:hop_count].to_i
+        @latency[data[:message_id]] = data[:time].to_i - data[:created_at].to_i 
+      end
     when 'finish'
       @finish_time = data[:time]
     else

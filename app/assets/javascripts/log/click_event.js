@@ -62,12 +62,36 @@ var ClickEvent = {
 
     $("#user_receive_count").click(function(){
       createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
-      console.log('user_send_count');
+      console.log('user_receive_count');
       $.ajax({
         type: "post",
         url: "/view_update",
         data: {
           page: 'user_receive_count'
+        },
+      });
+    });
+
+    $("#latency").click(function(){
+      createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
+      console.log('latency');
+      $.ajax({
+        type: "post",
+        url: "/view_update",
+        data: {
+          page: 'latency'
+        },
+      });
+    });
+
+    $("#hop_count").click(function(){
+      createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
+      console.log('hop_count');
+      $.ajax({
+        type: "post",
+        url: "/view_update",
+        data: {
+          page: 'hop_count'
         },
       });
     });

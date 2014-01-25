@@ -72,7 +72,7 @@ ProPHET.prototype = {
 		dp[to.eid] = this.deep_copy(to.delivery_predictability[to.eid]);
 		P_a_b = dp[my_eid][to.eid];
 		for( eid in to.delivery_predictability[to.eid] ){
-			if( +eid === my_eid ) continue;
+			if( +eid === my_eid || +eid === to.eid ) continue;
 
 			P_a_c_old = dp[my_eid][eid] || 0.0;
 			P_b_c = to.delivery_predictability[to.eid][eid] || 0.0;
@@ -137,13 +137,7 @@ ProPHET.prototype = {
 					dest.strage[message.id] = message.data;
 					dest.label.text = Object.keys(dest.strage).length;
 					this.node.buffer.shift();
-					Log.send({ 
-						time: Simulator.time, 
-						type: 'normal', 
-						operation: 'transmit',
-						from: this.node.eid, 
-						dest: dest.eid 
-					});
+					Log.send(Log.transmit_message( this.node, dest, message ));
 				}
 			}
 		}

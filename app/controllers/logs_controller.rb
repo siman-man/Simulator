@@ -24,7 +24,8 @@ class LogsController < ApplicationController
 			end
 
 			TD.event.post( file_key, time: data[:time], operation: data[:operation],
-               			from: data[:from], dest: data[:dest], message: data[:message])
+               			from: data[:from], dest: data[:dest], message_id: data[:message_id],
+               			hop_count: data[:hop_count], created_at: data[:created_at])
 
 			if data[:type] == 'finish'
 				#config = data.delete(:config)
@@ -54,7 +55,7 @@ class LogsController < ApplicationController
 			config_data[:protocol] = config["protocol"]
 			config_data[:node_num] = config["node_num"]
 			config_data[:dir_name] = "#{Rails.root}/data/#{Time.now.strftime("%04Y/%02m/%02d")}"
-			config_data[:filename] = "#{Time.now.strftime("%H%M%S")}.tsv"
+			config_data[:filename] = "#{Time.now.strftime("%H%M%S")}.ltsv"
 			config_data[:file_path] = ""
 
 			record = History.new( seed: config_data[:seed], stage_type: config_data[:stage_type], clear_time: config_data[:finish_time],
@@ -90,6 +91,24 @@ class LogsController < ApplicationController
 			save_receive_data( result[:receive], result[:receive_file] )
 			save_receive_user_count( result[:receive_user_count], result[:finish_time], result[:receive_user_file])
 			save_each_send_data( result[:each_transmit], result[:each_send_file] )
+			save_hop_count( result[:hop_count], dir_name + "/hop_count_#{filename}" )
+			save_latency( result[:latency], dir_name + "/latency_#{filename}" )
+		end
+
+		def save_hop_count( hop_count, filename )
+			File.open( filename, 'w' ) do |file|
+				hop_count.each do |id, hop_count|
+					file.write("message_id:#{id}\thop_count:#{hop_count}\n")
+				end
+			end
+		end
+
+		def save_latency( latency, filename )
+			File.open( filename, 'w' ) do |file|
+				latency.each do |id, time|
+					file.write("message_id:#{id}\ttime:#{time}\n")
+				end
+			end
 		end
 
 		def save_send_count( send_count, finish_time, filename )

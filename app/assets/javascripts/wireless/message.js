@@ -4,15 +4,15 @@ var Message = {
 
 	init: function(){
 		for(var i = 0; i < this.message_num; i++){
-			Node.node_list[0].strage[i] = { size: this.message_size, ftoken: 4, hop: 0 };
+			Node.node_list[0].strage[i] = { size: this.message_size, ftoken: 4, hop_count: 0 };
 		}
 	},
 
 	create: function( id, from, dest ){
 		var message = { id: id, from_eid: from.eid, dest_eid: dest.eid, data: 'hello', size: Message.message_size,
-								hop: from.strage[id].hop + 1 }
+								hop_count: from.strage[id].hop_count + 1 }
 		
-		if( from === 0 ){
+		if( from.eid === 0 ){
 			message.created_at = Simulator.time;
 		}else{
 			message.created_at = from.strage[id].created_at;
