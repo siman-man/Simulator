@@ -1,8 +1,10 @@
-var Epidemic = function(node){
+var NHopForwarding = function(node, limit){
+	limit = limit || 2;
 	this.node = node;
+	this.limit = limit-1;
 };
 
-Epidemic.prototype = {
+NHopForwarding.prototype = {
 	update: function(){
 		this.transmit();
 	},
@@ -33,7 +35,7 @@ Epidemic.prototype = {
 			if( this.check( dest, message ) ){
 				this.node.buffer.shift();
 			}else{
-				message.size--;
+				--message.size;
 				if( message.size === 0 ){
 					dest.strage[message.id] = message;
 					dest.label.text = Object.keys(dest.strage).length;
@@ -65,7 +67,7 @@ Epidemic.prototype = {
 				diff= [];
 
 		for( message_id in strageA ){
-			if( strageB[message_id] === undefined ){
+			if( strageB[message_id] === undefined && ( dest.eid === 1 || strageA[message_id].hop < this.limit) ){
 				diff.push(message_id);
 			}
 		}

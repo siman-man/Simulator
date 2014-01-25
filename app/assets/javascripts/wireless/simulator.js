@@ -67,6 +67,9 @@ var Simulator = {
       case 2:
         this.protocol_type = 'pro_phet';
         break;
+      case 3:
+        this.protocol_type = 'n_hop_forwarding';
+        break;
       default:
         this.protocol_type = 'epidemic';
     }

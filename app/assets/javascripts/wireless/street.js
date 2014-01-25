@@ -14,7 +14,7 @@ var Street = {
 
 		var road = new createjs.Shape();
 
-		road.graphics.beginFill('rgba(211,211,211,1.0)').drawRect(0, 0, View.gridSize, View.gridSize);
+		road.graphics.beginFill('rgba(211,211,211,1.0)').drawRect(0, 0, gridSize, gridSize);
 		
 		road.id = this.road_id;
 		this.road_id++;
@@ -23,7 +23,7 @@ var Street = {
 		road.type = 'road';
 
 		Simulator.map.addChild(road);
-		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 1, pf: 2 };
+		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 10, pf: 2 };
 	},
 
 	clear: function(){
