@@ -117,8 +117,7 @@ var Node = {
     console.log('create car =>');
     var car = this.createAgent(x,y,opt),
         key;
-    car.graphics.beginFill('rgba(0,59,255,1.0)').drawCircle(View.gridSize/2, View.gridSize/2, View.gridSize/2);
-    
+
     car.direct = 0;
 
     Propagation.calc(x, y);
@@ -151,6 +150,7 @@ var Node = {
     agent.y = y * gridSize;
     agent.life_time = +opt.life_time || undefined;
     agent.apper_time = +opt.apper_time || 0;
+    agent.wait_time = 0;
 
     agent.label = new createjs.Text(0, "14px Arial", "white");
     agent.label.textAlign = "center";

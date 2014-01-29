@@ -31,7 +31,7 @@ module WirelessesHelper
     stage_data[:filename] = filename
     File.open("#{Rails.root}/public/stages/#{filename}.rb", "w") do |file|
 
-      file.write("WebSimulator.define do\n")
+      file.write("WBSD.define do\n")
       
       data_list.each do |data|
         p data
@@ -83,7 +83,7 @@ module WirelessesHelper
     str += "\t\tend"
   end
 
-  module WebSimulator
+  module WBSD
     class << self
       def define(&block)
         block.call

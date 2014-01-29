@@ -1,14 +1,20 @@
 var MoveModel = {
+  wait_time: 100,
   EPS: 1e-8,
 
   randomWayPoint: function(user){
-  	user.way_point = user.way_point || this.directWayPoint(user);
+    if(user.wait_time === 0){
+      user.way_point = user.way_point || this.directWayPoint(user);
+    }
 
     if(user.way_point){
       this.moveToWayPoint(user);
+    }else if(user.wait_time > 0){
+      user.wait_time--;
     }
 
     if(this.checkArrive(user)){
+      user.wait_time = Simulator.mersenne.random() * this.wait_time | 0;
       user.way_point = undefined;
     }
   },
