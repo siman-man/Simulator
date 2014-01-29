@@ -70,4 +70,24 @@ var FSM = {
 			},
 		});
 	},
+
+	randomWayPoint: function(){
+		return new StateMachine.create({
+			initial: 'wait',
+			events: [
+				{ name: 'move', from: 'wait', to: 'walk' },
+				{ name: 'stop', from: 'walk', to: 'wait' },
+			],
+			callbacks: {
+				onmove: function(event, from, to, user){
+					console.log('way point init =>', user);
+					user.way_point = MoveModel.directWayPoint(user);
+				},
+				onstop: function(event, from, to, user){
+					user.wait_time = Simulator.mersenne.random() * MoveModel.wait_time | 0;
+					user.way_point = undefined;
+				},
+			}
+		});
+	},
 }

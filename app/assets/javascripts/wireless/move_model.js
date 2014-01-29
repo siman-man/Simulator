@@ -3,19 +3,18 @@ var MoveModel = {
   EPS: 1e-8,
 
   randomWayPoint: function(user){
-    if(user.wait_time === 0){
-      user.way_point = user.way_point || this.directWayPoint(user);
+    if(user.wait_time === 0 && user.status.current === 'wait'){
+      user.status.move(user);
     }
 
     if(user.way_point){
-      this.moveToWayPoint(user);
+      MoveModel.moveToWayPoint(user);
     }else if(user.wait_time > 0){
       user.wait_time--;
     }
 
-    if(this.checkArrive(user)){
-      user.wait_time = Simulator.mersenne.random() * this.wait_time | 0;
-      user.way_point = undefined;
+    if(user.status.current === 'walk' && MoveModel.checkArrive(user)){
+      user.status.stop(user);
     }
   },
 
@@ -150,6 +149,7 @@ var MoveModel = {
       if( Simulator.field[y][x].type != 'wall' ) break;
     }
 
+    console.log('coord.x =>', user.x, 'coord.y =>', user.y);
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y });
 
     if(user.route_list.length === 0){

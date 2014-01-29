@@ -4,8 +4,6 @@ var View = {
 	packet_color: "yellow",
 	packet_size: 2,
 	gridSize: gridSize,
-	width: Simulator.canvas_width/gridSize|0+1,
-	height: Simulator.canvas_height/gridSize|0+1,
 	propagation: [],
 	grid_lines: [],
 	connection_line: [],
@@ -19,6 +17,8 @@ var View = {
 
 	init: function(){
 		var x, y;
+		this.width = Simulator.canvas_width/gridSize|0+1;
+		this.height = Simulator.canvas_height/gridSize|0+1;
 
  		for( y = 0; y < this.height; y++ ){
       this.propagation[y] = [];
@@ -176,7 +176,7 @@ var View = {
 				hline, 
 				color,
 				i;
-
+		console.log(Simulator.map);
 		for(i = 0; i <= Simulator.canvas_height; i += span){
 			vline = new createjs.Shape();
 			vline.graphics.beginStroke("rgba(0,0,0,0.9)");

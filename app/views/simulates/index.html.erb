@@ -80,33 +80,32 @@
   Propagation.init();
   Network.init();
   Simulator.init();
-  Street.init();
   Simulator.stage_change = true;
   Simulator.file_name = "<%= @file_name %>"
 
 <% @obj_list.each do |obj| %>
-var x, y;
-var opt = <%= obj.to_json.html_safe %>
-console.log(opt);
-x = <%= obj[:x] %>
-y = <%= obj[:y] %>
-<% case obj[:type] %>
-<% when :server %>
-Node.create(x, y, opt);
-<% when :start %>
-Node.create( x, y, opt);
-<% when :end %>
-Node.create( x, y, opt);
-<% when :user %>
-Node.create(x, y, opt );
-<% when :tree %>
-Tree.create( x, y );
-<% when :road %>
-Street.create(x, y);
-<% when :car %>
-Node.create(x, y, opt );
-<% else %>  
-<% end %>
-<% end %>
+var x, y,
+    opt = <%= obj.to_json.html_safe %>
+
+  x = <%= obj[:x] %>
+  y = <%= obj[:y] %>
+  <% case obj[:type] %>
+    <% when :server %>
+      Node.create(x, y, opt);
+    <% when :start %>
+      Node.create( x, y, opt);
+    <% when :end %>
+      Node.create( x, y, opt);
+    <% when :user %>
+      Node.create(x, y, opt );
+    <% when :tree %>
+      Tree.create( x, y );
+    <% when :road %>
+      Street.create(x, y);
+    <% when :car %>
+      Node.create(x, y, opt );
+    <% else %>  
+    <% end %>
+  <% end %>
 <% end %>
 </script>

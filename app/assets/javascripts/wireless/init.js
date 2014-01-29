@@ -4,13 +4,12 @@ var Init = {
     if( Simulator.stage_change === undefined ){
       console.log('first init=>');
       Panel.init();
-      View.drawGrid();
       View.init();
+      View.drawGrid();
       Propagation.init();
       Network.init();
       Simulator.init();
       Search.init();
-      Street.init();
     }
 
     Simulator.canvas.addEventListener('mousedown', Simulator.onmousedown, false);
@@ -44,5 +43,6 @@ var Init = {
 }
 
 $(document).ready(function(){
+  Simulator.getCanvasInfo();
   Init.init();
 });

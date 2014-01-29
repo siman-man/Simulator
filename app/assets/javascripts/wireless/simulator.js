@@ -1,8 +1,4 @@
 var Simulator = {
-  canvas: document.getElementById('canvas'),
-  canvas_width: window.canvas.width,
-  canvas_height: window.canvas.height,
-  map: new createjs.Stage(canvas), 
   packet_list: {},
   node_map: {},
   field: [],
@@ -23,6 +19,13 @@ var Simulator = {
   article_id: 0,
   time: 0,
   per_frame: 360,
+
+  getCanvasInfo: function(){
+    Simulator.canvas = document.getElementById('canvas');
+    Simulator.canvas_width = window.canvas.width;
+    Simulator.canvas_height = window.canvas.height;
+    Simulator.map = new createjs.Stage(Simulator.canvas); 
+  },
 
   init: function( config ){
     if( Simulator.replay ){
@@ -90,8 +93,7 @@ var Simulator = {
     View.drawGrid()
     View.init();
     Simulator.init( config );
-    Node.init();
-    Street.init();  
+    Node.init(); 
   },
 
   handleTick: function(event) {

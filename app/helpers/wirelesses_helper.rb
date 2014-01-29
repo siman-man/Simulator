@@ -45,7 +45,7 @@ module WirelessesHelper
           user_data << { eid: info["eid"], name: info["name"], speed: info["speed"] }
           path = ( info["type"] == "user")? create_path(info["path"]) : ""
           file.write("\tcreate(:#{info["type"]}) do |t| 
-\t\tt.pos( x: #{info["x"]}, y: #{info["y"]} )
+\t\tt.position( x: #{info["x"]}, y: #{info["y"]} )
 \t\tt.add_data( 
 \t\t\teid: #{info["eid"]}, 
 \t\t\tname: '#{info["name"]}', 

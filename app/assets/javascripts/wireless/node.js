@@ -34,7 +34,20 @@ var Node = {
     }
   },
 
-  direct_move_model: function(user, type){
+  setMoveModel: function(agent, move_model){
+   move_model = move_model || "StationaryMovement";
+   switch(move_model){
+      case 'RandomWayPoint':
+        agent.move_model = MoveModel.randomWayPoint;
+        agent.status = new FSM.randomWayPoint();
+        break;
+      default:
+        agent.move_model = MoveModel.stationaryMovement;
+        break;
+    }
+  },
+
+  directMoveModel: function(user, type){
     switch(type){
       case 0:
         user.move_model = "RandomWayPoint";
@@ -158,7 +171,7 @@ var Node = {
     agent.label.y = agent.y + gridSize/5|0;
     agent.label.textBaseline = "top";
 
-    agent.move_model = opt.move_model || "StationaryMovement";
+    this.setMoveModel(agent,opt.move_model);
 
     agent.route_list = [];
     agent.path = opt.path || [];
@@ -363,6 +376,8 @@ var Node = {
 	},
 
 	moveUser: function(user){
+    user.move_model(user);
+    /*
     switch(user.move_model){
       case 'RandomWayPoint':
         MoveModel.randomWayPoint(user);
@@ -379,9 +394,10 @@ var Node = {
         MoveModel.carMovement(user);
         break;
       default:
-        MoveModel.randomWayPoint(user);
+        user.move_model(user);
         break;
     }
+    */
   },
 
   changeSpeed: function( eid, speed ){

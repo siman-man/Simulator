@@ -1,13 +1,6 @@
 var Street = {
-	street: [],
 	road_id: 0,
 	road_list: {},
-
-	init: function(){
-		for(var i = 0; i < Simulator.canvas_height; i++){
-			this.street[i] = [];
-		}
-	},
 
 	create: function(x, y){
 		console.log("create road =>");
