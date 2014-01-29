@@ -26,6 +26,7 @@ var Panel = {
 		this.lifeTimeChanged();
 		this.apperTimeChanged();
 		this.moveModelChanged();
+		this.fieldWidthChanged();
 
 		$("#wait_time").change(function(){
 			if( View.selected_cell !== undefined ){
@@ -137,7 +138,7 @@ var Panel = {
   		$("#create_route").attr("checked",false);
   		$("#user_eid").val(obj.eid);
   		$("#user_name").val(obj.name);
-  		$("#move_model").val(Panel.model2value(obj.move_model));
+  		$("#move_model").val(Panel.model2value(obj.move_model_type));
   		$("#life_time").val(obj.life_time || 'undefined');
   		$("#apper_time").val(obj.apper_time || 0 );
   		Panel.select[0].selectedIndex = Simulator.route_user.speed-1;
@@ -199,6 +200,26 @@ var Panel = {
 				Node.node_list[eid].apper_time = apper_time;
 			}
 		}); 
+  },
+
+  fieldWidthChanged: function(){
+  	$("#field_width").change(function(){
+  		$("#canvas_field").empty();
+  		var width = +$("#field_width").val() * View.gridSize;
+  		console.log('width =>', width);
+  		var str = "<canvas id='canvas' width='" + width + "' height='" + 450 + "'></canvas>";
+  		$("#canvas_field").append(str);
+  		Simulator.clear( true );
+  		Simulator.getCanvasInfo();
+ 			View.init();
+  		View.drawGrid();
+  		Propagation.init();
+  		$.each( Node.node_list, function( index, node ) {
+  			console.log('node =>', node);
+  			var coord = View.point2coord( node.x, node.y );
+  			Node.create( coord.y, coord.x, node );
+			});
+  	});
   },
 
   model2value: function( move_model ){

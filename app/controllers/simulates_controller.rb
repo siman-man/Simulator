@@ -3,13 +3,9 @@ class SimulatesController < ApplicationController
 	
   def index
     @stages = Stage.where(nil).order("created_at DESC")
-    p @stages
     @stage_type = 1
-    p params
     if params[:time].presence
       params.reject!{|key| [:controller,:action].include?(key)}
-      #params.delete(:controller)
-      #params.delete(:action)
       create_log(params)
     end
 
@@ -28,9 +24,8 @@ class SimulatesController < ApplicationController
         end
       end
 
-      puts str
-
-      @obj_list = Simulator.new.instance_eval { eval(str); @list }
+      @scenario = eval(str)
+      @obj_list = @scenario[:obj_list]
     end
 
     if params[:edit_stage]
@@ -48,28 +43,10 @@ class SimulatesController < ApplicationController
       end
 
       @file_name = filename
-      puts str
 
-      @obj_list = Simulator.new.instance_eval { eval(str); @list }
-    end
-
-    if params[:data]
-      @data = Hash.new
-      p params[:data]
-      @data[:seed] = params["data"]["seed"]
-      @data[:stage_type] = params["data"]["stage_type"]
-
-      file_name = "#{Rails.root}/public/stages/stage#{@data[:stage_type]}.rb"
-
-      str = ""
-      File.open(file_name) do |file|
-        file.readlines.each do |line|
-          str += line
-        end
-      end
-      puts str
-
-      @obj_list = Simulator.new.instance_eval { eval(str); @list }
+      @scenario = eval(str)
+      @config = @scenario[:config]
+      @obj_list = @scenario[:obj_list]
     end
 
     if params[:file].presence
@@ -81,10 +58,12 @@ class SimulatesController < ApplicationController
         str += line
       end
 
-      @obj_list = Simulator.new.instance_eval { eval(str); @list }
+      @scenario = eval(str)
+      @obj_list = @scenario[:obj_list]
     end
 
     @obj_list ||= []
+
 
     respond_to do |format|
       format.html { render action: 'index' }
@@ -109,7 +88,7 @@ class SimulatesController < ApplicationController
     @file_name = filename
     puts str
 
-    @obj_list = Simulator.new.instance_eval { eval(str); @list }
+    @obj_list = eval(str)
   end
   
   def stage_init
@@ -125,7 +104,7 @@ class SimulatesController < ApplicationController
         end
       end
 
-      @obj_list = Simulator.new.instance_eval { eval(str); @list }
+      @obj_list = eval(str)
       puts "obj_list = #{@obj_list}"
     end
 

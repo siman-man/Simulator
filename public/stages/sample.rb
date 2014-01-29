@@ -1,11 +1,13 @@
-WBSD.define do
+WBSD::Simulator.define do
+	field_width 21
+
 	create(:start) do |t| 
 		t.position( x: 10, y: 10 )
 		t.add_data( 
 			eid: 0, 
 			name: 'start', 
 			speed: 10, 
-			move_model: 'StationaryMovement',
+			move_model: 'function',
 			life_time: '-1',
 			apper_time: '0'  
 		)
@@ -17,7 +19,7 @@ WBSD.define do
 			eid: 1, 
 			name: 'end', 
 			speed: 10, 
-			move_model: 'StationaryMovement',
+			move_model: 'function',
 			life_time: '-1',
 			apper_time: '0'  
 		)
@@ -29,12 +31,9 @@ WBSD.define do
 			eid: 2, 
 			name: 'node1', 
 			speed: 10, 
-			move_model: 'RandomWayPoint',
+			move_model: 'RandomWalk',
 			life_time: '-1',
 			apper_time: '0'  
 		)
-		t.create_path do |route|
-			route.add({ y: 6, x: 19, wait: 0 })
-		end
 	end
 end

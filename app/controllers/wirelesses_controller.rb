@@ -23,7 +23,7 @@ class WirelessesController < ApplicationController
 
       puts str
 
-      @obj_list = Simulator.new.instance_eval { eval(str); @list }
+      @obj_list = eval(str)
     end
 
     respond_to do |format|
@@ -51,7 +51,7 @@ class WirelessesController < ApplicationController
 
       puts str
 
-      @obj_list = Simulator.new.instance_eval { eval(str); @list }
+      @obj_list = eval(str)
     end
 
     respond_to do |format|

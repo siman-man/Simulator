@@ -19,13 +19,13 @@ var MoveModel = {
   },
 
   randomWalk: function(user){
-    user.way_point = user.way_point || this.directRandomWalkPoint(user);
+    user.way_point = user.way_point || MoveModel.directRandomWalkPoint(user);
 
     if(user.way_point){
-      this.moveToWayPoint(user);
+      MoveModel.moveToWayPoint(user);
     }
 
-    if(this.checkArrive(user)){
+    if(MoveModel.checkArrive(user)){
       user.way_point = undefined;
     }
   },
@@ -48,10 +48,10 @@ var MoveModel = {
     }
 
     if(user.way_point){
-      this.moveToNextPoint(user);
+      MoveModel.moveToNextPoint(user);
     }
     
-    if(this.checkArrive(user)){
+    if(MoveModel.checkArrive(user)){
       user.x = user.way_point.x * gridSize;
       user.y = user.way_point.y * gridSize;
       if( user.way_point.wait === user.stop_time ){

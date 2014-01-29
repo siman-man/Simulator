@@ -3,6 +3,7 @@ var Init = {
     console.log("ready =>");
     if( Simulator.stage_change === undefined ){
       console.log('first init=>');
+      Simulator.getCanvasInfo();
       Panel.init();
       View.init();
       View.drawGrid();
@@ -43,6 +44,5 @@ var Init = {
 }
 
 $(document).ready(function(){
-  Simulator.getCanvasInfo();
   Init.init();
 });

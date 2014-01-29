@@ -21,6 +21,7 @@ var Simulator = {
   per_frame: 360,
 
   getCanvasInfo: function(){
+    console.log('get canvas info =>');
     Simulator.canvas = document.getElementById('canvas');
     Simulator.canvas_width = window.canvas.width;
     Simulator.canvas_height = window.canvas.height;
@@ -403,9 +404,5 @@ var Simulator = {
     Simulator.operation_flag = false;
     Simulator.press_flag = false;
     Simulator.create_route_mode = false;
-  },
-
-  onmousewheel: function(e){
-    console.log('wheel =>');
   },
 }

@@ -38,8 +38,21 @@ var Node = {
    move_model = move_model || "StationaryMovement";
    switch(move_model){
       case 'RandomWayPoint':
+        agent.move_model_type = "RandomWayPoint";
         agent.move_model = MoveModel.randomWayPoint;
         agent.status = new FSM.randomWayPoint();
+        break;
+      case 'MapRouteMovement':
+        agent.move_model_type = "MapRouteMovement"
+        agent.move_model = MoveModel.mapRouteMovement;
+        break;
+      case 'RandomWalk':
+        agent.move_model_type = "RandomWalk";
+        agent.move_model = MoveModel.randomWalk;
+        break;
+      case 'StationaryMovement':
+        agent.move_model_type = "StationaryMovement";
+        agent.move_model = MoveModel.stationaryMovement; 
         break;
       default:
         agent.move_model = MoveModel.stationaryMovement;
@@ -142,6 +155,10 @@ var Node = {
     Simulator.node_map[key][car.eid] = { x: x, y: y, obj: car, type: 'car' };
 
     this.node_list[car.eid] = car;
+  },
+
+  agent2opt: function(agent){
+
   },
 
   createAgent: function( x, y, opt ){
@@ -377,27 +394,6 @@ var Node = {
 
 	moveUser: function(user){
     user.move_model(user);
-    /*
-    switch(user.move_model){
-      case 'RandomWayPoint':
-        MoveModel.randomWayPoint(user);
-        break;
-      case 'RandomWalk':
-        MoveModel.randomWalk(user);
-        break;
-      case 'MapRouteMovement':
-        MoveModel.mapRouteMovement(user);
-        break;
-      case 'StationaryMovement':
-        MoveModel.stationaryMovement(user);
-      case 'CarMovement':
-        MoveModel.carMovement(user);
-        break;
-      default:
-        user.move_model(user);
-        break;
-    }
-    */
   },
 
   changeSpeed: function( eid, speed ){

@@ -45,17 +45,17 @@ module WirelessesHelper
           user_data << { eid: info["eid"], name: info["name"], speed: info["speed"] }
           path = ( info["type"] == "user")? create_path(info["path"]) : ""
           file.write("\tcreate(:#{info["type"]}) do |t| 
-\t\tt.position( x: #{info["x"]}, y: #{info["y"]} )
-\t\tt.add_data( 
-\t\t\teid: #{info["eid"]}, 
-\t\t\tname: '#{info["name"]}', 
-\t\t\tspeed: #{info["speed"]}, 
-\t\t\tmove_model: '#{info["move_model"]}',
-\t\t\tlife_time: '#{info["life_time"]}',
-\t\t\tapper_time: '#{info["apper_time"]}'  
-\t\t)
-#{path}
-\tend\n")
+            \t\tt.position( x: #{info["x"]}, y: #{info["y"]} )
+            \t\tt.add_data( 
+              \t\t\teid: #{info["eid"]}, 
+              \t\t\tname: '#{info["name"]}', 
+              \t\t\tspeed: #{info["speed"]}, 
+              \t\t\tmove_model: '#{info["move_model"]}',
+              \t\t\tlife_time: '#{info["life_time"]}',
+              \t\t\tapper_time: '#{info["apper_time"]}'  
+              \t\t)
+          #{path}
+          \tend\n")
         else
           file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]} )}\n")
         end
@@ -84,40 +84,54 @@ module WirelessesHelper
   end
 
   module WBSD
-    class << self
-      def define(&block)
-        block.call
+    class Simulator
+      attr_reader :list
+
+      class << self
+        def define(&block)
+          Simulator.new.instance_eval &block
+        end
       end
-    end
-  end
 
-  class Simulator
-    attr_reader :list
+      def initialize
+        @list = []
+        @config = {}
+        config_list = [:simulation_time, :transmit_range, :messege_num,
+          :messege_size, :field_width, :field_height, :grid_size]
 
-    def initialize
-      @list = []
-    end 
+        config_list.each do |name|
+          Simulator.class_eval do
+            define_method name do |data|
+              @config[name] = data
+              { obj_list: @list, config: @config }
+            end
+          end
+        end
+      end 
 
-    def create(type, &block)
-      @obj = {}
-      @obj[:type] = type
-      block.call(self)
-      @list << @obj
-    end 
+      def create(type, &block)
+        puts "create user =>"
+        @obj = {}
+        @obj[:type] = type
+        block.call(self)
+        @list << @obj
+        { obj_list: @list, config: @config }
+      end 
 
-    def position(pos)
-      @obj[:x] = pos[:x]
-      @obj[:y] = pos[:y]
-    end 
+      def position(pos)
+        @obj[:x] = pos[:x]
+        @obj[:y] = pos[:y]
+      end 
 
-    def add_data( data )
-      @obj.merge!(data)
-    end
+      def add_data( data )
+        @obj.merge!(data)
+      end
 
-    def create_path( &block )
-      route = []
-      block.call route
-      @obj[:path] = route
+      def create_path( &block )
+        route = []
+        block.call route
+        @obj[:path] = route
+      end
     end
   end
 end

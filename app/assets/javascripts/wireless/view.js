@@ -176,7 +176,7 @@ var View = {
 				hline, 
 				color,
 				i;
-		console.log(Simulator.map);
+		console.log('simulator map =>', Simulator.map);
 		for(i = 0; i <= Simulator.canvas_height; i += span){
 			vline = new createjs.Shape();
 			vline.graphics.beginStroke("rgba(0,0,0,0.9)");
