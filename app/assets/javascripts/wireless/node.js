@@ -157,8 +157,26 @@ var Node = {
     this.node_list[car.eid] = car;
   },
 
-  agent2opt: function(agent){
+  pathDeepCopy: function(path){
+    var res = [];
+    for( var i in path ){
+      res[i] = path[i];
+    }
+    return res;
+  },
 
+  agent2opt: function(agent){
+    var opt = {};
+    opt.eid = agent.eid;
+    opt.type = agent.type;
+    opt.name = agent.name;
+    opt.speed = agent.speed;
+    opt.life_time = agent.life_time;
+    opt.apper_time = agent.apper_time;
+    opt.buffer_size = agent.buffer_size;
+    opt.color = Config.directObjectColor(agent.type);
+    opt.path = this.pathDeepCopy(agent.path);
+    return opt;
   },
 
   createAgent: function( x, y, opt ){
@@ -176,8 +194,8 @@ var Node = {
     agent.contact_list = {};
     agent.buffer_size = opt.buffer_size || 1000;
     agent.speed = opt.speed || 10;
-    agent.x = x * gridSize;
-    agent.y = y * gridSize;
+    agent.x = x * View.gridSize;
+    agent.y = y * View.gridSize;
     agent.life_time = +opt.life_time || undefined;
     agent.apper_time = +opt.apper_time || 0;
     agent.wait_time = 0;

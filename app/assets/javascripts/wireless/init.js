@@ -3,6 +3,8 @@ var Init = {
     console.log("ready =>");
     if( Simulator.stage_change === undefined ){
       console.log('first init=>');
+      Config.init();
+      Init.field();
       Simulator.getCanvasInfo();
       Panel.init();
       View.init();
@@ -13,14 +15,7 @@ var Init = {
       Search.init();
     }
 
-    Simulator.canvas.addEventListener('mousedown', Simulator.onmousedown, false);
-    Simulator.canvas.addEventListener('mousemove', Simulator.onmousemove, false);
-    Simulator.canvas.addEventListener('mouseup', Simulator.onmouseup, false);
-    Simulator.canvas.addEventListener("mousewheel" , Simulator.onmousewheel, false);
-
-    Simulator.canvas.addEventListener("contextmenu", function(e){
-      e.preventDefault();
-    }, false);
+    this.addMouseEvent();
 
     if( Simulator.stage_change === undefined ){
       console.log('non edit mode =>');
@@ -41,6 +36,25 @@ var Init = {
       $("#filename").val(Simulator.file_name);
     }
   },
+
+  addMouseEvent: function(){
+    Simulator.canvas.addEventListener('mousedown', Simulator.onmousedown, false);
+    Simulator.canvas.addEventListener('mousemove', Simulator.onmousemove, false);
+    Simulator.canvas.addEventListener('mouseup', Simulator.onmouseup, false);
+    Simulator.canvas.addEventListener("mousewheel" , Simulator.onmousewheel, false);
+
+    Simulator.canvas.addEventListener("contextmenu", function(e){
+      e.preventDefault();
+    }, false);
+  },
+
+  field: function(){
+    var width = View.width * View.gridSize,
+        height = View.height * View.gridSize,
+        str = "<canvas id='canvas' width='" + width + "' height='" + height + "'></canvas>";
+    
+    $("#canvas_field").append(str);
+  }
 }
 
 $(document).ready(function(){

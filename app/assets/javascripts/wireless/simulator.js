@@ -25,6 +25,7 @@ var Simulator = {
     Simulator.canvas = document.getElementById('canvas');
     Simulator.canvas_width = window.canvas.width;
     Simulator.canvas_height = window.canvas.height;
+    console.log('width =>', Simulator.canvas_width, 'height =>', Simulator.canvas_height);
     Simulator.map = new createjs.Stage(Simulator.canvas); 
   },
 

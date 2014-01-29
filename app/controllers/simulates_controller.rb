@@ -25,6 +25,7 @@ class SimulatesController < ApplicationController
       end
 
       @scenario = eval(str)
+      @config = @scenario[:config]
       @obj_list = @scenario[:obj_list]
     end
 
@@ -59,11 +60,11 @@ class SimulatesController < ApplicationController
       end
 
       @scenario = eval(str)
+      @config = @scenario[:config]
       @obj_list = @scenario[:obj_list]
     end
 
     @obj_list ||= []
-
 
     respond_to do |format|
       format.html { render action: 'index' }
@@ -88,7 +89,9 @@ class SimulatesController < ApplicationController
     @file_name = filename
     puts str
 
-    @obj_list = eval(str)
+    @scenario = eval(str)
+    @config = @scenario[:config]
+    @obj_list = @scenario[:obj_list]
   end
   
   def stage_init
@@ -104,7 +107,9 @@ class SimulatesController < ApplicationController
         end
       end
 
-      @obj_list = eval(str)
+      @scenario = eval(str)
+      @config = @scenario[:config]
+      @obj_list = @scenario[:obj_list]
       puts "obj_list = #{@obj_list}"
     end
 

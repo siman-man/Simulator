@@ -80,7 +80,6 @@ var FSM = {
 			],
 			callbacks: {
 				onmove: function(event, from, to, user){
-					console.log('way point init =>', user);
 					user.way_point = MoveModel.directWayPoint(user);
 				},
 				onstop: function(event, from, to, user){

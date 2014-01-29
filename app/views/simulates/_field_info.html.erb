@@ -1,3 +1,27 @@
-<div id="play_panel" class="panel right_panel">
-  <input type="number" id="field_width" min="1" max="100" value="30">
+<div id="field_status" class="panel right_panel">
+	<header>
+  	<h3 class="header_title">ステージ情報</h3>
+	</header>
+	<form class="form-horizontal" role="form">
+  	<div class="form-group">
+    	<label class="control-label">横幅</label>
+    	<div id="play_panel">
+  			<input type="number" class="form-control" id="field_width" min="1" max="100" value="30">
+			</div>
+  	</div>
+
+  	<div class="form-group">
+    	<label class="control-label">縦幅</label>
+    	<div id="play_panel">
+  			<input type="number" class="form-control" id="field_height" min="1" max="100" value="30">
+			</div>
+  	</div>
+
+  	<div class="form-group">
+    	<label class="control-label">グリッドサイズ</label>
+    	<div id="play_panel">
+  			<input type="number" class="form-control" id="grid_size" min="1" max="100" value="30">
+			</div>
+  	</div>
+	</form>
 </div>

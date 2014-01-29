@@ -74,12 +74,11 @@
 
 <% if defined?(@stage_change) %>
   var config = <%= @config.to_json.html_safe %>
-  console.log("stage change =>", config);
+  console.log("stage config =>", config);
+  Config.init(config);
   $("#canvas_field").empty();
-  View.gridSize = config.grid_size || View.gridSize;
-  var width = ( config.field_width !== undefined )? config.field_width * View.gridSize : 900;
-  var str = "<canvas id='canvas' width='" + width + "' height='" + 450 + "'></canvas>";
-  $("#canvas_field").append(str);
+  View.gridSize = gridSize;
+  Init.field();
   Simulator.getCanvasInfo();
   Panel.init();
   View.init();

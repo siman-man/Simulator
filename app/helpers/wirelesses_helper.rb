@@ -29,42 +29,43 @@ module WirelessesHelper
     stage_data = Hash.new
     user_data = []
     stage_data[:filename] = filename
+    stage_data[:node_num] = 0
     File.open("#{Rails.root}/public/stages/#{filename}.rb", "w") do |file|
 
-      file.write("WBSD.define do\n")
+      file.write("WBSD::Simulator.define do\n")
       
       data_list.each do |data|
-        p data
-        p data.split(' ')
         info = Hash[data.split(' ').map{|e| e.split(':')}]
         p info["path"]
         if info["type"] == "stage_data"
-          info["x"] = 0
-          info["y"] = 0
+          info.delete("type")
+          file.write(<<-EOS
+  field_width #{info['field_width']}
+  field_height #{info['field_height']}
+  grid_size #{info['grid_size']}   
+            EOS
+          )
         elsif ["user", "car", "server","start","end"].include?(info["type"])
+          stage_data[:node_num] += 1
           user_data << { eid: info["eid"], name: info["name"], speed: info["speed"] }
           path = ( info["type"] == "user")? create_path(info["path"]) : ""
-          file.write("\tcreate(:#{info["type"]}) do |t| 
-            \t\tt.position( x: #{info["x"]}, y: #{info["y"]} )
-            \t\tt.add_data( 
-              \t\t\teid: #{info["eid"]}, 
-              \t\t\tname: '#{info["name"]}', 
-              \t\t\tspeed: #{info["speed"]}, 
-              \t\t\tmove_model: '#{info["move_model"]}',
-              \t\t\tlife_time: '#{info["life_time"]}',
-              \t\t\tapper_time: '#{info["apper_time"]}'  
-              \t\t)
-          #{path}
-          \tend\n")
+          file.write(<<-EOS
+  create(:#{info["type"]}) do |t| 
+    t.position( x: #{info["x"]}, y: #{info["y"]} )
+    t.add_data( 
+      id: #{info["eid"]}, 
+      name: '#{info["name"]}', 
+      speed: #{info["speed"]}, 
+      move_model: '#{info["move_model"]}',
+      life_time: '#{info["life_time"]}',
+      apper_time: '#{info["apper_time"]}'  
+    )
+#{path}
+  end
+          EOS
+          )
         else
           file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]} )}\n")
-        end
-        if info["type"] == "stage_data"
-          if info["node_num"] 
-            p info
-            node_num = info["node_num"].to_i
-            stage_data[:node_num] = node_num
-          end
         end
       end
       
@@ -76,7 +77,7 @@ module WirelessesHelper
 
   def create_path(path)
     path = eval(path.gsub(/\*/,','))
-    str = "\t\tt.create_path do |route|\n"
+    str = "\n\t\tt.create_path do |route|\n"
     path.each_slice(3) do |data|
       str += "\t\t\troute.add({ y: #{data[0]}, x: #{data[1]}, wait: #{data[2]} })\n"
     end

@@ -17,8 +17,8 @@ var View = {
 
 	init: function(){
 		var x, y;
-		this.width = Simulator.canvas_width/gridSize|0+1;
-		this.height = Simulator.canvas_height/gridSize|0+1;
+		this.width = Simulator.canvas_width/gridSize|0;
+		this.height = Simulator.canvas_height/gridSize|0;
 
  		for( y = 0; y < this.height; y++ ){
       this.propagation[y] = [];
