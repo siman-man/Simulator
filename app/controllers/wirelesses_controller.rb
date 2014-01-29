@@ -5,9 +5,6 @@ class WirelessesController < ApplicationController
 
   before_action :set_wireless, only: [:show, :edit, :update, :destroy]
 
-  # GET /wirelesses
-  # GET /wirelesses.json
-
   def index
     if params[:time].presence
       params.delete(:controller)

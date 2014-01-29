@@ -139,8 +139,8 @@ var MoveModel = {
         y,
         coord = View.point2coord( user.x, user.y );
     while(true){
-      x = Simulator.mersenne.random() * View.width * 1.0 | 0;
-      y = Simulator.mersenne.random() * View.height * 1.0 | 0;
+      x = Simulator.mersenne.random() * (View.width-1) * 1.0 | 0;
+      y = Simulator.mersenne.random() * (View.height-1) * 1.0 | 0;
       if( Simulator.field[y][x].type != 'wall' ) break;
     }
 

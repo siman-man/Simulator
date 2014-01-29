@@ -40,10 +40,10 @@ var Node = {
         user.move_model = "RandomWayPoint";
         break;
       case 1:
-        user.move_model = "RandomWalk";
+        user.move_model = "MapRouteMovement";
         break;
       case 2:
-        user.move_model = "MapRouteMovement";
+        user.move_model = "RandomWalk";
         break;
       case 3:
         user.move_model = "StationaryMovement";
@@ -133,6 +133,7 @@ var Node = {
   },
 
   createAgent: function( x, y, opt ){
+    console.log('opt =>', opt);
     var agent = new createjs.Shape();
     if( this.isServer(opt.type)){
       agent.graphics.beginFill(opt.color).drawRect( 0, 0, gridSize, gridSize);
@@ -148,6 +149,8 @@ var Node = {
     agent.speed = opt.speed || 10;
     agent.x = x * gridSize;
     agent.y = y * gridSize;
+    agent.life_time = +opt.life_time || undefined;
+    agent.apper_time = +opt.apper_time || 0;
 
     agent.label = new createjs.Text(0, "14px Arial", "white");
     agent.label.textAlign = "center";
@@ -174,7 +177,7 @@ var Node = {
   },
 
 	createUser: function( x, y, opt ){
-    opt.move_model = "RandomWayPoint";
+    opt.move_model = opt.move_model || "RandomWayPoint";
     opt.color = 'rgba(0,0,0,1.0)';
     opt.speed = opt.speed || 10;
     var user = this.createAgent( x, y, opt),
@@ -243,10 +246,15 @@ var Node = {
 	move: function(){
 		var node,
 				eid,
-				key;
+				key,
+        coord;
 
 		for( eid in this.node_list ){
 			node = this.node_list[eid];
+      if( !Simulator.map.contains(node) ) continue;
+      if( node.life_time === Simulator.time ){
+        this.disapper(node);
+      }
 
 			if( this.isUser(node.type) ){
 				coord = View.point2coord( node.x, node.y );
@@ -256,9 +264,9 @@ var Node = {
 				coord = View.point2coord( node.x, node.y );
 				key = Simulator.key_map[coord.y][coord.x];
       	Simulator.node_map[key][node.eid] = { x: coord.x, y: coord.y, obj: node, type: node.type };
-			}
-      node.label.y = node.y + gridSize/5|0;
-      node.label.x = node.x + gridSize/2|0;
+			  node.label.y = node.y + gridSize/5|0;
+        node.label.x = node.x + gridSize/2|0;
+      }
 		}
 	},
 
@@ -272,6 +280,7 @@ var Node = {
 
     for( eid in this.node_list ){
       node = this.node_list[eid];
+      if( !Simulator.map.contains(node) ) continue;
       node.label.text = Object.keys(node.strage).length;
     
       coord = View.point2coord( node.x, node.y );
@@ -385,6 +394,18 @@ var Node = {
 		this.eid = 0;
     this.node_list = {};
 	},
+
+  apper: function( y, x ){
+
+  },
+
+  disapper: function( node ){
+    var coord = View.point2coord( node.x, node.y ),
+        key = Simulator.key_map[coord.y][coord.x];
+    Simulator.map.removeChild(node);
+    delete Simulator.node_map[key][node.eid];
+    Simulator.field[coord.y][coord.x] = { x: coord.x, y: coord.y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+  },
 
 	remove: function(node){
     if( node.name === 'start' || node.name === 'end' ) return;

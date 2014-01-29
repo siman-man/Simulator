@@ -46,7 +46,14 @@ module WirelessesHelper
           path = ( info["type"] == "user")? create_path(info["path"]) : ""
           file.write("\tcreate(:#{info["type"]}) do |t| 
 \t\tt.pos( x: #{info["x"]}, y: #{info["y"]} )
-\t\tt.add_data( eid: #{info["eid"]}, name: '#{info["name"]}', speed: #{info["speed"]}, move_model: '#{info["move_model"]}' )
+\t\tt.add_data( 
+\t\t\teid: #{info["eid"]}, 
+\t\t\tname: '#{info["name"]}', 
+\t\t\tspeed: #{info["speed"]}, 
+\t\t\tmove_model: '#{info["move_model"]}',
+\t\t\tlife_time: '#{info["life_time"]}',
+\t\t\tapper_time: '#{info["apper_time"]}'  
+\t\t)
 #{path}
 \tend\n")
         else
@@ -98,7 +105,7 @@ module WirelessesHelper
       @list << @obj
     end 
 
-    def pos(pos)
+    def position(pos)
       @obj[:x] = pos[:x]
       @obj[:y] = pos[:y]
     end 

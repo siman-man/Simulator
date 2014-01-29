@@ -5,7 +5,7 @@ var Show = {
 	node_list: [],
 	edge_list: [],
 	line_list: [],
-	r: 15,
+	r: 10,
 
 	init: function(){
 		this.canvas = document.getElementById('my_canvas');
@@ -108,7 +108,7 @@ var Show = {
  				dist = Math.sqrt( dx*dx + dy*dy ),
  				cos = dx / dist,
  				sin = dy / dist,
-        thin = (value/this.max_value)*10,
+        thin = (value/this.max_value)*5,
         color = this.directEdgeColor(thin) || "black";
 
 		line.graphics.setStrokeStyle(thin).beginStroke(color);

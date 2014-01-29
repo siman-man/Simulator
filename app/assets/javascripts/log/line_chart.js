@@ -3,7 +3,7 @@ var LineChart = {
 		console.log(DataList.finish_time);
 		console.log(DataList.graph_data);
 		var margin = {top: 20, right: 80, bottom: 50, left: 70},
-		width = 960 - margin.left - margin.right,
+		width = 860 - margin.left - margin.right,
 		height = 500 - margin.top - margin.bottom;
 
 		var x = d3.scale.linear()
@@ -24,7 +24,7 @@ var LineChart = {
 		.orient("left");
 
 		var line = d3.svg.line()
-		.interpolate("basis")
+		.interpolate("linear")
 		.x(function(d) { return x(d.time); })
 		.y(function(d) { return y(d.count); });
 
@@ -37,7 +37,6 @@ var LineChart = {
 		color.domain(d3.keys(DataList.graph_data[0]).filter(function(key) { return (LineChart.filter(key)); }));
 
 		var cities = color.domain().map(function(name) {
-			console.log("name =>", name);
 			return {
 				name: name,
 				values: DataList.graph_data.map(function(d) {

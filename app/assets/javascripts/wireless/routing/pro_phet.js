@@ -19,6 +19,7 @@ var ProPHET = function(node){
 ProPHET.prototype = {
 	update: function(){
 		this.aging_check();
+		this.buffer_update();
 		this.transmit();
 	},
 
@@ -36,6 +37,13 @@ ProPHET.prototype = {
 			}
 		}
 		return +best_eid;
+	},
+
+	buffer_update: function(){
+		var buffer = this.node.buffer;
+		while( buffer[0] !== undefined && this.message_check(buffer[0]) ){
+			buffer.shift();
+		}
 	},
 
 	aging_check: function(){
@@ -65,10 +73,11 @@ ProPHET.prototype = {
 	connect: function( to ){
 		var dp = this.node.delivery_predictability,
 				eid, P_a_b, P_b_c, P_a_c, P_a_c_old,
-				my_eid = this.node.eid;
+				my_eid = this.node.eid,
+				last_time = this.node.last_connect_time[to.eid] || 0;
 
-		dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid] );
-		console.log("first =>", dp[my_eid][to.eid]);
+		dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid], last_time );
+
 		dp[to.eid] = this.deep_copy(to.delivery_predictability[to.eid]);
 		P_a_b = dp[my_eid][to.eid];
 		for( eid in to.delivery_predictability[to.eid] ){
@@ -78,8 +87,6 @@ ProPHET.prototype = {
 			P_b_c = to.delivery_predictability[to.eid][eid] || 0.0;
 
 			P_a_c = this.update_predictability( P_a_b, P_b_c );
-
-			console.log( P_a_b, P_b_c, P_a_c );
 
 			if( P_a_c_old < P_a_c ){
 				dp[my_eid][eid] = P_a_c;
@@ -98,9 +105,9 @@ ProPHET.prototype = {
 		}
 	},
 
-	first_connection: function( old ){
+	first_connection: function( old, last_time ){
 		old = old || 0.0;
-		return old + ( 1.0 - this.delta - old ) * this.P_encounter( Simulator.time );
+		return old + ( 1.0 - this.delta - old ) * this.P_encounter( Simulator.time - last_time );
 	},
 
 	aging: function( old, k ){
@@ -129,25 +136,20 @@ ProPHET.prototype = {
 			dest_eid = message.dest_eid;
 			dest = Node.node_list[dest_eid];
 			
-			if( this.check( dest, message ) ){
+	
+			message.size--;
+			if( message.size === 0 ){
+				dest.strage[message.id] = message;
+				dest.label.text = Object.keys(dest.strage).length;
 				this.node.buffer.shift();
-			}else{
-				message.size--;
-				if( message.size === 0 ){
-					dest.strage[message.id] = message.data;
-					dest.label.text = Object.keys(dest.strage).length;
-					this.node.buffer.shift();
-					Log.send(Log.transmit_message( this.node, dest, message ));
-				}
+				Log.send(Log.transmit_message( this.node, dest, message ));
 			}
 		}
 	},
 
-	check: function( dest, message ){
-
-		if( this.node.contact_list[dest.eid].current === 'close' ) return true;
-		if( dest.strage[message.id] !== undefined ) return true;
-
+	message_check: function( message ){
+		if( this.node.contact_list[message.dest_eid].current === 'close' ) return true;
+		if( Node.node_list[message.dest_eid].strage[message.id] !== undefined ) return true;
 		return false;
 	},
 

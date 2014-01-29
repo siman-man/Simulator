@@ -281,7 +281,6 @@ var Simulator = {
           if( draw_object.obj ){
             Simulator.operation_flag = true;
             Simulator.target = draw_object;
-            console.log( draw_object );
 
             if( Node.isServer(draw_object.type) && operation_type === 0 ){
               console.log("server move =>");

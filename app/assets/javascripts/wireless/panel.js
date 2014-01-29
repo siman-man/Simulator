@@ -23,6 +23,8 @@ var Panel = {
 			}
 		});
 
+		this.lifeTimeChanged();
+		this.apperTimeChanged();
 		this.moveModelChanged();
 
 		$("#wait_time").change(function(){
@@ -129,13 +131,15 @@ var Panel = {
   },
 
   updateNodeData: function( obj ){
-  	var eid = $("#user_eid").val();
-  	if( eid != obj.eid ){ 
+  	var eid = $("#user_eid").val() || -1;
+  	if( eid !== obj.eid ){ 
   		Simulator.route_user = Node.node_list[obj.eid];
   		$("#create_route").attr("checked",false);
   		$("#user_eid").val(obj.eid);
   		$("#user_name").val(obj.name);
   		$("#move_model").val(Panel.model2value(obj.move_model));
+  		$("#life_time").val(obj.life_time || 'undefined');
+  		$("#apper_time").val(obj.apper_time || 0 );
   		Panel.select[0].selectedIndex = Simulator.route_user.speed-1;
   		Panel.slider.slider( "value", Simulator.route_user.speed );
 		}
@@ -173,6 +177,26 @@ var Panel = {
 			console.log(Node.node_list[eid]);
 			if( name.length > 0 ){
 				Node.node_list[eid].name = name;
+			}
+		}); 
+  },
+
+  lifeTimeChanged: function(){
+		$("#life_time").change(function(){
+			var eid = $("#user_eid").val(),
+					life_time = +$("#life_time").val();
+			if( eid.length > 0 ){
+				Node.node_list[eid].life_time = life_time;
+			}
+		}); 
+  },
+
+  apperTimeChanged: function(){
+		$("#apper_time").change(function(){
+			var eid = $("#user_eid").val(),
+					life_time = +$("#apper_time").val();
+			if( eid.length > 0 ){
+				Node.node_list[eid].apper_time = apper_time;
 			}
 		}); 
   },

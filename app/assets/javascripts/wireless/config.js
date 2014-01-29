@@ -30,6 +30,8 @@ var Config = {
 				name: node.name,
 				speed: node.speed,
 				move_model: node.move_model,
+				life_time: node.life_time || -1,
+				apper_time: node.apper_time || 0,
 				path: this.path2string(node.path),
 			}))
 		}
