@@ -8,9 +8,9 @@ var Propagation = {
   init: function(){
     var ypos, xpos;
     this.before_check_point = { x: -1, y: -1 };
-    for( ypos = 0; ypos < View.height; ypos++ ){
+    for( ypos = 0; ypos <= View.height; ++ypos ){
       this.board[ypos] = [];
-      for( xpos = 0; xpos < View.width; xpos++ ){
+      for( xpos = 0; xpos <= View.width; ++xpos ){
         this.board[ypos][xpos] = { check: false, cost: 999999 };
       }
     }

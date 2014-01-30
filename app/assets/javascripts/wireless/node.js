@@ -180,7 +180,6 @@ var Node = {
   },
 
   createAgent: function( x, y, opt ){
-    console.log('opt =>', opt);
     var agent = new createjs.Shape();
     if( this.isServer(opt.type)){
       agent.graphics.beginFill(opt.color).drawRect( 0, 0, gridSize, gridSize);
@@ -283,7 +282,9 @@ var Node = {
     node.status = ServerStatus.init();
 
     this.node_list[node.eid] = node;
+    console.log('eid =>', node.eid, 'y =>',y, 'x =>', x);
     key = Simulator.key_map[y][x];
+    console.log('node =>', node, 'key =>', key);
     Simulator.node_map[key][node.eid] = { x: x, y: y, obj: node, type: 'server' };
     Simulator.field[y][x] = { x: x, y: y, obj: node, type: node.type, cost: 1, pf: 1 };
     Propagation.calc(x, y);

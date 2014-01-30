@@ -20,11 +20,11 @@ var View = {
 		this.width = Simulator.canvas_width/gridSize|0;
 		this.height = Simulator.canvas_height/gridSize|0;
 
- 		for( y = 0; y < this.height; y++ ){
+ 		for( y = 0; y <= this.height; ++y ){
       this.propagation[y] = [];
       this.route_grid[y] = [];
 
-      for(x = 0; x < this.width; x++){
+      for(x = 0; x <= this.width; ++x){
       	shape = new createjs.Shape();
       	shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
       	View.propagation[y][x] = { obj: shape, flag: false };
@@ -176,7 +176,6 @@ var View = {
 				hline, 
 				color,
 				i;
-		console.log('simulator map =>', Simulator.map);
 		for(i = 0; i <= Simulator.canvas_height; i += span){
 			vline = new createjs.Shape();
 			vline.graphics.beginStroke("rgba(0,0,0,0.9)");

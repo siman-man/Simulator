@@ -10,7 +10,6 @@ var Init = {
       View.init();
       View.drawGrid();
       Propagation.init();
-      Network.init();
       Simulator.init();
       Search.init();
     }
@@ -44,6 +43,9 @@ var Init = {
     Simulator.canvas.addEventListener("mousewheel" , Simulator.onmousewheel, false);
 
     Simulator.canvas.addEventListener("contextmenu", function(e){
+      e.preventDefault();
+    }, false);
+    Simulator.canvas.addEventListener("mousewheel", function(e){
       e.preventDefault();
     }, false);
   },

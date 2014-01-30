@@ -206,90 +206,19 @@ var Panel = {
 
   fieldWidthChanged: function(){
   	$("#field_width").change(function(){
-  		$("#canvas_field").empty();
-  		var width = +$("#field_width").val() * View.gridSize,
-  				height = +$("#field_height").val() * View.gridSize;
-  		console.log('width =>', width);
-  		var str = "<canvas id='canvas' width='" + width + "' height='" + height + "'></canvas>";
-  		$("#canvas_field").append(str);
-  		var obj_list = Config.field2obj_list();
-  		console.log('obj_list =>', obj_list);
-  		Simulator.clear(true);
-  		Simulator.getCanvasInfo();
-  		View.init();
-  		View.drawGrid()
-  		Propagation.init();
-  		Simulator.init();
-  		Init.addMouseEvent();
-  		$.each( obj_list, function( index, obj ) {
-  			switch(obj.type){
-  				case 'wall':
-  					break;
-  				default:
-  					Node.create( obj.x, obj.y, obj.opt );
-  					break;
-  			}
-  		});
-  	});
-  },
-
-  fieldHeightChanged: function(){
-  	$("#grid_size").change(function(){
-  		$("#canvas_field").empty();
-  		var obj_list = Config.field2obj_list();
-  		gridSize = +$("#grid_size").val();
-  		View.gridSize = gridSize;
-  		var width = +$("#field_width").val() * View.gridSize,
-  				height = +$("#field_height").val() * View.gridSize;
-  		console.log('width =>', width, 'height =>', height);
-  		var str = "<canvas id='canvas' width='" + width + "' height='" + height + "'></canvas>";
-  		$("#canvas_field").append(str);
-  		console.log('obj_list =>', obj_list);
-  		Simulator.clear(true);
-  		Simulator.getCanvasInfo();
-  		View.init();
-  		View.drawGrid()
-  		Propagation.init();
-  		Simulator.init();
-  		Init.addMouseEvent();
-  		$.each( obj_list, function( index, obj ) {
-  			switch(obj.type){
-  				case 'wall':
-  					break;
-  				default:
-  					Node.create( obj.x, obj.y, obj.opt );
-  					break;
-  			}
-  		});
+  		Simulator.field_update();
   	});
   },
 
   gridSizeChanged: function(){
+  	$("#grid_size").change(function(){
+  		Simulator.field_update();
+  	});
+  },
+
+ 	fieldHeightChanged: function(){
   	$("#field_height").change(function(){
-  		$("#canvas_field").empty();
-  		var width = +$("#field_width").val() * View.gridSize,
-  				height = +$("#field_height").val() * View.gridSize;
-  		console.log('width =>', width, 'height =>', height);
-  		var str = "<canvas id='canvas' width='" + width + "' height='" + height + "'></canvas>";
-  		$("#canvas_field").append(str);
-  		var obj_list = Config.field2obj_list();
-  		console.log('obj_list =>', obj_list);
-  		Simulator.clear(true);
-  		Simulator.getCanvasInfo();
-  		View.init();
-  		View.drawGrid()
-  		Propagation.init();
-  		Simulator.init();
-  		Init.addMouseEvent();
-  		$.each( obj_list, function( index, obj ) {
-  			switch(obj.type){
-  				case 'wall':
-  					break;
-  				default:
-  					Node.create( obj.x, obj.y, obj.opt );
-  					break;
-  			}
-  		});
+  		Simulator.field_update();
   	});
   },
 

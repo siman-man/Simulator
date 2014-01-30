@@ -7,6 +7,7 @@ var Simulator = {
   start_time: undefined,
   end_time: undefined,
   seed: 1,
+  update_flag: false,
   replay: false,
   stage_type: 1,
   selected_target: -1,
@@ -406,4 +407,43 @@ var Simulator = {
     Simulator.press_flag = false;
     Simulator.create_route_mode = false;
   },
+
+  onmousewheel: function(e){
+    var ngs;
+    if( e.wheelDelta < 0 ){
+      ngs = Math.max( 1, View.gridSize - 1);
+    }else{
+      ngs = Math.min( 100, View.gridSize + 1 );
+    }
+    $("#grid_size").val(ngs);
+    Simulator.field_update();
+  },
+
+  field_update: function(){
+    $("#canvas_field").empty();
+    var obj_list = Config.field2obj_list();
+    gridSize = +$("#grid_size").val();
+    View.gridSize = gridSize;
+    var width = +$("#field_width").val() * View.gridSize,
+        height = +$("#field_height").val() * View.gridSize;
+    console.log('width =>', width, 'height =>', height);
+    var str = "<canvas id='canvas' width='" + width + "' height='" + height + "'></canvas>";
+    $("#canvas_field").append(str);
+    Simulator.clear(true);
+    Simulator.getCanvasInfo();
+    View.init();
+    View.drawGrid()
+    Propagation.init();
+    Simulator.init();
+    Init.addMouseEvent();
+    $.each( obj_list, function( index, obj ) {
+      switch(obj.type){
+        case 'wall':
+          break;
+        default:
+          Node.create( obj.x, obj.y, obj.opt );
+          break;
+      }
+    });
+  }
 }
