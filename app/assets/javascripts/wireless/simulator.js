@@ -19,6 +19,7 @@ var Simulator = {
   total_send_message_num: 0,
   article_id: 0,
   time: 0,
+  time_limit: -1,
   per_frame: 360,
 
   getCanvasInfo: function(){
@@ -127,7 +128,7 @@ var Simulator = {
   },
 
   finishCheck: function(){
-    if( Object.keys(Node.node_list[1].strage).length === Message.message_num ){
+    if(Object.keys(Node.node_list[1].strage).length === Message.message_num || Simulator.time === Simulator.time_limit){
       Simulator.state.finish();
     }
   },

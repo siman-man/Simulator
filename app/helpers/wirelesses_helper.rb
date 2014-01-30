@@ -43,7 +43,9 @@ module WirelessesHelper
   field_width #{info['field_width']}
   field_height #{info['field_height']}
   grid_size #{info['grid_size']} 
-  transmit_range #{info['transmit_range']}  
+  transmit_range #{info['transmit_range']}
+  routing_protocol '#{info['routing_protocol']}'
+  time_limit #{info['time_limit']}  
             EOS
           )
         elsif ["user", "car", "server","start","end"].include?(info["type"])
@@ -99,7 +101,8 @@ module WirelessesHelper
         @list = []
         @config = {}
         config_list = [:simulation_time, :transmit_range, :messege_num,
-          :messege_size, :field_width, :field_height, :grid_size]
+          :messege_size, :field_width, :field_height, :grid_size, :routing_protocol,
+          :time_limit]
 
         config_list.each do |name|
           Simulator.class_eval do

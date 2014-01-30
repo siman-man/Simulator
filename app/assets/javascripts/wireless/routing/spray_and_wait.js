@@ -18,6 +18,7 @@ var SprayAndWait = function(node){
 
 SprayAndWait.prototype = {
 	update: function(){
+		this.buffer_update();
 		this.transmit();
 	},
 
@@ -34,6 +35,13 @@ SprayAndWait.prototype = {
 		}
 	},
 
+	buffer_update: function(){
+		var buffer = this.node.buffer;
+		while( buffer[0] !== undefined && this.message_check(buffer[0]) ){
+			buffer.shift();
+		}
+	},
+
 	transmit: function(){
 		var dest,
 				dest_eid,
@@ -43,26 +51,21 @@ SprayAndWait.prototype = {
 			message = this.node.buffer[0];
 			dest_eid = message.dest_eid;
 			dest = Node.node_list[dest_eid];
-			
-			if( this.check( dest, message ) ){
+		
+			message.size--;
+			if( message.size === 0 ){
+				dest.strage[message.id] = message;
+				this.node.strage[message.id].ftoken = message.ftoken;
+				dest.label.text = Object.keys(dest.strage).length;
 				this.node.buffer.shift();
-			}else{
-				message.size--;
-				if( message.size === 0 ){
-					dest.strage[message.id] = message;
-					this.node.strage[message.id].ftoken = message.ftoken;
-					dest.label.text = Object.keys(dest.strage).length;
-					this.node.buffer.shift();
-					Log.send(Log.transmit_message( this.node, dest, message ));
-				}
+				Log.send(Log.transmit_message( this.node, dest, message ));
 			}
 		}
 	},
 
-	check: function( dest, message ){
-		if( this.node.contact_list[dest.eid].current === 'close' ) return true;
-		if( dest.strage[message.id] !== undefined ) return true;
-
+	message_check: function( message ){
+		if( this.node.contact_list[message.dest_eid].current === 'close' ) return true;
+		if( Node.node_list[message.dest_eid].strage[message.id] !== undefined ) return true;
 		return false;
 	},
 

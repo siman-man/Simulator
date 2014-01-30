@@ -6,11 +6,16 @@ var Config = {
 			View.height = config.field_height || 30;
 			View.gridSize = config.grid_size || 30;
 			Propagation.transmit_range = config.transmit_range || 4;
+			Simulator.time_limit = config.time_limit || -1;
+			$("#time_limit").val(Simulator.time_limit);
+			if( config.routing_protocol !== undefined ){
+				$("#protocol").val(Panel.protocol2value(config.routing_protocol));
+			}
 		}else{
 			View.width = 30;
 			View.height = 30;
 			View.gridSize = 30;
-			Propagation.transmit_range = 4;
+			Propagation.transmit_range = 5;
 		}
 		gridSize = View.gridSize;
 
@@ -57,12 +62,18 @@ var Config = {
 			 	coord,
 			 	obj;
 
+		if( Simulator.protocol_type === undefined ){
+			Simulator.direct_protocol_type(+$("#protocol").val());
+		}
+
 
 		data.push( this.create_data( "stage_data", { 
 			field_width: View.width,
 			field_height: View.height,
 			grid_size: View.gridSize,
-			transmit_range: Propagation.transmit_range, 
+			transmit_range: Propagation.transmit_range,
+			routing_protocol: Simulator.protocol_type,
+			time_limit: Simulator.time_limit,
 		}));
 
 		for( y = 0; y < View.height; ++y ){

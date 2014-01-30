@@ -30,6 +30,8 @@ var Panel = {
 		this.fieldHeightChanged();
 		this.gridSizeChanged();
 		this.transmitRangeChanged();
+		this.protocolChanged();
+		this.timeLimitChanged();
 
 		$("#wait_time").change(function(){
 			if( View.selected_cell !== undefined ){
@@ -229,6 +231,20 @@ var Panel = {
   	});
   },
 
+  protocolChanged: function(){
+  	$("#protocol").change(function(){
+  		console.log("Protocol chage =>");
+  		Simulator.direct_protocol_type(+$("#protocol").val());
+  	});
+  },
+
+  timeLimitChanged: function(){
+  	$("#time_limit").change(function(){
+  		console.log("Time limit =>");
+  		Simulator.time_limit = +$("#time_limit").val();
+  	});
+  },
+
   model2value: function( move_model ){
   	console.log("move model => ", move_model);
   	switch(move_model){
@@ -248,5 +264,20 @@ var Panel = {
   			return 4;
   			break;
   	}
+  },
+
+  protocol2value: function( protocol_type ){
+  	switch(protocol_type){
+			case 'epidemic':
+				return 0;
+			case 'spray_and_wait':
+				return 1;
+			case 'pro_phet':
+				return 2;
+			case 'n_hop_forwarding':
+				return 3;
+			default:
+				return 0;
+		}
   },
 };

@@ -17,9 +17,9 @@ var FSM = {
 					Simulator.user_id = Date.now();
 					Simulator.start_time = new Date();
 					Simulator.start_time = Simulator.start_time.getTime();
-					Simulator.direct_protocol_type(parseInt($("#protocol").val()));
+					Simulator.direct_protocol_type(+$("#protocol").val());
 					Simulator.seed = $("#seed").val();
-					Message.message_num = parseInt($("#message_num").val());
+					Message.message_num = +$("#message_num").val();
 					Message.init();
 					Node.init();
 					Log.init({ 
