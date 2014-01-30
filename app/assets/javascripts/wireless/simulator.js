@@ -82,21 +82,16 @@ var Simulator = {
   },
 
   clear: function( config ){
+    console.log("Simulator clear =>");
     createjs.Ticker.removeEventListener("tick", this.handleTick);
     Simulator.map.removeAllChildren();
 
     Simulator.time = 0;
     Simulator.node_list = {};
     Street.clear();
-    Home.clear();
     Wall.clear();
     Node.clear();
     View.clear();
-    
-    View.drawGrid()
-    View.init();
-    Simulator.init( config );
-    Node.init(); 
   },
 
   handleTick: function(event) {
@@ -195,9 +190,6 @@ var Simulator = {
         case 'wall':
           Wall.create( x, y );
           break;
-        case 'home':
-          Home.create( x, y );
-          break;
         case 'car':
           key = Simulator.key_map[y][x];
           if( Object.keys(Simulator.node_map[key]).length === 0 ){
@@ -227,9 +219,6 @@ var Simulator = {
           break;
         case 'car':
           Node.remove( draw_object.obj );
-          break;
-        case 'home':
-          Home.remove( draw_object.obj );
           break;
         case 'wall':
           Wall.remove( draw_object.obj );
@@ -416,10 +405,12 @@ var Simulator = {
       ngs = Math.min( 100, View.gridSize + 1 );
     }
     $("#grid_size").val(ngs);
-    Simulator.field_update();
+    if( Simulator.state.current !== 'run' ){
+      Simulator.field_update();
+    }
   },
 
-  field_update: function(){
+  stage_update: function(){
     $("#canvas_field").empty();
     var obj_list = Config.field2obj_list();
     gridSize = +$("#grid_size").val();
@@ -429,6 +420,11 @@ var Simulator = {
     console.log('width =>', width, 'height =>', height);
     var str = "<canvas id='canvas' width='" + width + "' height='" + height + "'></canvas>";
     $("#canvas_field").append(str);
+    return obj_list;
+  },
+
+  field_update: function(){
+    var obj_list = Simulator.stage_update();
     Simulator.clear(true);
     Simulator.getCanvasInfo();
     View.init();
@@ -438,7 +434,14 @@ var Simulator = {
     Init.addMouseEvent();
     $.each( obj_list, function( index, obj ) {
       switch(obj.type){
+        case 'road':
+          Street.create( obj.x, obj.y );
+          break;
+        case 'lake':
+          Lake.create( obj.x, obj.y );
+          break;
         case 'wall':
+          Wall.create( obj.x, obj.y );
           break;
         default:
           Node.create( obj.x, obj.y, obj.opt );

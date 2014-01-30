@@ -3,6 +3,19 @@ Simulator.stage_type = "<%= @stage_type %>"
 console.log('create map =>');
 var config = <%= @config.to_json.html_safe %>
 console.log('config =>', config);
+
+Config.init(config);
+$("#canvas_field").empty();
+View.gridSize = gridSize;
+Init.field();
+Simulator.getCanvasInfo();
+View.init();
+View.drawGrid()
+Propagation.init();
+Simulator.init();
+Search.init();
+Init.addMouseEvent();
+
 <% @obj_list.each do |obj| %>
 	var x, y;
 	console.log("create =>");

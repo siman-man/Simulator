@@ -54,6 +54,10 @@ var Node = {
         agent.move_model_type = "StationaryMovement";
         agent.move_model = MoveModel.stationaryMovement; 
         break;
+      case 'CarMovement':
+        agent.move_model_type = "CarMovement";
+        agent.move_model = MoveModel.carMovement;
+        break;
       default:
         agent.move_model = MoveModel.stationaryMovement;
         break;
@@ -140,7 +144,7 @@ var Node = {
   createCar: function( x, y, opt ){
     opt.color = 'rgba(0,59,255,1.0)';
     opt.speed = 3;
-    console.log('create car =>');
+    console.log('create car =>', opt);
     var car = this.createAgent(x,y,opt),
         key;
 
@@ -171,6 +175,7 @@ var Node = {
     opt.type = agent.type;
     opt.name = agent.name;
     opt.speed = agent.speed;
+    opt.move_model = agent.move_model_type;
     opt.life_time = agent.life_time;
     opt.apper_time = agent.apper_time;
     opt.buffer_size = agent.buffer_size;

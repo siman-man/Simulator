@@ -50,9 +50,8 @@
 
   <% unless @edit_mode %>
     <%= render 'control_panel' %>
-  <% else %>
-    <%= render 'field_info' %>
   <% end %>
+  <%= render 'field_info' %>
   <%= render 'user_status' %>
   <div id="canvas_field">
   </div>
@@ -103,13 +102,14 @@
         Node.create( x, y, opt);
       <% when :user %>
         Node.create(x, y, opt );
-      <% when :tree %>
-        Tree.create( x, y );
+      <% when :wall %>
+        Wall.create( x, y );
       <% when :road %>
         Street.create(x, y);
       <% when :car %>
         Node.create(x, y, opt );
-      <% else %>  
+      <% when :lake %>
+        Lake.create( x, y);
       <% end %>
     <% end %>
   <% end %>

@@ -42,7 +42,8 @@ module WirelessesHelper
           file.write(<<-EOS
   field_width #{info['field_width']}
   field_height #{info['field_height']}
-  grid_size #{info['grid_size']}   
+  grid_size #{info['grid_size']} 
+  transmit_range #{info['transmit_range']}  
             EOS
           )
         elsif ["user", "car", "server","start","end"].include?(info["type"])
@@ -65,7 +66,7 @@ module WirelessesHelper
           EOS
           )
         else
-          file.write("\tcreate(:#{info["type"]}){|t| t.pos( x: #{info["x"]}, y: #{info["y"]} )}\n")
+          file.write("\tcreate(:#{info["type"]}){|t| t.position( x: #{info["x"]}, y: #{info["y"]} )}\n")
         end
       end
       

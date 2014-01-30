@@ -1,20 +1,23 @@
 var Config = {
-
 	init: function(config){
+		console.log("config init =>");
 		if( config !== undefined ){
 			View.width = config.field_width || 30;
 			View.height = config.field_height || 30;
 			View.gridSize = config.grid_size || 30;
+			Propagation.transmit_range = config.transmit_range || 4;
 		}else{
 			View.width = 30;
 			View.height = 30;
 			View.gridSize = 30;
+			Propagation.transmit_range = 4;
 		}
 		gridSize = View.gridSize;
 
 		$("#field_width").val(View.width);
 		$("#field_height").val(View.height);
 		$("#grid_size").val(View.gridSize);
+		$("#transmit_range").val(Propagation.transmit_range);
 	},
 
 	field2obj_list: function(){
@@ -58,7 +61,8 @@ var Config = {
 		data.push( this.create_data( "stage_data", { 
 			field_width: View.width,
 			field_height: View.height,
-			grid_size: View.gridSize, 
+			grid_size: View.gridSize,
+			transmit_range: Propagation.transmit_range, 
 		}));
 
 		for( y = 0; y < View.height; ++y ){

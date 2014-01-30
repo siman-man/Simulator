@@ -29,6 +29,7 @@ var Panel = {
 		this.fieldWidthChanged();
 		this.fieldHeightChanged();
 		this.gridSizeChanged();
+		this.transmitRangeChanged();
 
 		$("#wait_time").change(function(){
 			if( View.selected_cell !== undefined ){
@@ -219,6 +220,12 @@ var Panel = {
  	fieldHeightChanged: function(){
   	$("#field_height").change(function(){
   		Simulator.field_update();
+  	});
+  },
+
+  transmitRangeChanged: function(){
+  	$("#transmit_range").change(function(){
+  		Propagation.transmit_range = +$("#transmit_range").val();
   	});
   },
 

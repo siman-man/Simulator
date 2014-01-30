@@ -71,12 +71,12 @@ var MoveModel = {
     switch(direct){
       case 0:
         obj = Simulator.field[coord.y][coord.x+1];
-        if(obj && obj.type == 'road'){
+        if(obj && obj.type === 'road'){
           car.x += car.speed;
         }else{
-          if( this.isRoad( coord.y+1, coord.x ) ){
+          if( MoveModel.isRoad( coord.y+1, coord.x ) ){
             car.direct = 1;
-          }else if( this.isRoad( coord.y-1, coord.x )){
+          }else if( MoveModel.isRoad( coord.y-1, coord.x )){
             car.direct = 3;
           }else{
             car.direct = 2;
@@ -85,12 +85,12 @@ var MoveModel = {
         break;
       case 1:
         obj = Simulator.field[coord.y+1][coord.x];
-        if(obj && obj.type == 'road'){
+        if(obj && obj.type === 'road'){
           car.y += car.speed;
         }else{
-          if( this.isRoad( coord.y, coord.x+1 ) ){
+          if( MoveModel.isRoad( coord.y, coord.x+1 ) ){
             car.direct = 0;
-          }else if( this.isRoad( coord.y, coord.x-1 )){
+          }else if( MoveModel.isRoad( coord.y, coord.x-1 )){
             car.direct = 2;
           }else{
             car.direct = 3;
@@ -99,12 +99,12 @@ var MoveModel = {
         break;
       case 2:
         obj = Simulator.field[coord.y][coord.x-1];
-        if(obj && obj.type == 'road'){
+        if(obj && obj.type === 'road'){
           car.x -= car.speed;
         }else{
-          if( this.isRoad( coord.y+1, coord.x ) ){
+          if( MoveModel.isRoad( coord.y+1, coord.x ) ){
             car.direct = 1;
-          }else if( this.isRoad( coord.y-1, coord.x )){
+          }else if( MoveModel.isRoad( coord.y-1, coord.x )){
             car.direct = 3;
           }else{
             car.direct = 0;
@@ -113,12 +113,12 @@ var MoveModel = {
         break;
       case 3:
         obj = Simulator.field[coord.y-1][coord.x];
-        if(obj && obj.type == 'road'){
+        if(obj && obj.type === 'road'){
           car.y -= car.speed;
         }else{
-          if( this.isRoad( coord.y, coord.x+1 ) ){
+          if( MoveModel.isRoad( coord.y, coord.x+1 ) ){
             car.direct = 0;
-          }else if( this.isRoad( coord.y, coord.x-1 )){
+          }else if( MoveModel.isRoad( coord.y, coord.x-1 )){
             car.direct = 2;
           }else{
             car.direct = 1;
@@ -213,7 +213,7 @@ var MoveModel = {
       user.y -= user.speed;
     }
 
-    if( Math.abs(dx) <= this.EPS && Math.abs(dy) <= this.EPS ){
+    if( Math.abs(point.x - user.x) <= this.EPS && Math.abs(point.y-user.y) <= this.EPS ){
       user.x = point.x;
       user.y = point.y;
       user.route_list.shift();

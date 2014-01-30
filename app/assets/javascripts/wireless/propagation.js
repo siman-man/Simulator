@@ -1,5 +1,5 @@
 var Propagation = {
-	limit: 4,
+	transmit_range: 4,
   dx: [ 1, 0,-1, 0, 1, 1,-1,-1],
   dy: [ 0, 1, 0,-1,-1, 1, 1,-1],
   board: [],
@@ -46,7 +46,7 @@ var Propagation = {
     while( queue.size() > 0 ){
       node = queue.pop();
 
-      if( this.board[node.y][node.x].cost >= this.limit ) continue;
+      if( this.board[node.y][node.x].cost > this.transmit_range ) continue;
       this.board[node.y][node.x].check = true;
 
       for(i = 0; i < 8; ++i){
@@ -55,7 +55,7 @@ var Propagation = {
 
         if( View.isInside( ny, nx ) ){
           cost = node.cost + Simulator.field[ny][nx].pf;
-          if( cost < this.board[ny][nx].cost && cost <= this.limit ){
+          if( cost < this.board[ny][nx].cost && cost <= this.transmit_range ){
             this.board[ny][nx].cost = cost;
           
             key = Simulator.key_map[ny][nx];
@@ -64,7 +64,7 @@ var Propagation = {
                 connect_list[eid] = true;
               }
             }
-            if( this.board[ny][nx].cost <= this.limit ){
+            if( this.board[ny][nx].cost <= this.transmit_range ){
               View.propagation[ny][nx].flag = true;
               queue.push( { x: nx, y: ny, cost: this.board[ny][nx].cost } )
             }

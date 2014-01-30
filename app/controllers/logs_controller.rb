@@ -47,15 +47,19 @@ class LogsController < ApplicationController
 		def save_record(config, file_key)
 			p config
 			config_data = Hash.new
-			config_data[:seed] = config["seed"].to_i
-			config_data[:stage_type] = config["stage_type"]
+			messege_num = config["message_num"].to_i
+			protocol = config["protocol"]
+			stage_type = config["stage_type"]
+			seed = config["seed"].to_i
+			config_data[:seed] = seed
+			config_data[:stage_type] = stage_type
 			config_data[:finish_time] = config["finish_time"].to_i
-			config_data[:message_num] = config["message_num"].to_i
+			config_data[:message_num] = message_num
 			config_data[:total_send_message_num] = config["total_send_message_num"].to_i
 			config_data[:protocol] = config["protocol"]
 			config_data[:node_num] = config["node_num"]
 			config_data[:dir_name] = "#{Rails.root}/data/#{Time.now.strftime("%04Y/%02m/%02d")}"
-			config_data[:filename] = "#{Time.now.strftime("%H%M%S")}.ltsv"
+			config_data[:filename] = "#{protocol}_#{stage_type}_#{message_num}_#{seed}_#{Time.now.strftime("%H%M%S")}.ltsv"
 			config_data[:file_path] = ""
 
 			record = History.new( seed: config_data[:seed], stage_type: config_data[:stage_type], clear_time: config_data[:finish_time],
