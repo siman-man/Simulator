@@ -149,7 +149,6 @@ var MoveModel = {
       if( Simulator.field[y][x].type != 'wall' ) break;
     }
 
-    console.log('coord.x =>', user.x, 'coord.y =>', user.y);
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y });
 
     if(user.route_list.length === 0){

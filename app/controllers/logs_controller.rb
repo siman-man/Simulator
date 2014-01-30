@@ -47,7 +47,7 @@ class LogsController < ApplicationController
 		def save_record(config, file_key)
 			p config
 			config_data = Hash.new
-			messege_num = config["message_num"].to_i
+			message_num = config["message_num"].to_i
 			protocol = config["protocol"]
 			stage_type = config["stage_type"]
 			seed = config["seed"].to_i
