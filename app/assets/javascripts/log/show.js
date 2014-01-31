@@ -35,7 +35,6 @@ var Show = {
 		}
 		for( var id in DataList.edge_list ){
 			var edge = DataList.edge_list[id];
-			console.log(edge);
 			this.edge_list.push({ source: edge.source, target: edge.target, value: edge.value });
 		}
 	},

@@ -67,22 +67,22 @@ var Node = {
   directMoveModel: function(user, type){
     switch(type){
       case 0:
-        user.move_model = "RandomWayPoint";
+        user.move_model_type = "RandomWayPoint";
         break;
       case 1:
-        user.move_model = "MapRouteMovement";
+        user.move_model_type = "MapRouteMovement";
         break;
       case 2:
-        user.move_model = "RandomWalk";
+        user.move_model_type = "RandomWalk";
         break;
       case 3:
-        user.move_model = "StationaryMovement";
+        user.move_model_type = "StationaryMovement";
         break;
       case 4:
-        user.move_model = "CarMovement";
+        user.move_model_type = "CarMovement";
         break;
       default:
-        user.move_model = "StationaryMovement";
+        user.move_model_type = "StationaryMovement";
         break;
     }
   },
@@ -191,7 +191,7 @@ var Node = {
     }else{
       agent.graphics.beginFill(opt.color).drawCircle(gridSize/2, gridSize/2, gridSize/2);
     }
-    agent.eid = opt.eid || this.eid;
+    agent.eid = +opt.eid || this.eid;
     this.eid++;
     agent.type = opt.type;
     agent.name = opt.name || "node" + (agent.eid-1);

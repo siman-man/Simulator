@@ -79,7 +79,7 @@ var LineChart = {
 
 		city.append("path")
 			.attr("class", "line")
-			.attr("d", function(d) { console.log(d);return line(d.values); })
+			.attr("d", function(d) { return line(d.values); })
 			.style("stroke", function(d) { return color(d.name); });
 
 		city.append("text")
@@ -91,7 +91,6 @@ var LineChart = {
 	},
 
 	filter: function(key){
-		console.log(CheckBox.filter);
 		return 0 <= CheckBox.filter.indexOf(key);
 	},
 }

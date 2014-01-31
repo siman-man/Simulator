@@ -1,10 +1,10 @@
 var Message = {
-	message_size: 5,
+	message_size: 1,
 	message_num: 1,
 
 	init: function(){
 		for(var i = 0; i < this.message_num; i++){
-			Node.node_list[0].strage[i] = { size: this.message_size, ftoken: 8, hop_count: 0 };
+			Node.node_list[0].strage[i] = { size: this.message_size, ftoken: 2, hop_count: 0 };
 		}
 	},
 

@@ -2,7 +2,7 @@
  * 宛先への到達確率を求めて、一番高いノードに送信。
  */
 
-var time_unit = 100;
+var time_unit = 500;
 
 var ProPHET = function(node){
 	this.node = node;
@@ -13,7 +13,7 @@ var ProPHET = function(node){
 	this.P_encounter_max = 0.7;
 	this.P_encounter_first = 0.5;
 	this.P_first_threshold = 0.1;
-	this.I_typ = 100;
+	this.I_typ = 3000;
 };
 
 ProPHET.prototype = {
@@ -49,13 +49,14 @@ ProPHET.prototype = {
 	aging_check: function(){
 		var eid,
 				last_time,
-				diff_time;
+				diff_time,
+				dp = this.node.delivery_predictability;
 
 		for( eid in this.node.last_connect_time ){
 			last_time = this.node.last_connect_time[eid];
 			diff_time = Simulator.time - last_time;
 			if( this.node.eid !== +eid && last_time !== 0 && diff_time % time_unit === 0 ){
-				this.node.delivery_predictability[this.node.eid][eid] = this.node.delivery_predictability[this.node.eid][eid] * Math.pow( this.gamma, diff_time / time_unit ); 
+				dp[this.node.eid][eid] = dp[this.node.eid][eid] * Math.pow( this.gamma, 6 ); 
 			}
 		}
 	},
@@ -76,21 +77,32 @@ ProPHET.prototype = {
 				my_eid = this.node.eid,
 				last_time = this.node.last_connect_time[to.eid] || 0;
 
-		dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid], last_time );
-
-		dp[to.eid] = this.deep_copy(to.delivery_predictability[to.eid]);
-		P_a_b = dp[my_eid][to.eid];
+		if( to.eid === 1 ){
+			console.log('my_eid =>', my_eid, "before =>", dp[my_eid][to.eid]);
+			console.log(this.first_connection( dp[my_eid][to.eid], last_time ));
+			dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid], last_time );
+			console.log('my_eid =>', my_eid, "after =>", dp[my_eid][to.eid]);
+		}else{
+			dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid], last_time );
+		}
+		this.node.delivery_predictability[to.eid] = this.deep_copy(to.delivery_predictability[to.eid]);
+		P_a_b = this.node.delivery_predictability[my_eid][to.eid];
+		if( this.node.eid === 2 && to.eid === 1 ) console.log("P_a_b =>", P_a_b);
 		for( eid in to.delivery_predictability[to.eid] ){
 			if( +eid === my_eid || +eid === to.eid ) continue;
 
-			P_a_c_old = dp[my_eid][eid] || 0.0;
+			P_a_c_old = this.node.delivery_predictability[my_eid][eid] || 0.0;
 			P_b_c = to.delivery_predictability[to.eid][eid] || 0.0;
 
 			P_a_c = this.update_predictability( P_a_b, P_b_c );
 
 			if( P_a_c_old < P_a_c ){
-				dp[my_eid][eid] = P_a_c;
+				this.node.delivery_predictability[my_eid][eid] = P_a_c;
 			}
+		}
+
+		if( this.node.eid === 2 && to.eid === 1){
+			console.log("dp =>", this.node.delivery_predictability);
 		}
 	
 		var message_diff = [],
@@ -153,19 +165,26 @@ ProPHET.prototype = {
 		return false;
 	},
 
+	grtr: function( eid, other ){
+		var my_dp = this.node.delivery_predictability[this.node.eid][eid],
+				other_dp = other.delivery_predictability[other.eid][eid];
+
+		return ( my_dp < other_dp );
+	},
+
+	grtr_max: function( eid, other ){
+  	var best_eid = this.get_best_eid( eid );
+  	return ( other.eid === best_eid );
+	},
+
 	diff: function( dest ){
 		var strageA = this.node.strage,
 				strageB = dest.strage,
 				message_id,
-				diff= [],
-				best_eid = this.get_best_eid( 1 );
-
-		if( this.node.eid === 0 ){
-			console.log('best eid = ', best_eid, 'dest.eid = ', dest.eid );
-		}
+				diff= [];
 
 		for( message_id in strageA ){
-			if( strageB[message_id] === undefined && best_eid === dest.eid ){
+			if( strageB[message_id] === undefined && this.grtr_max( 1, dest ) ){
 				diff.push(message_id);
 			}
 		}
