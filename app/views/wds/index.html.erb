@@ -33,7 +33,7 @@ h1 {
 		<div class="col-lg-4">
 			<h2>統計データ</h2>
 			<%= content_tag( :p, "各DTNプロトコルの統計情報を閲覧することが出来ます。") %>
-			<p><a class="btn btn-primary" href="#">View details &raquo;</a></p>
+			<%= content_tag( :p , link_to("View details &raquo;".html_safe, view_graph_path, class: "btn btn-primary"), class: "button") %>
 		</div>
 		<div class="col-lg-4">
 			<h2>実装プロトコル一覧</h2>

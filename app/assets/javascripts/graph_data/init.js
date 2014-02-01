@@ -4,6 +4,7 @@ var Init = {
 	}
 }
 
+
 $(document).ready(function(){
   Init.init();
 });

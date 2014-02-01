@@ -1,0 +1,33 @@
+<style>
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+body {
+  font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+</style>
+
+<script>
+	var opt = {}
+	opt.ylabel = "受信数";
+	opt.xlabel = "Node name"
+  DataList.graph_data = DataList.receive_num;
+	Result.vertical(DataList.graph_data, opt);
+</script>

@@ -18,7 +18,8 @@ var FSM = {
 					Simulator.start_time = new Date();
 					Simulator.start_time = Simulator.start_time.getTime();
 					Simulator.direct_protocol_type(+$("#protocol").val());
-					Simulator.seed = $("#seed").val();
+					Simulator.seed = +$("#seed").val();
+					Simulator.mersenne = new MersenneTwister(Simulator.seed);
 					Message.message_num = +$("#message_num").val();
 					Message.init();
 					Node.init();
@@ -48,15 +49,13 @@ var FSM = {
 							time: Simulator.time, 
 							type: 'finish', 
 							operation: "finish",
-							config: { 
-								seed: Simulator.seed,
-								stage_type: Simulator.stage_type,
-								finish_time: Simulator.time, 
-								message_num: Message.message_num,
-								total_send_message_num: Simulator.total_send_message_num,
-								protocol: Simulator.protocol_type,
-								node_num: Object.keys(Node.node_list).length  
-							},
+							seed: Simulator.seed,
+							stage_type: Simulator.stage_type,
+							finish_time: Simulator.time, 
+							message_num: Message.message_num,
+							total_send_message_num: Simulator.total_send_message_num,
+							protocol: Simulator.protocol_type,
+							node_num: Object.keys(Node.node_list).length,
 							msg: 'end'
 						});
 					}else{

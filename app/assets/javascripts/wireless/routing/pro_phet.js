@@ -85,6 +85,7 @@ ProPHET.prototype = {
 		}else{
 			dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid], last_time );
 		}
+
 		this.node.delivery_predictability[to.eid] = this.deep_copy(to.delivery_predictability[to.eid]);
 		P_a_b = this.node.delivery_predictability[my_eid][to.eid];
 		if( this.node.eid === 2 && to.eid === 1 ) console.log("P_a_b =>", P_a_b);
@@ -174,6 +175,9 @@ ProPHET.prototype = {
 
 	grtr_max: function( eid, other ){
   	var best_eid = this.get_best_eid( eid );
+  	if( this.node.eid === 0 && other.eid === 2 ){
+			console.log('best eid =>', best_eid);
+		}
   	return ( other.eid === best_eid );
 	},
 

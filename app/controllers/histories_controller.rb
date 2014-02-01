@@ -16,10 +16,14 @@ class HistoriesController < ApplicationController
 		latency_file = history[:dir_name] + "/latency_" + history[:filename]
 		hop_count_file = history[:dir_name] + "/hop_count_" + history[:filename]
 		users_data_file = File.expand_path("#{history[:stage_type]}.dat", Rails.root + 'public/users')
+		@width = history[:width]
+		@height = history[:height]
 		@node_list = create_node_list( history[:node_num] )
 		@send_data = tsf2json(send_file)
 		@send_count = ltsv2json(send_count_file)
-		@receive_data = tsf2json(receive_file)
+		@receive_num = tsf2json(receive_file)
+		@heat_map = ltsv2json( history[:dir_name] + "/heat_map_" + history[:filename])
+		@user_heat_map = ltsv2json( history[:dir_name] + "/user_heat_map_" + history[:filename])
 		@receive_user_count = ltsv2json(receive_user_count_file)
 		@each_send_data = edge2json(each_send_file)
 		@users_data = ltsv2json(users_data_file)
@@ -27,7 +31,7 @@ class HistoriesController < ApplicationController
 		@latency = ltsv2json(latency_file).sort_by{|data| data["message_id"].to_i }
 		@hop_count = ltsv2json(hop_count_file).sort_by{|data| data["message_id"].to_i }
 		@send_count = @send_count.map{|e| {time: e["time"].to_i, value: e["value"].to_i}}
-		@finish_time = history[:finish_time]
+		@finish_time = history[:clear_time]
 		@message_num = history[:message_num]
 		@view_id = params[:id]
 		@view = 'connection_network'
@@ -41,6 +45,10 @@ class HistoriesController < ApplicationController
 	end
 
 	private
+		def graph_data(filename) 
+			ltsv2json(filename)
+		end
+
 		def create_node_list( node_num )
 			(0..node_num-1).to_a.map do |id|
 				if id == 0 

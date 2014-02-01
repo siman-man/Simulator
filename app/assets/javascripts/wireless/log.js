@@ -1,19 +1,6 @@
 var Log = {
   queue: [],
-  limit_size: 30,
-
-	create: function(time, host, dest, req, size){
-		$.ajax({
-  		url: "/simulates",
- 			data: {
-    		time: time,
-    		host: host,
-    		dest: dest,
-    		req:  req,
-    		size: size
-  		},
-  	});
-	},
+  limit_size: 200,
 
   init: function( data ){
     this.queue.push(this.save(data));
@@ -56,13 +43,34 @@ var Log = {
       created_at: data.created_at,
       message_id: data.message_id,
       hop_count: data.hop_count,
-      config: data.config,
-      message: data.msg
+      name: data.name,
+      xpos: data.xpos,
+      ypos: data.ypos,
+      message: data.msg 
+    }
+  },
+
+  finish_save: function(data){
+    return {
+      time: data.time,
+      type: data.type,
+      operation: data.operation,
+      name: data.name,
+      message: data.msg,
+      seed: data.seed,
+      stage_type: data.stage_type,
+      finish_time: data.finish_time, 
+      message_num: data.message_num,
+      total_send_message_num: data.total_send_message_num,
+      protocol: data.protocol,
+      node_num: data.node_num,
+      width: View.width,
+      height: View.height
     }
   },
 
   finish: function( data ){
-    this.queue.push(this.save(data));
+    this.queue.push(this.finish_save(data));
     $.ajax({
       type: "post",
       url: "/logs",
@@ -73,22 +81,51 @@ var Log = {
       success: function(obj){
         alert('Simulation Finish!');
         window.location = '/history';
-        //window.location = '/result' + '?key=' + Simulator.user_id;
       }
     });
   },
 
+  agent_message: function(agent){
+    var coord = View.point2coord( agent.x, agent.y );
+    return message = {
+      time: Simulator.time,
+      type: 'normal',
+      operation: 'gps',
+      name: agent.name,
+      xpos: coord.x,
+      ypos: coord.y,
+    };
+  },
+
   transmit_message: function( from, dest, data ){
+    var coord = View.point2coord( from.x, from.y );
     return message = {
       time: Simulator.time,
       type: 'normal',
       operation: 'transmit',
       message_id: data.id,
       hop_count: data.hop_count,
+      xpos: coord.x,
+      ypos: coord.y,
       created_at: data.created_at,
       from: from.eid,
-      dest: dest.eid,
-      created_at: data.created_at
+      dest: dest.eid
+    };
+  },
+
+  receive_message: function( from, dest, data ){
+    var coord = View.point2coord( dest.x, dest.y );
+    return message = {
+      time: Simulator.time,
+      type: 'normal',
+      operation: 'receive',
+      message_id: data.id,
+      hop_count: data.hop_count,
+      xpos: coord.x,
+      ypos: coord.y,
+      created_at: data.created_at,
+      from: from.eid,
+      dest: dest.eid
     };
   },
 }

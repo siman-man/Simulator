@@ -26,6 +26,15 @@ var Node = {
     }
   },
 
+  sendLocation: function(){
+    var i,
+        agent;
+    for( i in this.node_list ){
+      agent = this.node_list[i];
+      Log.send(Log.agent_message(agent));
+    }
+  },
+
   node_set_routing_protocol: function(){
     var node, eid;
     for( eid in this.node_list ){

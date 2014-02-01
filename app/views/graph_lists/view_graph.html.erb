@@ -1,0 +1,46 @@
+<style>
+#protocol_list {
+  margin-top: 30px;
+}
+
+.head {
+  font-size: 18px;
+}
+.button_list {
+  border: none;
+  background: transparent;
+}
+
+</style>
+
+<%= javascript_include_tag 'log/data_list' %>
+<%= javascript_include_tag "graph_data/click_event" %>
+<%= javascript_include_tag "graph_data/init" %>
+<%= javascript_include_tag "graph_data/epidemic_chart" %>
+<%= javascript_include_tag "graph_data/heat_map" %>
+
+<script>
+	DataList.epidemic_send_count = <%= @epidemic_send_count.to_json.html_safe %>
+	DataList.heat_map = <%= @heat_map.to_json.html_safe %>
+	DataList.width = 50
+	DataList.height = 50
+</script>
+
+<div id="protocol_list" class="container">
+  <div class="row row-offcanvas row-offcanvas-right">
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group">
+        <%= link_to("一覧に戻る", root_path, class: "list-group-item" ) %>
+        <a href="#" id='epidemic_send_count' class="list-group-item">Epidemic送信数</a>
+        <a href="#" id='heat_map' class="list-group-item">ヒートマップ</a>
+      </div>
+    </div><!--/span-->
+    <div id="show_result" class="col-xs-12 col-sm-9">
+      <%= render @data %>
+    </div><!--/span-->
+  </div><!--/row-->
+  <hr>
+  <footer>
+    <p>&copy; Company 2013</p>
+  </footer>
+</div><!--/.container-->

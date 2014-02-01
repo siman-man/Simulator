@@ -1,27 +1,24 @@
 var ClickEvent = {
+  sendEvent: function(name){
+    createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
+    console.log(name);
+    $.ajax({
+      type: "post",
+      url: "/view_update",
+      data: {
+        id: DataList.view_id,
+        page: name
+      },
+    });
+  },
+
 	init: function(){
 		$("#receive_num").click(function(){
-			createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
-			console.log('receive_num');
-			$.ajax({
-      	type: "post",
-      	url: "/view_update",
-      	data: {
-        	page: 'receive_data'
-      	},
-    	});
+			ClickEvent.sendEvent("receive_num");
 		});
 
 		$("#send_num").click(function(){
-			createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
-			console.log('send_num');
-			$.ajax({
-      	type: "post",
-      	url: "/view_update",
-      	data: {
-        	page: 'send_data'
-      	},
-    	});
+			ClickEvent.sendEvent("send_num");
 		});
 
 		$("#connection_network").click(function(){
@@ -31,6 +28,7 @@ var ClickEvent = {
       	type: "post",
       	url: "/view_update",
       	data: {
+          id: DataList.view_id,
         	page: 'connection_network'
       	},
     	});
@@ -43,6 +41,7 @@ var ClickEvent = {
       	type: "post",
       	url: "/view_update",
       	data: {
+          id: DataList.view_id,
         	page: 'send_count'
       	},
     	});
@@ -55,6 +54,7 @@ var ClickEvent = {
         type: "post",
         url: "/view_update",
         data: {
+          id: DataList.view_id,
           page: 'user_send_count'
         },
       });
@@ -67,6 +67,7 @@ var ClickEvent = {
         type: "post",
         url: "/view_update",
         data: {
+          id: DataList.view_id,
           page: 'user_receive_count'
         },
       });
@@ -79,6 +80,7 @@ var ClickEvent = {
         type: "post",
         url: "/view_update",
         data: {
+          id: DataList.view_id,
           page: 'latency'
         },
       });
@@ -91,9 +93,27 @@ var ClickEvent = {
         type: "post",
         url: "/view_update",
         data: {
+          id: DataList.view_id,
           page: 'hop_count'
         },
       });
+    });
+
+    $("#heat_map").click(function(){
+      createjs.Ticker.removeEventListener(DataList.event_tag,DataList.event_func);
+      console.log('heat_map');
+      $.ajax({
+        type: "post",
+        url: "/view_update",
+        data: {
+          id: DataList.view_id,
+          page: 'heat_map'
+        },
+      });
+    });
+
+    $("#user_heat_map").click(function(){
+      ClickEvent.sendEvent("user_heat_map");
     });
 	},
 }

@@ -1,7 +1,5 @@
 var LineChart = {
 	multi: function(){
-		console.log(DataList.finish_time);
-		console.log(DataList.graph_data);
 		var margin = {top: 20, right: 80, bottom: 50, left: 70},
 		width = 860 - margin.left - margin.right,
 		height = 500 - margin.top - margin.bottom;

@@ -212,7 +212,7 @@ var MoveModel = {
       user.y -= user.speed;
     }
 
-    if( Math.abs(point.x - user.x) <= this.EPS && Math.abs(point.y-user.y) <= this.EPS ){
+    if( Math.abs(point.x-user.x) <= this.EPS && Math.abs(point.y-user.y) <= this.EPS ){
       user.x = point.x;
       user.y = point.y;
       user.route_list.shift();
@@ -227,6 +227,6 @@ var MoveModel = {
     var dx = Math.abs(user.x - user.way_point.x * gridSize),
         dy = Math.abs(user.y - user.way_point.y * gridSize);
     
-    return ( dx <= this.EPS && dy <= this.EPS )? true : false;
+    return ( dx <= this.EPS && dy <= this.EPS );
   },
 };

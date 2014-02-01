@@ -39,7 +39,6 @@ var Simulator = {
       console.log('simulator init =>');
     }
 
-    this.mersenne = new MersenneTwister(this.seed);
     var x, y, key;
 
     for( y = 0; y < View.height; ++y ){
@@ -115,6 +114,9 @@ var Simulator = {
 
   moveUpdate: function(){
     Node.move();
+    if( Simulator.time % 10 === 0 ){
+      Node.sendLocation();
+    }
   },
 
   scanUpdate: function(){

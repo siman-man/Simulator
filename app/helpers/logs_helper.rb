@@ -1,7 +1,7 @@
 module LogsHelper
   require 'find'
 
-  def init
+  def init(config)
     @finish_time = 0
     @total_emit = 0
     @transmit_num = Hash.new(0)
@@ -12,11 +12,13 @@ module LogsHelper
     @each_transmit_num = Hash.new{|h,k| h[k] = Hash.new(0) }
     @each_receive_num = Hash.new{|h,k| h[k] = Hash.new(0) }
     @hop_count = Hash.new(0)
+    @field = Array.new(config[:height]){|row| row = Array.new(config[:width],0)}
+    @user_field = Array.new(config[:height]){|row| row = Array.new(config[:width],0)}
     @latency = Hash.new(0)
   end
 
-  def collect_data( key, user_list )
-    init
+  def collect_data( key, user_list, config )
+    init(config)
     @user_list = user_list
     puts "user_list = #{@user_list}"
     @name_list = @user_list.map{|k,v| [k, v["name"]]}.to_h
@@ -27,8 +29,8 @@ module LogsHelper
     File.open( file_name, 'r' ) do |file|
       file.readlines.each do |line|
         str = line.chomp.split(' ')[2..-1].join(' ')
-        data = Hash[str.delete('{}"').split(',').map{|str| 
-          d = str.split(':') 
+        data = Hash[str.delete('{}"').split(',').map{|string| 
+          d = string.split(':') 
           d[0] = d[0].to_sym
           d
         }]
@@ -38,7 +40,6 @@ module LogsHelper
     end
 
     data_order
-    p @each_transmit_num
 
     collect_result
   end
@@ -62,6 +63,8 @@ module LogsHelper
     result[:name_list] = @name_list
     result[:hop_count] = @hop_count
     result[:latency] = @latency
+    result[:field] = @field
+    result[:user_field] = @user_field
 
     each_send = []
     @each_transmit_num.each do |from, data|
@@ -99,13 +102,20 @@ module LogsHelper
         data[eid] = d
       end
     end
-    p data
+    data
   end
 
   def check(data)
+    time = data[:time].to_i
+    dest = data[:dest].to_i
+    from = data[:from].to_i
+
     case data[:operation]
     when 'init'
     when 'transmit'
+      ypos = data[:ypos].to_i
+      xpos = data[:xpos].to_i
+
       @send_user_count[data[:time]] << @name_list[data[:from]]
       @receive_user_count[data[:time]] << @name_list[data[:dest]]
       @send_count[data[:time]] += 1
@@ -114,15 +124,25 @@ module LogsHelper
       @receive_num[data[:dest]] += 1
       @each_transmit_num[data[:from]][data[:dest]] += 1
       @each_receive_num[data[:dest]][data[:from]] += 1
-      @finish_time = data[:time]
+
+      @field[ypos][xpos] += 1
 
       if data[:dest] == "1"
-        p data
         @hop_count[data[:message_id]] = data[:hop_count].to_i
-        @latency[data[:message_id]] = data[:time].to_i - data[:created_at].to_i 
+        @latency[data[:message_id]] = time - data[:created_at].to_i 
       end
+    when 'receive'
+      ypos = data[:ypos].to_i
+      xpos = data[:xpos].to_i
+
+      @field[ypos][xpos] += 1
+    when 'gps'
+      ypos = data[:ypos].to_i
+      xpos = data[:xpos].to_i
+
+      @user_field[ypos][xpos] += 1
     when 'finish'
-      @finish_time = data[:time]
+      @finish_time = time
     else
     end
   end

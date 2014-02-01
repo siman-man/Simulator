@@ -1,0 +1,30 @@
+<style>
+body {
+  font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+</style>
+
+<script>
+  DataList.ylabel = "通信量";
+	DataList.xlabel = "ユーザ数"
+  DataList.graph_data = DataList.epidemic_send_count;
+  Epidemic.vertical(DataList.graph_data);
+</script>

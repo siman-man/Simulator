@@ -6,6 +6,8 @@ class CreateHistories < ActiveRecord::Migration
     	t.integer :clear_time
     	t.integer :message_num
       t.integer :node_num
+      t.integer :width
+      t.integer :height
     	t.integer :total_send_message_num
     	t.string :protocol
     	t.string :dir_name

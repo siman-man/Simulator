@@ -16,6 +16,7 @@
 <%= javascript_include_tag "log/result" %>
 <%= javascript_include_tag "log/show" %>
 <%= javascript_include_tag "log/line_chart" %>
+<%= javascript_include_tag "log/heat_map" %>
 <%= javascript_include_tag "log/click_event" %>
 <%= javascript_include_tag "log/check_box" %>
 <%= javascript_include_tag "log/area_chart" %>
@@ -25,16 +26,21 @@
 DataList.node_list = <%= @node_list.to_json.html_safe %>
 DataList.edge_list = <%= @each_send_data.to_json.html_safe %>
 DataList.user_list = <%= @users_data.to_json.html_safe %>
-DataList.receive_data = <%= @receive_data.to_json.html_safe %>
-DataList.send_data = <%= @send_data.to_json.html_safe %>
+DataList.receive_num = <%= @receive_num.to_json.html_safe %>
+DataList.send_num = <%= @send_data.to_json.html_safe %>
 DataList.send_count = <%= @send_count.to_json.html_safe %>
 DataList.send_user_count = <%= @send_user_count.to_json.html_safe %>
 DataList.receive_user_count = <%= @receive_user_count.to_json.html_safe %>
 DataList.latency = <%= @latency.to_json.html_safe %>
 DataList.hop_count = <%= @hop_count.to_json.html_safe %>
+DataList.heat_map = <%= @heat_map.to_json.html_safe %>
+DataList.user_heat_map = <%= @user_heat_map.to_json.html_safe %>
 DataList.view_id = <%= @view_id %>
 DataList.finish_time = <%= @finish_time %>
 DataList.message_num = <%= @message_num %>
+DataList.view_id = <%= @view_id %>
+DataList.width = <%= @width %>
+DataList.height = <%= @height %>
 </script>
 
 <div id="protocol_list" class="container">
@@ -50,6 +56,8 @@ DataList.message_num = <%= @message_num %>
         <a href="#" id='user_receive_count', class='list-group-item'>ユーザ別受信数</a>
         <a href="#" id='latency', class='list-group-item'>レイテンシ</a>
         <a href="#" id='hop_count', class='list-group-item'>ホップ数</a>
+        <a href="#" id="heat_map", class='list-group-item'>ヒートマップ</a>
+        <a href="#" id="user_heat_map", class='list-group-item'>ユーザ移動マップ</a>
       </div>
     </div><!--/span-->
     <div id="show_result" class="col-xs-12 col-sm-9">

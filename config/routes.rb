@@ -11,10 +11,14 @@ Simulator::Application.routes.draw do
 
   match "/logs" => "logs#record", :as => :log_init, :via => [:post]
   match "/logs" => "logs#index", :as => :log, :via => [:get]
+  
+  match '/view_graph' => 'graph_lists#view_graph', :via => [:get]
+  match '/graph_update' => 'graph_lists#view_update', :via => [:post]
 
   match "/history" => "histories#index", :via => [:get]
   match "/view_update" => "histories#view_update", :via => [:post]
   post 'histories/:id' => 'histories#show', :as => :detail
+ 
   match "/protocol_list" => "protocols#index", :via => [:get]
   match '/stage_list' => 'stages#index', :via => [:get]
   match '/stage_create' => 'stages#create', :via => [:post]
