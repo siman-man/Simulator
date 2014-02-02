@@ -93,7 +93,9 @@ module WirelessesHelper
 
       class << self
         def define(&block)
-          Simulator.new.instance_eval &block
+          wbsd = Simulator.new
+          wbsd.instance_eval &block
+          wbsd.instance_eval{ { obj_list: @list, config: @config } }
         end
       end
 
@@ -120,7 +122,6 @@ module WirelessesHelper
         @obj[:type] = type
         block.call(self)
         @list << @obj
-        { obj_list: @list, config: @config }
       end 
 
       def position(pos)

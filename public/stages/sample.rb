@@ -43,6 +43,11 @@
       )
     end
 
+    # 5回繰り返す処理、xには0 ~ 4の値が入る
+    5.times do |x|
+      create(:wall){|wall| wall.position( x: x, y: 8)}
+    end
+
 end
 
 

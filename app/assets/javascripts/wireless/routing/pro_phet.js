@@ -188,7 +188,7 @@ ProPHET.prototype = {
 				diff= [];
 
 		for( message_id in strageA ){
-			if( strageB[message_id] === undefined && this.grtr_max( 1, dest ) ){
+			if( strageB[message_id] === undefined && this.grtr( 1, dest ) ){
 				diff.push(message_id);
 			}
 		}
