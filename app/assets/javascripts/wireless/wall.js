@@ -3,7 +3,6 @@ var Wall = {
 	wall_list: {},
 
 	create: function(x, y){
-		console.log('wall created =>', y, x );
 		var wall = new createjs.Shape();
 		wall.x = x * gridSize; 
 		wall.y = y * gridSize;
@@ -33,7 +32,6 @@ var Wall = {
 
 	remove: function( wall ){
 		var coord = View.point2coord( wall.x, wall.y );
-		console.log('wall remove =>', coord.y, coord.x );
 
 		Simulator.map.removeChild(wall);
 		delete this.wall_list[wall.id];

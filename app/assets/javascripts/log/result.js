@@ -153,7 +153,7 @@ var Result = {
   },
 
   vertical: function(dataset, opt){
-  	var margin = {top: 20, right: 20, bottom: 40, left: 40},
+  	var margin = {top: 20, right: 20, bottom: 50, left: 70},
   	    width = Math.max( 600, dataset.length*50 ) - margin.left - margin.right,
   	    height = 500 - margin.top - margin.bottom;
 
@@ -163,7 +163,7 @@ var Result = {
   	var x = d3.scale.ordinal()
   	.rangeRoundBands([0, width], .1)
   	.domain(dataset.map(function(d){
-  		return d.label.replace("node","N");
+  		return d.label;
   	}));
 
     var y = d3.scale.linear()
@@ -191,6 +191,7 @@ var Result = {
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
         .append("text")
+        .attr("style","font-size:16px;")
         .attr("y", 30)
         .attr("x", width * 0.6)
         .attr("dy", ".71em")
@@ -207,7 +208,7 @@ var Result = {
         .data(dataset)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d){ return x(d.label.replace("node","N")) })
+        .attr("x", function(d){ return x(d.label) })
         .attr("width", x.rangeBand())
         .attr("y", function(d){ return y(d.value) })
         .attr("height", function(d){ return height - y(d.value) })
@@ -281,7 +282,7 @@ var Result = {
     var i, data, max_value = 0;
     for( i in dataset ){
       data = dataset[i];
-      max_value = Math.max( max_value, data.value );
+      max_value = Math.max( max_value, +data.value );
     }
     return max_value;
   },

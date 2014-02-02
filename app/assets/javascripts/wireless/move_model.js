@@ -146,7 +146,7 @@ var MoveModel = {
     while(true){
       x = Simulator.mersenne.random() * (View.width-1) * 1.0 | 0;
       y = Simulator.mersenne.random() * (View.height-1) * 1.0 | 0;
-      if( Simulator.field[y][x].type != 'wall' ) break;
+      if( Simulator.field[y][x].type !== 'wall' || Simulator.field[y][x].type !== 'tree' ) break;
     }
 
     user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y });

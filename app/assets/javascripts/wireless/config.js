@@ -166,6 +166,9 @@ var Config = {
 			case 'wall':
 				return 'rgba(92,92,92,1.0)';
 				break;
+			case 'tree':
+				return 'rgba(0,88,0,1.0)';
+				break;
 			case 'lake':
 				return 'rgba(128,255,212,0.98)';
 				break;

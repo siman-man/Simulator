@@ -59,6 +59,7 @@ SprayAndWait.prototype = {
 				dest.label.text = Object.keys(dest.strage).length;
 				this.node.buffer.shift();
 				Log.send(Log.transmit_message( this.node, dest, message ));
+				Log.send(Log.receive_message( this.node, dest, message ));
 			}
 		}
 	},

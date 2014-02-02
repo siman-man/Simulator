@@ -18,7 +18,6 @@ Init.addMouseEvent();
 
 <% @obj_list.each do |obj| %>
 	var x, y;
-	console.log("create =>");
 	var opt = <%= obj.to_json.html_safe %>
 	x = <%= obj[:x] %>
 	y = <%= obj[:y] %>
@@ -33,6 +32,8 @@ Init.addMouseEvent();
 		Node.create(x, y, opt);
 	<% when :wall %>
 		Wall.create(x, y);
+	<% when :tree %>
+		Tree.create(x, y);
 	<% when :road %>
 		Street.create(x, y);
 	<% when :lake %>

@@ -5,7 +5,7 @@ var Show = {
 	node_list: [],
 	edge_list: [],
 	line_list: [],
-	r: 10,
+	r: 8,
 
 	init: function(){
 		this.canvas = document.getElementById('my_canvas');
@@ -80,18 +80,18 @@ var Show = {
  		node.addEventListener('mousedown', this.onmousedown, false);
  		node.name = DataList.user_list[id].name;
 
- 		node.label = new createjs.Text(node.name, "20px Arial", "black");
+ 		node.label = new createjs.Text(node.name, "16px Arial", "black");
     node.label.textAlign = "center";
     node.label.x = node.x;
     node.label.y = node.y - this.r*2.5;
     node.label.textBaseline = "top";
  		
  		if( id == 0 ){
-			node.graphics.beginFill('rgba(0,255,59,1.0)').drawCircle(0, 0, this.r);
+			node.graphics.beginFill('rgba(0,255,99,1.0)').drawCircle(0, 0, this.r);
  		}else if( id == 1 ){
 			node.graphics.beginFill('rgba(255,59,0,1.0)').drawCircle(0, 0, this.r);
  		}else{
- 			node.graphics.beginFill('rgba(0,59,255,1.0)').drawCircle(0, 0, this.r);
+ 			node.graphics.beginFill('rgba(0,99,255,1.0)').drawCircle(0, 0, this.r);
  		}
     Show.stage.addChild(node);
     Show.stage.addChild(node.label);

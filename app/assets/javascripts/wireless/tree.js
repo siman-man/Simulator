@@ -3,7 +3,6 @@ var Tree = {
 	tree_list: {},
 
 	create: function(x, y){
-		console.log('tree created =>', y, x );
 		var tree = new createjs.Shape();
 		tree.x = x * gridSize; 
 		tree.y = y * gridSize;
@@ -33,7 +32,6 @@ var Tree = {
 
 	remove: function( tree ){
 		var coord = View.point2coord( tree.x, tree.y );
-		console.log('tree remove =>', coord.y, coord.x );
 
 		Simulator.map.removeChild(tree);
 		delete this.tree_list[tree.id];

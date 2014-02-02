@@ -16,8 +16,8 @@ var HeatMap = {
   			hcrow = [], // change to gene name or probe id
   			hccol = [], // change to gene name or probe id
   			rowLabel = [], // change to gene name or probe id
-  			colLabel = []; // change to contrast name
-
+  			colLabel = [], // change to contrast name
+        max_messege = DataList.message_num*0.05;
   	for(var i = 0 ; i < DataList.height; i++){
   		hcrow[i] = i;
   		rowLabel[i] = i+"";
@@ -28,7 +28,7 @@ var HeatMap = {
     }
 
   	var colorScale = d3.scale.quantile()
-  			.domain([0, 19])
+  			.domain([0, max_messege])
   			.range(colors);
 
   	var svg = d3.select("#show_result").append("svg")
@@ -77,7 +77,7 @@ var HeatMap = {
 
     var label_list = [];
     for(var i = 0; i < 20; i++){
-      label_list.push( DataList.message_num/20 * i | 0 )
+      label_list.push( max_messege/20 * i | 0 )
     }
 
   	var legend = svg.selectAll(".legend")

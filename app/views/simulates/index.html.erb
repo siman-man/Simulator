@@ -104,6 +104,8 @@
         Node.create(x, y, opt );
       <% when :wall %>
         Wall.create( x, y );
+      <% when :tree %>
+        Tree.create( x, y );
       <% when :road %>
         Street.create(x, y);
       <% when :car %>

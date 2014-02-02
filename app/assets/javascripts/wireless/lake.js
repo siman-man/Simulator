@@ -3,7 +3,6 @@ var Lake = {
 	lake_list: {},
 
 	create: function(x, y){
-		console.log('lake created =>', y, x );
 		//var lake = new createjs.Bitmap('/assets/lake.gif');
 		var lake = new createjs.Shape();
 		lake.x = x * gridSize; 
@@ -34,7 +33,6 @@ var Lake = {
 
 	remove: function(lake){
 		var coord = View.point2coord( lake.x, lake.y );
-		console.log('lake remove =>', coord.y, coord.x );
 
 		Simulator.map.removeChild(lake);
 		delete this.lake_list[lake.id];

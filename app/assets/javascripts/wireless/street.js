@@ -3,8 +3,6 @@ var Street = {
 	road_list: {},
 
 	create: function(x, y){
-		console.log("create road =>");
-
 		var road = new createjs.Shape();
 
 		road.graphics.beginFill('rgba(211,211,211,1.0)').drawRect(0, 0, gridSize, gridSize);
@@ -16,7 +14,7 @@ var Street = {
 		road.type = 'road';
 
 		Simulator.map.addChild(road);
-		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 10, pf: 2 };
+		Simulator.field[y][x] = { x: x, y: y, obj: road, type: 'road', cost: 20, pf: 2 };
 	},
 
 	clear: function(){
@@ -34,7 +32,6 @@ var Street = {
 	},
 
 	remove: function( road ){
-		console.log('remoev road =>');
 		var coord = View.point2coord( road.x, road.y );
 		Simulator.map.removeChild(road);
 		delete this.road_list[road.id];

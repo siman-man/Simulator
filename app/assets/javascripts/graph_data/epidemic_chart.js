@@ -13,7 +13,7 @@ var Epidemic = {
     }));
 
     var y = d3.scale.linear()
-    .domain([0, d3.max(dataset, function(d){ return +d.send_count; })])
+    .domain([0, d3.max(dataset, function(d){ return +d.count; })])
     .nice()
     .range([height, 0]);
 
@@ -40,7 +40,7 @@ var Epidemic = {
       .attr("y", 30)
       .attr("x", width * 0.55)
       .attr("dy", ".71em")
-      .attr("style","font-size:18px;")
+      .attr("style","font-size:16px;")
       .style("text-anchor", "end")
       .text(DataList.xlabel)
 
@@ -50,11 +50,11 @@ var Epidemic = {
       .append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
-      .attr("x", -50)
+      .attr("x", -120)
       .attr("y", 10)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .attr("style","font-size:18px;")
+      .attr("style","font-size:16px;")
       .text(DataList.ylabel)
 
     svg.selectAll(".bar")
@@ -63,8 +63,8 @@ var Epidemic = {
         .attr("class", "bar")
         .attr("x", function(d){ return x(d.user_count) })
         .attr("width", x.rangeBand())
-        .attr("y", function(d){ return y(+d.send_count) })
-        .attr("height", function(d){ return height - y(+d.send_count) })
+        .attr("y", function(d){ return y(+d.count) })
+        .attr("height", function(d){ return height - y(+d.count) })
         .style("fill", "teal") 
   },
 }

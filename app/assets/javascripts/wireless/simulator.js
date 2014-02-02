@@ -89,6 +89,7 @@ var Simulator = {
     Simulator.time = 0;
     Simulator.node_list = {};
     Street.clear();
+    Tree.clear();
     Wall.clear();
     Node.clear();
     View.clear();
@@ -193,6 +194,9 @@ var Simulator = {
         case 'wall':
           Wall.create( x, y );
           break;
+        case 'tree':
+          Tree.create( x, y );
+          break;
         case 'car':
           key = Simulator.key_map[y][x];
           if( Object.keys(Simulator.node_map[key]).length === 0 ){
@@ -205,6 +209,7 @@ var Simulator = {
           break;
         case 'tree':
           Tree.create( x, y );
+          break;
         default:
           break;
       }
@@ -225,6 +230,9 @@ var Simulator = {
           break;
         case 'wall':
           Wall.remove( draw_object.obj );
+          break;
+        case 'tree':
+          Tree.remove( draw_object.obj );
           break;
         case 'lake':
           Lake.remove( draw_object.obj );
@@ -417,9 +425,8 @@ var Simulator = {
     $("#canvas_field").empty();
     var obj_list = Config.field2obj_list();
     gridSize = +$("#grid_size").val();
-    View.gridSize = gridSize;
-    var width = +$("#field_width").val() * View.gridSize,
-        height = +$("#field_height").val() * View.gridSize;
+    var width = +$("#field_width").val() * gridSize,
+        height = +$("#field_height").val() * gridSize;
     console.log('width =>', width, 'height =>', height);
     var str = "<canvas id='canvas' width='" + width + "' height='" + height + "'></canvas>";
     $("#canvas_field").append(str);
@@ -429,6 +436,7 @@ var Simulator = {
   field_update: function(){
     var obj_list = Simulator.stage_update();
     Simulator.clear(true);
+    View.gridSize = gridSize;
     Simulator.getCanvasInfo();
     View.init();
     View.drawGrid()
@@ -445,6 +453,9 @@ var Simulator = {
           break;
         case 'wall':
           Wall.create( obj.x, obj.y );
+          break;
+        case 'tree':
+          Tree.create( obj.x, obj.y );
           break;
         default:
           Node.create( obj.x, obj.y, obj.opt );

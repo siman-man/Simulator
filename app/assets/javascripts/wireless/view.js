@@ -209,7 +209,7 @@ var View = {
 	},
 
 	point2coord: function( px, py ){
-		return { x: px/gridSize|0, y: py/gridSize|0 };
+		return { x: px/View.gridSize|0, y: py/View.gridSize|0 };
 	},
 
 	point2coordCar: function( px, py, direct){
