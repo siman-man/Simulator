@@ -30,7 +30,7 @@ var AreaChart = {
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		x.domain([0, d3.max(data, function(d) { return +d.message_id+1; })]);
+		x.domain([0, d3.max(data, function(d) { return +d.message_id; })]);
 		y.domain([0, d3.max(data, function(d) { return +d.time; })]);
 
 		svg.append("path")
@@ -86,7 +86,7 @@ var AreaChart = {
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		x.domain([0, d3.max(data, function(d) { return +d.message_id+1; })]);
+		x.domain([0, d3.max(data, function(d) { return +d.message_id; })]);
 		y.domain([0, d3.max(data, function(d) { return +d.hop_count+2; })]);
 
 		svg.append("path")

@@ -3,7 +3,6 @@ var Lake = {
 	lake_list: {},
 
 	create: function(x, y){
-		//var lake = new createjs.Bitmap('/assets/lake.gif');
 		var lake = new createjs.Shape();
 		lake.x = x * gridSize; 
 		lake.y = y * gridSize;

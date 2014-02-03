@@ -132,6 +132,7 @@ var Simulator = {
 
   finishCheck: function(){
     if(Object.keys(Node.node_list[1].strage).length === Message.message_num || Simulator.time === Simulator.time_limit){
+    //if(Simulator.time === Simulator.time_limit){
       Simulator.state.finish();
     }
   },

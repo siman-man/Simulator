@@ -43,28 +43,23 @@ var Node = {
     }
   },
 
-  setMoveModel: function(agent, move_model){
-   move_model = move_model || "StationaryMovement";
-   switch(move_model){
+  setMoveModel: function(agent){
+   agent.move_model_type = agent.move_model_type || "StationaryMovement";
+   switch(agent.move_model_type){
       case 'RandomWayPoint':
-        agent.move_model_type = "RandomWayPoint";
         agent.move_model = MoveModel.randomWayPoint;
         agent.status = new FSM.randomWayPoint();
         break;
       case 'MapRouteMovement':
-        agent.move_model_type = "MapRouteMovement"
         agent.move_model = MoveModel.mapRouteMovement;
         break;
       case 'RandomWalk':
-        agent.move_model_type = "RandomWalk";
         agent.move_model = MoveModel.randomWalk;
         break;
       case 'StationaryMovement':
-        agent.move_model_type = "StationaryMovement";
         agent.move_model = MoveModel.stationaryMovement; 
         break;
       case 'CarMovement':
-        agent.move_model_type = "CarMovement";
         agent.move_model = MoveModel.carMovement;
         break;
       default:
@@ -218,8 +213,9 @@ var Node = {
     agent.label.x = agent.x + gridSize/2|0;
     agent.label.y = agent.y + gridSize/5|0;
     agent.label.textBaseline = "top";
+    agent.move_model_type = opt.move_model || "StationaryMovement";
 
-    this.setMoveModel(agent,opt.move_model);
+    this.setMoveModel(agent);
 
     agent.route_list = [];
     agent.path = opt.path || [];

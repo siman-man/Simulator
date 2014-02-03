@@ -171,9 +171,10 @@ var Panel = {
   },
 
   updateNodeMoveModel: function( eid, type ){
-  	if( eid <= 1 ) return;
+  	if( Node.isServer(Node.node_list[eid].type) ) return;
   	var user = Node.node_list[eid];
   	Node.directMoveModel( user, type );
+  	Node.setMoveModel(user)
   },
 
   userNameChanged: function(){

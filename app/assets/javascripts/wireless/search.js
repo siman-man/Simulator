@@ -49,12 +49,9 @@ var Search = {
 				break;
 			}
 
-			//neighbor_list = this.getNeighbor(cell.x, cell.y);
-
 			for( i = 0; i < 4; ++i ){
 				ny = cell.y + this.dy[i];
 				nx = cell.x + this.dx[i];
-				//neighbor = neighbor_list[i];
 
 				if( View.isInside( ny, nx ) && this.check_list[ny][nx] !== this.check_count ){
 					h = Math.abs(nx - to.x) + Math.abs(ny - to.y);
@@ -68,21 +65,5 @@ var Search = {
 		}
 
 		return route;
-	},
-
-	getNeighbor: function( x, y ){
-		var neighbor_list = [],
-				nx, ny, i;
-
-		for( i = 0; i < 4; i++){
-			ny = y + this.dy[i];
-			nx = x + this.dx[i];
-			
-			if( View.isInside( ny, nx )){
-				neighbor_list.push( Simulator.field[ny][nx] );
-			}
-		}
-
-		return neighbor_list;
-	},
+	}
 }
