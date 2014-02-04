@@ -63,7 +63,10 @@ var Panel = {
 			$("input:radio").attr("checked",false);
 			if($("#keep_out").is(":checked") && $("#user_eid").val()){
         console.log($("#user_eid").val()|0);
-      } 
+        Simulator.state.setKeepOut();
+      }else if( Simulator.state.current === 'keepOutMode' ){
+      	Simulator.state.keepEnd();
+      }
 		});
 
 		$("#message_num").change(function(){

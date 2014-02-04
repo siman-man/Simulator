@@ -5,6 +5,8 @@ var FSM = {
 			events: [
 				{ name: 'createRoute', from: 'init', to: 'createPathMode' },
 				{ name: 'pathEnd', from: 'createPathMode', to: 'init' },
+				{ name: 'setKeepOut', from: 'init', to: 'keepOutMode' },
+				{ name: 'keepEnd', from: 'keepOutMode', to: 'init' },
 				{ name: 'start',  from: 'init',  to: 'run' },
 				{ name: 'pause', from: 'run', to: 'stop'    },
 				{ name: 'restart',  from: 'stop',    to: 'run' },

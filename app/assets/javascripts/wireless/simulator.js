@@ -8,6 +8,8 @@ var Simulator = {
   start_time: undefined,
   end_time: undefined,
   seed: 1,
+  click_point: {},
+  release_point: {},
   update_flag: false,
   replay: false,
   stage_type: 1,
@@ -265,12 +267,14 @@ var Simulator = {
     }
   },
 
-    onmousedown: function(e) {
-      console.log("onmousedown =>");
+  onmousedown: function(e) {
+    console.log("onmousedown =>");
+    Simulator.press_flag = true;
+    if( Simulator.state.current === 'run' ) return;
 
-      if( Simulator.state.current != 'run' ){
-        var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
-        y = e.clientY - canvas.offsetTop + document.body.scrollTop,
+    var rect = Simulator.canvas.getBoundingClientRect(),
+        x = e.clientX - rect.left,
+        y = e.clientY - rect.top,
         coord = View.point2coord(x, y),
         operation_type = e.button,
         object_type = $("input[name='draw_object']:checked").val(),
@@ -280,48 +284,27 @@ var Simulator = {
         node = Simulator.node_map[key],
         obj_data = node[Object.keys(node)[0]];
 
-        if($("#create_route").is(":checked") && $("#user_eid").val().length !== 0 ){
-          this.create_route_mode = true;
+    Simulator.click_point = { x: coord.x, y: coord.y };
+    Simulator.release_point = {};
+    
+    if($("#create_route").is(":checked") && $("#user_eid").val().length !== 0 ){
+      this.create_route_mode = true;
+    }
+
+    if( obj_data !== undefined ){
+      console.log("obj path", obj_data.obj.path.length);
+      if( obj_data.obj.path.length === 0 ){
+        View.route_top = { y: coord.y, x: coord.x };
+          console.log("mouse down: route top =>", View.route_top);
         }
+        Panel.updateNodeData( obj_data.obj );
+        draw_object = obj_data;
+      }
 
-        if( obj_data !== undefined ){
-          console.log("obj path", obj_data.obj.path.length);
-          if( obj_data.obj.path.length === 0 ){
-            View.route_top = { y: coord.y, x: coord.x };
-            console.log("mouse down: route top =>", View.route_top);
-          }
-          Panel.updateNodeData( obj_data.obj );
-          draw_object = obj_data;
-        }
+    console.log("operation type => ", operation_type, 'y:',coord.y,'x:',coord.x);
 
-        console.log("operation type => ", operation_type, 'y:',coord.y,'x:',coord.x);
-
-        switch(Simulator.state.current){
-          case 'init':
-            break;
-          case 'createRouteMode':
-            if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
-              console.log("paint route=>");
-              View.paint_route( coord.y, coord.x );
-            }else if( operation_type === 0 ){
-              if( View.selected_cell ){
-                console.log(View.selected_cell);
-                var before = View.selected_cell;
-                View.selected_cell.obj.graphics.clear().beginFill('rgba(255,0,0,0.2)').drawRect(before.x*gridSize, before.y*gridSize, gridSize, gridSize);
-              }
-              console.log("cell selected =>");
-              View.selected_cell = View.route_grid[coord.y][coord.x];
-              $("#wait_time").val(View.selected_cell.obj.label.text);
-              View.selected_cell.obj.graphics.clear().beginFill('rgba(0,0,255,0.2)').drawRect(coord.x*gridSize, coord.y*gridSize, gridSize, gridSize);
-            }else if( operation_type === 2 ){
-              if( View.route_top.y === coord.y && View.route_top.x === coord.x ){
-                View.delete_route();
-              }
-            }
-            break;
-        }
-
-        if( !this.create_route_mode ){
+      switch(Simulator.state.current){
+        case 'init':
           if( draw_object.obj ){
             Simulator.operation_flag = true;
             Simulator.target = draw_object;
@@ -353,75 +336,108 @@ var Simulator = {
               delete Simulator.node_map[key][obj_data.obj.eid];
             }
           }
-        }
+          break;
+        case 'createRouteMode':
+          if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
+            console.log("paint route=>");
+            View.paint_route( coord.y, coord.x );
+          }else if( operation_type === 0 ){
+            if( View.selected_cell ){
+              console.log(View.selected_cell);
+              var before = View.selected_cell;
+              View.selected_cell.obj.graphics.clear().beginFill('rgba(255,0,0,0.2)').drawRect(before.x*gridSize, before.y*gridSize, gridSize, gridSize);
+            }
+            console.log("cell selected =>");
+            View.selected_cell = View.route_grid[coord.y][coord.x];
+            $("#wait_time").val(View.selected_cell.obj.label.text);
+            View.selected_cell.obj.graphics.clear().beginFill('rgba(0,0,255,0.2)').drawRect(coord.x*gridSize, coord.y*gridSize, gridSize, gridSize);
+          }else if( operation_type === 2 ){
+            if( View.route_top.y === coord.y && View.route_top.x === coord.x ){
+              View.delete_route();
+            }
+          }
+          break;
+        case 'createPathMode':
+          break;
       }
-
-      Simulator.press_flag = true;
     },
 
   onmousemove: function(e) {
     if( Simulator.press_flag ){
-      var x = e.clientX - canvas.offsetLeft + document.body.scrollLeft,
-          y = e.clientY - canvas.offsetTop + document.body.scrollTop,
+      var rect = Simulator.canvas.getBoundingClientRect(),
+          x = e.clientX - rect.left,
+          y = e.clientY - rect.top,
           coord = View.point2coord(x, y),
           operation_type = e.button,
           object_type = $("input[name='draw_object']:checked").val(),
           draw_object = Simulator.field[coord.y][coord.x],
           target = Simulator.target;
 
-      if( !this.create_route_mode ){
-        if( target && ( Node.isServer(target.type) || target.type === 'user' ) && Simulator.operation_flag && draw_object.obj === undefined){
-          target.obj.y = coord.y * gridSize;
-          target.obj.x = coord.x * gridSize;
-          target.obj.label.y = target.obj.y + gridSize/5|0;
-          target.obj.label.x = target.obj.x + gridSize/2|0;
-          target.x = coord.x;
-          target.y = coord.y;
-          Propagation.calc(coord.x, coord.y);
-        }else if( draw_object.obj === undefined && !Node.isUser(object_type) && !Node.isServer(object_type) ){
-          console.log("mousemove - objectCheck =>");
-          Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
-        }else if( draw_object.obj !== undefined && operation_type === 2 ){
-          Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
-        }
-      }else{
-        if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
-          View.paint_route( coord.y, coord.x );
-        }else if( operation_type === 2 ){
-          if( View.route_top.y === coord.y && View.route_top.x === coord.x ){
-            View.delete_route();
+      switch(Simulator.state.current){
+        case 'init':
+          if( target && ( Node.isServer(target.type) || target.type === 'user' ) && Simulator.operation_flag && draw_object.obj === undefined){
+            target.obj.y = coord.y * gridSize;
+            target.obj.x = coord.x * gridSize;
+            target.obj.label.y = target.obj.y + gridSize/5|0;
+            target.obj.label.x = target.obj.x + gridSize/2|0;
+            target.x = coord.x;
+            target.y = coord.y;
+            Propagation.calc(coord.x, coord.y);
+          }else if( draw_object.obj === undefined && !Node.isUser(object_type) && !Node.isServer(object_type) ){
+            console.log("mousemove - objectCheck =>");
+            Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
+          }else if( draw_object.obj !== undefined && operation_type === 2 ){
+            Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
           }
-        }
+          break;
+        case 'createRouteMode':
+          if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
+            View.paint_route( coord.y, coord.x );
+          }else if( operation_type === 2 ){
+            if( View.route_top.y === coord.y && View.route_top.x === coord.x ){
+              View.delete_route();
+            }
+          }
+          break;
       }
     }
   },
   
   onmouseup: function(e){
-    console.log("onmouseup =>");
-    if( !Simulator.create_route_mode ){
-      var target = Simulator.target;
-      if( target && e.button !== 2 ){
-        var coord = View.point2coord( target.obj.x, target.obj.y ),
-            key, 
-            eid;
-        if( Node.isServer(target.type) ){
-          Simulator.field[coord.y][coord.x] = target;
-          key = Simulator.key_map[coord.y][coord.x];
-          eid = target.obj.eid;
-          Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: target.obj, type: target.type };
-          Propagation.calc(coord.x, coord.y);
-        }else if( target.type === 'user' ){
-          var user = target.obj;
-          key = Simulator.key_map[coord.y][coord.x];
-          eid = user.eid;
-          if( user.path[0].y !== coord.y || user.path[0].x !== coord.x ){
-            user.path= [{ y: coord.y, x: coord.x, wait: 0 }];
+    var rect = Simulator.canvas.getBoundingClientRect(),
+        x = e.clientX - rect.left,
+        y = e.clientY - rect.top,
+        coord = View.point2coord(x, y);
+
+    Simulator.release_point = { x: coord.x, y: coord.y };
+    console.log("onmouseup =>", ' y: ', coord.y, ' x: ', coord.x );
+    switch(Simulator.state.current){
+      case 'init':
+        var target = Simulator.target;
+        if( target && e.button !== 2 ){
+          var coord = View.point2coord( target.obj.x, target.obj.y ),
+              key, 
+              eid;
+          if( Node.isServer(target.type) ){
+            Simulator.field[coord.y][coord.x] = target;
+            key = Simulator.key_map[coord.y][coord.x];
+            eid = target.obj.eid;
+            Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: target.obj, type: target.type };
+            Propagation.calc(coord.x, coord.y);
+          }else if( target.type === 'user' ){
+            var user = target.obj;
+            key = Simulator.key_map[coord.y][coord.x];
+            eid = user.eid;
+            if( user.path[0].y !== coord.y || user.path[0].x !== coord.x ){
+              user.path= [{ y: coord.y, x: coord.x, wait: 0 }];
+            }
+            Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: user, type: user.type };
+            Propagation.calc(coord.x, coord.y);
           }
-          Simulator.node_map[key][eid] = { x: coord.x, y: coord.y, obj: user, type: user.type };
-          Propagation.calc(coord.x, coord.y);
         }
-      }
+        break;
     }
+
     Simulator.target = undefined;
     Simulator.operation_flag = false;
     Simulator.press_flag = false;
