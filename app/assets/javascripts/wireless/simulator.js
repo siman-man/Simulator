@@ -67,12 +67,18 @@ var Simulator = {
     console.log('seed value => ' + Simulator.seed);
   },
 
-  setKeepOut: function( upper_left, lower_right, eid ){
-    var y, 
-        x;
-    for( y = upper_left.y; y <= lower_right.y; ++y ){
-      for( x = upper_left.x; y <= lower_right.x; ++x ){
-        this.keep_out[y][x][eid] = true; 
+  setKeepOut: function( click_point, release_point, eid ){
+    var y,
+        x,
+        sy = Math.min( click_point.y, release_point.y),
+        ey = Math.max( click_point.y, release_point.y),
+        sx = Math.min( click_point.x, release_point.x),
+        ex = Math.max( click_point.x, release_point.x); 
+  
+    for( y = sy; y <= ey; ++y ){
+      for( x = sx; x <= ex; ++x ){
+        this.keep_out[y][x][eid] = true;
+        View.keep_out_field[y][x].eid = eid;
       }
     }
   },
@@ -399,6 +405,18 @@ var Simulator = {
             }
           }
           break;
+        case 'keepOutMode':
+          var eid = +$("#user_eid").val();
+        
+          if( operation_type === 0 ){
+            View.gridCleanUp( Simulator.click_point, Simulator.release_point, -1 );
+            Simulator.release_point = { x: coord.x, y: coord.y };
+            View.gridPaintOut( Simulator.click_point, Simulator.release_point, -1 );
+          }else if( operation_type === 2 ){
+            Simulator.release_point = { x: coord.x, y: coord.y };
+            View.gridCleanUp( Simulator.click_point, Simulator.release_point, eid );
+          }
+          break;
       }
     }
   },
@@ -435,6 +453,9 @@ var Simulator = {
             Propagation.calc(coord.x, coord.y);
           }
         }
+        break;
+      case 'keepOutMode':
+        Simulator.setKeepOut( Simulator.click_point, Simulator.release_point, +$("#user_eid").val() );
         break;
     }
 

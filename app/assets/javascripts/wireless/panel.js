@@ -50,8 +50,6 @@ var Panel = {
 		$("#create_route").change(function(){
 			$("input:radio").attr("checked",false);
 			if($("#create_route").is(":checked") && $("#user_eid").val()){
-        Simulator.route_user = Node.node_list[$("#user_eid").val()|0];
-        View.route_view( Simulator.route_user.path );
         Simulator.state.createRoute();
       }else if( Simulator.state.current === 'createPathMode' ){
       	Simulator.state.pathEnd();
@@ -148,10 +146,11 @@ var Panel = {
   },
 
   updateNodeData: function( obj ){
-  	var eid = $("#user_eid").val() || -1;
+  	var eid = ($("#user_eid").val())? +$("#user_eid").val() : -1;
   	if( eid !== obj.eid ){ 
   		Simulator.route_user = Node.node_list[obj.eid];
   		$("#create_route").attr("checked",false);
+  		$("#keep_out").attr("checked",false);
   		$("#user_eid").val(obj.eid);
   		$("#user_name").val(obj.name);
   		$("#move_model").val(Panel.model2value(obj.move_model_type));

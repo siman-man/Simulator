@@ -7,6 +7,7 @@ var View = {
 	propagation: [],
 	grid_lines: [],
 	connection_line: [],
+	keep_out_field: [],
 	route_grid: [],
 	route_list: {},
 	selected_cell: undefined,
@@ -23,12 +24,14 @@ var View = {
  		for( y = 0; y <= this.height; ++y ){
       this.propagation[y] = [];
       this.route_grid[y] = [];
+      this.keep_out_field[y] = [];
 
       for(x = 0; x <= this.width; ++x){
       	shape = new createjs.Shape();
       	shape.graphics.beginFill('rgba(0,255,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
       	View.propagation[y][x] = { obj: shape, flag: false };
       	this.route_grid[y][x] = { obj: undefined, exist: false };
+      	this.keep_out_field[y][x] = { obj: undefined, eid: undefined };
       }
     }
 	},
@@ -161,6 +164,47 @@ var View = {
 			Simulator.map.removeChild(line);
 		}
 		View.connection_line = [];
+	},
+
+	gridPaintOut: function( click_point, release_point, eid ){
+		var y,
+				x,
+				sy = Math.min( click_point.y, release_point.y),
+				ey = Math.max( click_point.y, release_point.y),
+				sx = Math.min( click_point.x, release_point.x),
+				ex = Math.max( click_point.x, release_point.x), 
+        shape;
+    console.log('gridPaintOut =>');
+    for( y = sy; y <= ey; ++y ){
+      for( x = sx; x <= ex; ++x ){
+      	if( this.keep_out_field[y][x].obj === undefined ){
+        	shape = new createjs.Shape();
+    			shape.graphics.beginFill('rgba(255,0,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
+    			Simulator.map.addChild(shape);
+    			this.keep_out_field[y][x] = { obj: shape, eid: eid };
+    		}
+      }
+    }
+	},
+
+	gridCleanUp: function( click_point, release_point, eid ){
+		var y,
+				x,
+				sy = Math.min( click_point.y, release_point.y),
+				ey = Math.max( click_point.y, release_point.y),
+				sx = Math.min( click_point.x, release_point.x),
+				ex = Math.max( click_point.x, release_point.x), 
+				panel;
+	   for( y = sy; y <= ey; ++y ){
+      for( x = sx; x <= ex; ++x ){
+				if( this.keep_out_field[y][x].obj !== undefined && ( Simulator.keep_out[y][x][eid] || this.keep_out_field[y][x].eid === eid )){
+					panel = this.keep_out_field[y][x].obj;
+					Simulator.map.removeChild(panel);
+					delete this.keep_out_field[y][x].obj;
+					this.keep_out_field[y][x] = { obj: undefined, eid: undefined };
+				}
+			}
+		}
 	},
 
 	drawGrid: function(){

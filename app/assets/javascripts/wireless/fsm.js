@@ -15,6 +15,11 @@ var FSM = {
 			],
 
 			callbacks: {
+				oncreateRoute: function( event, from, to ){
+					Simulator.route_user = Node.node_list[$("#user_eid").val()|0];
+        	View.route_view( Simulator.route_user.path );
+				},
+
 				onstart: function(event, from, to, user) {
 					Simulator.user_id = Date.now();
 					Simulator.start_time = new Date();
