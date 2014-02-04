@@ -13,6 +13,7 @@ var Simulator = {
   update_flag: false,
   replay: false,
   stage_type: 1,
+  transmit_success_rate: 0.95,
   selected_target: -1,
   target: undefined,
   route_user: undefined,
@@ -149,7 +150,7 @@ var Simulator = {
 
   moveUpdate: function(){
     Node.move();
-    if( Simulator.time % 2 === 0 ){
+    if( Simulator.time % 10 === 0 ){
       Node.sendLocation();
     }
   },
@@ -165,8 +166,8 @@ var Simulator = {
   },
 
   finishCheck: function(){
-    //if(Object.keys(Node.node_list[1].strage).length === Message.message_num || Simulator.time === Simulator.time_limit){
-    if(Simulator.time === Simulator.time_limit){
+    if(Object.keys(Node.node_list[1].strage).length === Message.message_num || Simulator.time === Simulator.time_limit){
+    //if(Simulator.time === Simulator.time_limit){
       Simulator.state.finish();
     }
   },

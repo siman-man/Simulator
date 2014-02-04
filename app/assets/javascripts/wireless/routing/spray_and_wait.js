@@ -52,7 +52,8 @@ SprayAndWait.prototype = {
 			dest_eid = message.dest_eid;
 			dest = Node.node_list[dest_eid];
 		
-			message.size--;
+			if( Simulator.mersenne.random() < Simulator.transmit_success_rate) message.size--;
+			
 			if( message.size === 0 ){
 				dest.strage[message.id] = message;
 				this.node.strage[message.id].ftoken = message.ftoken;
