@@ -1,5 +1,6 @@
 /*
  * 宛先への到達確率を求めて、一番高いノードに送信。
+ * 転送戦略はGTRT+を使用
  */
 
 var time_unit = 500;
@@ -156,6 +157,7 @@ ProPHET.prototype = {
 				dest.label.text = Object.keys(dest.strage).length;
 				this.node.buffer.shift();
 				Log.send(Log.transmit_message( this.node, dest, message ));
+				Log.send(Log.receive_message( this.node, dest, message ));
 			}
 		}
 	},
@@ -173,11 +175,8 @@ ProPHET.prototype = {
 		return ( my_dp < other_dp );
 	},
 
-	grtr_max: function( eid, other ){
+	grtr_plus: function( eid, other ){
   	var best_eid = this.get_best_eid( eid );
-  	if( this.node.eid === 0 && other.eid === 2 ){
-			console.log('best eid =>', best_eid);
-		}
   	return ( other.eid === best_eid );
 	},
 
@@ -188,7 +187,7 @@ ProPHET.prototype = {
 				diff= [];
 
 		for( message_id in strageA ){
-			if( strageB[message_id] === undefined && this.grtr( 1, dest ) ){
+			if( strageB[message_id] === undefined && this.grtr_plus( 1, dest ) ){
 				diff.push(message_id);
 			}
 		}

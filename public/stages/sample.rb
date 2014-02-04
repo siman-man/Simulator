@@ -47,7 +47,6 @@
     5.times do |x|
       create(:wall){|wall| wall.position( x: x, y: 8)}
     end
-
 end
 
 

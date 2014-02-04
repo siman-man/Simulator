@@ -4,6 +4,7 @@ var Simulator = {
   field: [],
   user_id: 0,
   key_map: [],
+  keep_out: [],
   start_time: undefined,
   end_time: undefined,
   seed: 1,
@@ -44,12 +45,14 @@ var Simulator = {
     for( y = 0; y < View.height; ++y ){
       this.field[y] = [];
       this.key_map[y] = [];
+      this.keep_out[y] = [];
 
       for( x = 0; x < View.width; ++x ){
         this.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
         key = Simulator.point2key( x, y );
         this.key_map[y][x] = key;
         this.node_map[key] = {};
+        this.keep_out[y][x] = {};
       }
     }
 
@@ -60,6 +63,16 @@ var Simulator = {
     createjs.Ticker.addEventListener("tick", this.handleTick);
     Simulator.map.update();
     console.log('seed value => ' + Simulator.seed);
+  },
+
+  setKeepOut: function( upper_left, lower_right, eid ){
+    var y, 
+        x;
+    for( y = upper_left.y; y <= lower_right.y; ++y ){
+      for( x = upper_left.x; y <= lower_right.x; ++x ){
+        this.keep_out[y][x][eid] = true; 
+      }
+    }
   },
 
   direct_protocol_type: function( type ){
@@ -281,7 +294,32 @@ var Simulator = {
           draw_object = obj_data;
         }
 
-        console.log("operation type => ", operation_type);
+        console.log("operation type => ", operation_type, 'y:',coord.y,'x:',coord.x);
+
+        switch(Simulator.state.current){
+          case 'init':
+            break;
+          case 'createRouteMode':
+            if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
+              console.log("paint route=>");
+              View.paint_route( coord.y, coord.x );
+            }else if( operation_type === 0 ){
+              if( View.selected_cell ){
+                console.log(View.selected_cell);
+                var before = View.selected_cell;
+                View.selected_cell.obj.graphics.clear().beginFill('rgba(255,0,0,0.2)').drawRect(before.x*gridSize, before.y*gridSize, gridSize, gridSize);
+              }
+              console.log("cell selected =>");
+              View.selected_cell = View.route_grid[coord.y][coord.x];
+              $("#wait_time").val(View.selected_cell.obj.label.text);
+              View.selected_cell.obj.graphics.clear().beginFill('rgba(0,0,255,0.2)').drawRect(coord.x*gridSize, coord.y*gridSize, gridSize, gridSize);
+            }else if( operation_type === 2 ){
+              if( View.route_top.y === coord.y && View.route_top.x === coord.x ){
+                View.delete_route();
+              }
+            }
+            break;
+        }
 
         if( !this.create_route_mode ){
           if( draw_object.obj ){
@@ -313,25 +351,6 @@ var Simulator = {
               Simulator.target = obj_data;
               key = Simulator.key_map[coord.y][coord.x];
               delete Simulator.node_map[key][obj_data.obj.eid];
-            }
-          }
-        }else if( this.create_route_mode ){
-          if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
-            console.log("paint route=>");
-            View.paint_route( coord.y, coord.x );
-          }else if( operation_type === 0 ){
-            if( View.selected_cell ){
-               console.log(View.selected_cell);
-               var before = View.selected_cell;
-               View.selected_cell.obj.graphics.clear().beginFill('rgba(255,0,0,0.2)').drawRect(before.x*gridSize, before.y*gridSize, gridSize, gridSize);
-            }
-            console.log("cell selected =>");
-            View.selected_cell = View.route_grid[coord.y][coord.x];
-            $("#wait_time").val(View.selected_cell.obj.label.text);
-            View.selected_cell.obj.graphics.clear().beginFill('rgba(0,0,255,0.2)').drawRect(coord.x*gridSize, coord.y*gridSize, gridSize, gridSize);
-          }else if( operation_type === 2 ){
-            if( View.route_top.y === coord.y && View.route_top.x === coord.x ){
-              View.delete_route();
             }
           }
         }

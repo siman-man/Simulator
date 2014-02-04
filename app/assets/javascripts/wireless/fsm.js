@@ -3,8 +3,8 @@ var FSM = {
 		return new StateMachine.create({
 			initial: 'init',
 			events: [
-				{ name: 'create_route', from: 'init', to: 'create_path' },
-				{ name: 'path_end', from: 'create_path', to: 'init' },
+				{ name: 'createRoute', from: 'init', to: 'createPathMode' },
+				{ name: 'pathEnd', from: 'createPathMode', to: 'init' },
 				{ name: 'start',  from: 'init',  to: 'run' },
 				{ name: 'pause', from: 'run', to: 'stop'    },
 				{ name: 'restart',  from: 'stop',    to: 'run' },

@@ -49,13 +49,21 @@ var Panel = {
 
 		$("#create_route").change(function(){
 			$("input:radio").attr("checked",false);
-			if($("#create_route").is(":checked") && $("#user_eid").val().length !== 0 ){
+			if($("#create_route").is(":checked") && $("#user_eid").val()){
         Simulator.route_user = Node.node_list[$("#user_eid").val()|0];
         View.route_view( Simulator.route_user.path );
-      } 
-      if(!$("#create_route").is(":checked")){
+        Simulator.state.createRoute();
+      }else if( Simulator.state.current === 'createPathMode' ){
+      	Simulator.state.pathEnd();
       	View.clear_route();
       }
+		});
+
+		$("#keep_out").change(function(){
+			$("input:radio").attr("checked",false);
+			if($("#keep_out").is(":checked") && $("#user_eid").val()){
+        console.log($("#user_eid").val()|0);
+      } 
 		});
 
 		$("#message_num").change(function(){

@@ -103,18 +103,11 @@ var View = {
 		delete this.route_list[this.route_id];
 		this.route_grid[cell.y][cell.x] = { obj: undefined, exist: false };
 		if( this.route_id !== 0 ){
-			var ny, nx;
-			for(var i = 0; i < 4; ++i){
-				ny = cell.y + this.dy[i];
-				nx = cell.x + this.dx[i];
-				if( this.route_grid[ny][nx].exist ){
-					this.route_top = { y: ny, x: nx };
-					break;
-				}
-			}	
+			this.route_top = this.route_list[View.route_id-1];	
 		}else{
 			this.route_top = { y: -1, x: -1 };
 		}
+		console.log('route_top =>', this.route_top);
 	},
 
 	clear_route: function(){
