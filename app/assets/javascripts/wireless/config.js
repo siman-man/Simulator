@@ -66,7 +66,6 @@ var Config = {
 			Simulator.direct_protocol_type(+$("#protocol").val());
 		}
 
-
 		data.push( this.create_data( "stage_data", { 
 			field_width: View.width,
 			field_height: View.height,
@@ -84,6 +83,17 @@ var Config = {
 					console.log(Simulator.field[y][x]);
 					data.push( this.create_data( type, { y: y, x: x }))
 				}
+				var eid_list = Simulator.keep_out[y][x];
+				for( var id in eid_list ){
+					if( Simulator.keep_out[y][x][id] ){
+						data.push( this.create_data( "ko", {
+							x: x,
+							y: y,
+							eid: id
+						}));
+					}
+				}	
+				
 			}
 		}
 

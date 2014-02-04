@@ -23,7 +23,7 @@ var Simulator = {
   article_id: 0,
   time: 0,
   time_limit: -1,
-  per_frame: 360,
+  per_frame: 240,
 
   getCanvasInfo: function(){
     console.log('get canvas info =>');
@@ -42,32 +42,42 @@ var Simulator = {
       console.log('simulator init =>');
     }
 
-    var x, y, key;
+    var x, y, key,
+        keep_out_list = [];
+
+    if( config && config.keep_out ){
+      keep_out_list = config.keep_out
+    }
 
     for( y = 0; y < View.height; ++y ){
-      this.field[y] = [];
-      this.key_map[y] = [];
-      this.keep_out[y] = [];
+      Simulator.field[y] = [];
+      Simulator.key_map[y] = [];
+      Simulator.keep_out[y] = [];
 
       for( x = 0; x < View.width; ++x ){
-        this.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
+        Simulator.field[y][x] = { x: x, y: y, obj: undefined, type: 'normal', cost: 1, pf: 1 };
         key = Simulator.point2key( x, y );
-        this.key_map[y][x] = key;
-        this.node_map[key] = {};
-        this.keep_out[y][x] = {};
+        Simulator.key_map[y][x] = key;
+        Simulator.node_map[key] = {};
+        Simulator.keep_out[y][x] = {};
       }
     }
 
-    this.state = FSM.simulator();
-    this.end_flag = false;
+    console.log(keep_out_list);
+    $.each( keep_out_list, function( index, keep ){
+      Simulator.keep_out[keep.y][keep.x][keep.eid] = true;
+    });
 
-    createjs.Ticker.setFPS(this.per_frame);
-    createjs.Ticker.addEventListener("tick", this.handleTick);
+    Simulator.state = FSM.simulator();
+    Simulator.end_flag = false;
+
+    createjs.Ticker.setFPS(Simulator.per_frame);
+    createjs.Ticker.addEventListener("tick", Simulator.handleTick);
     Simulator.map.update();
     console.log('seed value => ' + Simulator.seed);
   },
 
-  setKeepOut: function( click_point, release_point, eid ){
+  setKeepOut: function( click_point, release_point, eid, type ){
     var y,
         x,
         sy = Math.min( click_point.y, release_point.y),
@@ -77,8 +87,11 @@ var Simulator = {
   
     for( y = sy; y <= ey; ++y ){
       for( x = sx; x <= ex; ++x ){
-        this.keep_out[y][x][eid] = true;
-        View.keep_out_field[y][x].eid = eid;
+        if( type === 'check' ){
+          Simulator.keep_out[y][x][eid] = true;
+        }else if( type === 'erase' ){
+          Simulator.keep_out[y][x][eid] = false;
+        }
       }
     }
   },
@@ -86,25 +99,25 @@ var Simulator = {
   direct_protocol_type: function( type ){
     switch(type){
       case 0:
-        this.protocol_type = 'epidemic';
+        Simulator.protocol_type = 'epidemic';
         break;
       case 1:
-        this.protocol_type = 'spray_and_wait';
+        Simulator.protocol_type = 'spray_and_wait';
         break;
       case 2:
-        this.protocol_type = 'pro_phet';
+        Simulator.protocol_type = 'pro_phet';
         break;
       case 3:
-        this.protocol_type = 'n_hop_forwarding';
+        Simulator.protocol_type = 'n_hop_forwarding';
         break;
       default:
-        this.protocol_type = 'epidemic';
+        Simulator.protocol_type = 'epidemic';
     }
   },
 
   clear: function( config ){
     console.log("Simulator clear =>");
-    createjs.Ticker.removeEventListener("tick", this.handleTick);
+    createjs.Ticker.removeEventListener("tick", Simulator.handleTick);
     Simulator.map.removeAllChildren();
 
     Simulator.time = 0;
@@ -136,7 +149,7 @@ var Simulator = {
 
   moveUpdate: function(){
     Node.move();
-    if( Simulator.time % 10 === 0 ){
+    if( Simulator.time % 2 === 0 ){
       Node.sendLocation();
     }
   },
@@ -152,8 +165,8 @@ var Simulator = {
   },
 
   finishCheck: function(){
-    if(Object.keys(Node.node_list[1].strage).length === Message.message_num || Simulator.time === Simulator.time_limit){
-    //if(Simulator.time === Simulator.time_limit){
+    //if(Object.keys(Node.node_list[1].strage).length === Message.message_num || Simulator.time === Simulator.time_limit){
+    if(Simulator.time === Simulator.time_limit){
       Simulator.state.finish();
     }
   },
@@ -294,7 +307,7 @@ var Simulator = {
     Simulator.release_point = {};
     
     if($("#create_route").is(":checked") && $("#user_eid").val().length !== 0 ){
-      this.create_route_mode = true;
+      Simulator.create_route_mode = true;
     }
 
     if( obj_data !== undefined ){
@@ -413,6 +426,7 @@ var Simulator = {
             Simulator.release_point = { x: coord.x, y: coord.y };
             View.gridPaintOut( Simulator.click_point, Simulator.release_point, -1 );
           }else if( operation_type === 2 ){
+            View.gridPaintOut( Simulator.click_point, Simulator.release_point, eid );
             Simulator.release_point = { x: coord.x, y: coord.y };
             View.gridCleanUp( Simulator.click_point, Simulator.release_point, eid );
           }
@@ -455,7 +469,11 @@ var Simulator = {
         }
         break;
       case 'keepOutMode':
-        Simulator.setKeepOut( Simulator.click_point, Simulator.release_point, +$("#user_eid").val() );
+        if( e.button === 0 ){
+          Simulator.setKeepOut( Simulator.click_point, Simulator.release_point, +$("#user_eid").val(), 'check' );
+        }else{
+          Simulator.setKeepOut( Simulator.click_point, Simulator.release_point, +$("#user_eid").val(), 'erase' );
+        }
         break;
     }
 

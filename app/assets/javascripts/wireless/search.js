@@ -17,11 +17,9 @@ var Search = {
   	}
   },
 
-	find: function(from, to){
+	find: function(from, to, eid){
 		var route = [],
 				queue = new PriorityQueue(),
-    		sx = to.x * View.gridSize,
-    		sy = to.y * View.gridSize,
     		i, j, ny, nx,
     		cell, neighbor_list, neighbor,
     		h, s, c, elem;
@@ -53,7 +51,7 @@ var Search = {
 				ny = cell.y + this.dy[i];
 				nx = cell.x + this.dx[i];
 
-				if( View.isInside( ny, nx ) && this.check_list[ny][nx] !== this.check_count ){
+				if( View.isInside( ny, nx ) && this.check_list[ny][nx] !== this.check_count && !Simulator.keep_out[ny][nx][eid] ){
 					h = Math.abs(nx - to.x) + Math.abs(ny - to.y);
 					c = cell.cost + Simulator.field[ny][nx].cost;
 					s = c+h;

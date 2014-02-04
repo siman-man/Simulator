@@ -72,7 +72,8 @@
 <% end %>
 
 <% if defined?(@stage_change) %>
-  var config = <%= @config.to_json.html_safe %>
+  var config = <%= @config.to_json.html_safe %>;
+
   console.log("stage config =>", config);
   Config.init(config);
   $("#canvas_field").empty();
@@ -83,7 +84,7 @@
   View.init();
   View.drawGrid()
   Propagation.init();
-  Simulator.init();
+  Simulator.init(config);
   Simulator.stage_change = true;
   Simulator.file_name = "<%= @file_name %>"
 

@@ -15,6 +15,14 @@ var FSM = {
 			],
 
 			callbacks: {
+				onsetKeepOut: function( event, from, to, eid ){
+					View.paintAllKeepOut(eid);
+				},
+
+				onkeepEnd: function( event, from, to, eid ){
+					View.clearAllKeepOut();
+				},
+
 				oncreateRoute: function( event, from, to ){
 					Simulator.route_user = Node.node_list[$("#user_eid").val()|0];
         	View.route_view( Simulator.route_user.path );

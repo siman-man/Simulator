@@ -132,24 +132,18 @@ var MoveModel = {
     return 0;
   },
 
-  setRoute: function(user, to){
-    var coord = View.point2coord( user.x, user.y );
-
-    user.way_point = { x: to.x, y: to.y };
-    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: to.x, y: to.y});
-  },
-
   directWayPoint: function(user){
     var x,
         y,
         coord = View.point2coord( user.x, user.y );
     while(true){
-      x = Simulator.mersenne.random() * (View.width-1) * 1.0 | 0;
-      y = Simulator.mersenne.random() * (View.height-1) * 1.0 | 0;
-      if( Simulator.field[y][x].type !== 'wall' || Simulator.field[y][x].type !== 'tree' ) break;
+      x = Simulator.mersenne.random() * (View.width) | 0;
+      y = Simulator.mersenne.random() * (View.height) | 0;
+      if( Simulator.field[y][x].type !== 'wall' && Simulator.field[y][x].type !== 'tree' && !Simulator.keep_out[y][x][user.eid]) break;
+      console.log('re select');
     }
 
-    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y });
+    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y }, user.eid );
 
     if(user.route_list.length === 0){
       console.log('reload')
@@ -173,7 +167,7 @@ var MoveModel = {
       if( View.isInside( y, x ) && Simulator.field[y][x].type != 'wall' ) break;
     }
 
-    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y});
+    user.route_list = Search.find({ x: coord.x, y: coord.y }, { x: x, y: y}, user.eid );
 
     if(user.route_list.length === 0){
       console.log('reload')

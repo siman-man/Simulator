@@ -166,22 +166,61 @@ var View = {
 		View.connection_line = [];
 	},
 
+	clearAllKeepOut: function( eid ){
+		var y,
+				x;
+
+		for( y = 0; y < View.height; ++y ){
+			for( x = 0; x < View.width; ++x ){
+				if( View.keep_out_field[y][x].obj !== undefined ){
+					this.clearKeepOut(y,x);
+				}
+			}
+		}
+	},
+
+	paintAllKeepOut: function( eid ){
+		var y,
+				x;
+
+		for( y = 0; y < View.height; ++y ){
+			for( x = 0; x < View.width; ++x ){
+				if( Simulator.keep_out[y][x][eid] ){
+					this.paintKeepOut(y,x,eid);
+				}
+			}
+		}
+	},
+
+	paintKeepOut: function( y, x, eid ){
+		var shape = new createjs.Shape();
+    shape.graphics.beginFill('rgba(255,0,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
+    Simulator.map.addChild(shape);
+    this.keep_out_field[y][x] = { obj: shape, eid: eid };
+	},
+
+	clearKeepOut: function( y, x ){
+		var panel = this.keep_out_field[y][x].obj;
+		Simulator.map.removeChild(panel);
+		delete this.keep_out_field[y][x].obj;
+		this.keep_out_field[y][x] = { obj: undefined, eid: undefined };
+	},
+
 	gridPaintOut: function( click_point, release_point, eid ){
 		var y,
 				x,
 				sy = Math.min( click_point.y, release_point.y),
 				ey = Math.max( click_point.y, release_point.y),
 				sx = Math.min( click_point.x, release_point.x),
-				ex = Math.max( click_point.x, release_point.x), 
-        shape;
+				ex = Math.max( click_point.x, release_point.x);
+
     console.log('gridPaintOut =>');
     for( y = sy; y <= ey; ++y ){
       for( x = sx; x <= ex; ++x ){
-      	if( this.keep_out_field[y][x].obj === undefined ){
-        	shape = new createjs.Shape();
-    			shape.graphics.beginFill('rgba(255,0,0,0.2)').drawRect(x*gridSize, y*gridSize, gridSize, gridSize);
-    			Simulator.map.addChild(shape);
-    			this.keep_out_field[y][x] = { obj: shape, eid: eid };
+      	if( eid === -1 && this.keep_out_field[y][x].obj === undefined ){
+        	this.paintKeepOut(y,x,eid);
+    		}else if( Simulator.keep_out[y][x][eid]){
+    			this.paintKeepOut(y,x,eid);
     		}
       }
     }
@@ -198,10 +237,7 @@ var View = {
 	   for( y = sy; y <= ey; ++y ){
       for( x = sx; x <= ex; ++x ){
 				if( this.keep_out_field[y][x].obj !== undefined && ( Simulator.keep_out[y][x][eid] || this.keep_out_field[y][x].eid === eid )){
-					panel = this.keep_out_field[y][x].obj;
-					Simulator.map.removeChild(panel);
-					delete this.keep_out_field[y][x].obj;
-					this.keep_out_field[y][x] = { obj: undefined, eid: undefined };
+					this.clearKeepOut(y, x);
 				}
 			}
 		}

@@ -1,7 +1,8 @@
 require 'td-logger'
 
-class Array
+class Array  
   alias :add :push
+  alias :set :push
 end
 
 module WirelessesHelper
@@ -30,6 +31,7 @@ module WirelessesHelper
     user_data = []
     stage_data[:filename] = filename
     stage_data[:node_num] = 0
+    keep_out = []
     File.open("#{Rails.root}/public/stages/#{filename}.rb", "w") do |file|
 
       file.write("WBSD::Simulator.define do\n")
@@ -37,6 +39,7 @@ module WirelessesHelper
       data_list.each do |data|
         info = Hash[data.split(' ').map{|e| e.split(':')}]
         p info["path"]
+        
         if info["type"] == "stage_data"
           info.delete("type")
           file.write(<<-EOS
@@ -48,6 +51,8 @@ module WirelessesHelper
   time_limit #{info['time_limit']}  
             EOS
           )
+        elsif info["type"] == "ko"
+          keep_out.push({ x: info["x"].to_i, y: info["y"].to_i, eid: info["eid"].to_i })
         elsif ["user", "car", "server","start","end"].include?(info["type"])
           stage_data[:node_num] += 1
           user_data << { eid: info["eid"], name: info["name"], speed: info["speed"] }
@@ -68,11 +73,19 @@ module WirelessesHelper
           EOS
           )
         else
-          file.write("\tcreate(:#{info["type"]}){|t| t.position( x: #{info["x"]}, y: #{info["y"]} )}\n")
+          file.puts("\tcreate(:#{info["type"]}){|t| t.position( x: #{info["x"]}, y: #{info["y"]} )}")
         end
       end
+
+      unless keep_out.size.zero?
+        file.puts("\tkeep_out do |k|")
+        keep_out.each do |data|
+          file.puts("\t\tk.set( x: #{data[:x]}, y: #{data[:y]}, eid: #{data[:eid]} )")
+        end
+        file.puts("\tend")
+      end
       
-      file.write("end\n")
+      file.puts("end")
     end
     create_node_data(user_data, filename)
     p stage_data
@@ -115,6 +128,11 @@ module WirelessesHelper
           end
         end
       end 
+
+      def keep_out(&block)
+        @config[:keep_out] ||= []
+        block.call(@config[:keep_out])
+      end
 
       def create(type, &block)
         puts "create user =>"

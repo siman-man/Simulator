@@ -195,7 +195,7 @@ var Node = {
     }else{
       agent.graphics.beginFill(opt.color).drawCircle(gridSize/2, gridSize/2, gridSize/2);
     }
-    agent.eid = +opt.eid || this.eid;
+    agent.eid = +opt.id || this.eid;
     this.eid++;
     agent.type = opt.type;
     agent.name = opt.name || "node" + (agent.eid-1);
