@@ -1,6 +1,6 @@
 var Epidemic = {
   vertical: function(dataset){
-    var margin = {top: 20, right: 20, bottom: 50, left: 70},
+    var margin = {top: 40, right: 20, bottom: 60, left: 100},
         width = Math.max( 600, dataset.length*50 ) - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
@@ -9,7 +9,7 @@ var Epidemic = {
     var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1)
     .domain(dataset.map(function(d){
-      return d.user_count;
+      return d.name;
     }));
 
     var y = d3.scale.linear()
@@ -37,8 +37,8 @@ var Epidemic = {
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
       .append("text")
-      .attr("y", 30)
-      .attr("x", width * 0.55)
+      .attr("y", 40)
+      .attr("x", width * 0.56)
       .attr("dy", ".71em")
       .attr("style","font-size:16px;")
       .style("text-anchor", "end")
@@ -50,21 +50,21 @@ var Epidemic = {
       .append("text")
       .attr("class", "label")
       .attr("transform", "rotate(-90)")
-      .attr("x", -120)
-      .attr("y", 10)
+      .attr("x", -100)
+      .attr("y", -60)
       .attr("dy", ".71em")
-      .style("text-anchor", "end")
       .attr("style","font-size:16px;")
+      .style("text-anchor", "end")
       .text(DataList.ylabel)
 
     svg.selectAll(".bar")
         .data(dataset)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d){ return x(d.user_count) })
+        .attr("x", function(d){ return x(d.name) })
         .attr("width", x.rangeBand())
         .attr("y", function(d){ return y(+d.count) })
         .attr("height", function(d){ return height - y(+d.count) })
-        .style("fill", "teal") 
+        .style("fill", "#F08C00") 
   },
 }

@@ -4,7 +4,7 @@ var Message = {
 
 	init: function(){
 		for(var i = 0; i < this.message_num; i++){
-			Node.node_list[0].strage[i] = { size: this.message_size, ftoken: 2, hop_count: 0 };
+			Node.node_list[0].strage[i] = { size: this.message_size, ftoken: 4, hop_count: 0 };
 		}
 	},
 

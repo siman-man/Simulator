@@ -78,14 +78,7 @@ ProPHET.prototype = {
 				my_eid = this.node.eid,
 				last_time = this.node.last_connect_time[to.eid] || 0;
 
-		if( to.eid === 1 ){
-			console.log('my_eid =>', my_eid, "before =>", dp[my_eid][to.eid]);
-			console.log(this.first_connection( dp[my_eid][to.eid], last_time ));
-			dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid], last_time );
-			console.log('my_eid =>', my_eid, "after =>", dp[my_eid][to.eid]);
-		}else{
-			dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid], last_time );
-		}
+		dp[my_eid][to.eid] = this.first_connection( dp[my_eid][to.eid], last_time );
 
 		this.node.delivery_predictability[to.eid] = this.deep_copy(to.delivery_predictability[to.eid]);
 		P_a_b = this.node.delivery_predictability[my_eid][to.eid];
@@ -101,10 +94,6 @@ ProPHET.prototype = {
 			if( P_a_c_old < P_a_c ){
 				this.node.delivery_predictability[my_eid][eid] = P_a_c;
 			}
-		}
-
-		if( this.node.eid === 2 && to.eid === 1){
-			console.log("dp =>", this.node.delivery_predictability);
 		}
 	
 		var message_diff = [],

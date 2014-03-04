@@ -52,15 +52,17 @@ SprayAndWait.prototype = {
 			dest_eid = message.dest_eid;
 			dest = Node.node_list[dest_eid];
 		
-			if( Simulator.mersenne.random() < Simulator.transmit_success_rate) message.size--;
+			message.size--;
 			
 			if( message.size === 0 ){
-				dest.strage[message.id] = message;
-				this.node.strage[message.id].ftoken = message.ftoken;
-				dest.label.text = Object.keys(dest.strage).length;
+				if( Simulator.mersenne.random() < Simulator.transmit_success_rate ){
+					dest.strage[message.id] = message;
+					this.node.strage[message.id].ftoken = message.ftoken;
+					dest.label.text = Object.keys(dest.strage).length;
+					Log.send(Log.transmit_message( this.node, dest, message ));
+					Log.send(Log.receive_message( this.node, dest, message ));
+				}
 				this.node.buffer.shift();
-				Log.send(Log.transmit_message( this.node, dest, message ));
-				Log.send(Log.receive_message( this.node, dest, message ));
 			}
 		}
 	},

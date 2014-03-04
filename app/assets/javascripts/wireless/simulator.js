@@ -13,7 +13,7 @@ var Simulator = {
   update_flag: false,
   replay: false,
   stage_type: 1,
-  transmit_success_rate: 0.95,
+  transmit_success_rate: 0.6,
   selected_target: -1,
   target: undefined,
   route_user: undefined,
@@ -357,7 +357,7 @@ var Simulator = {
             }
           }
           break;
-        case 'createRouteMode':
+        case 'createPathMode':
           if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
             console.log("paint route=>");
             View.paint_route( coord.y, coord.x );
@@ -384,6 +384,7 @@ var Simulator = {
 
   onmousemove: function(e) {
     if( Simulator.press_flag ){
+      console.log(Simulator.state.current)
       var rect = Simulator.canvas.getBoundingClientRect(),
           x = e.clientX - rect.left,
           y = e.clientY - rect.top,
@@ -410,7 +411,7 @@ var Simulator = {
             Simulator.objectCheck( coord.x, coord.y, object_type, operation_type, draw_object);
           }
           break;
-        case 'createRouteMode':
+        case 'createPathMode':
           if( !View.route_grid[coord.y][coord.x].exist && operation_type === 0 ){
             View.paint_route( coord.y, coord.x );
           }else if( operation_type === 2 ){

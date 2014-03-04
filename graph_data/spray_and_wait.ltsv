@@ -1,6 +1,6 @@
-copy_num:2 time:70960 latency:16581
-copy_num:4 time:39605 latency:6318
-copy_num:8 time:41350 latency:3660
-copy_num:16 time:42927 latency:2650
-copy_num:32 time:53758 latency:2566
-copy_num:64 time:38053 latency:2419
+copy_num:2  time:70960  latency:16581
+copy_num:4  time:39605  latency:6318
+copy_num:8  time:41350  latency:3660
+copy_num:16 time:42927  latency:2650
+copy_num:32 time:53758  latency:2566
+copy_num:64 time:38053  latency:2419
