@@ -1,4 +1,15 @@
+/**
+ *		シミュレーションの情報を定義する
+ *		@class Config
+ **/
+
 var Config = {
+	/**
+	 *		シミュレーションの設定を行う
+	 *		@method init
+	 *		@param config {Object} 設定情報
+	 *		@return 無し
+	 **/
 	init: function(config){
 		console.log("config init =>");
 		if( config !== undefined ){
@@ -25,8 +36,15 @@ var Config = {
 		$("#transmit_range").val(Propagation.transmit_range);
 	},
 
+	/**
+	 *		フィールド情報のオブジェクト化を行う
+	 *		@method field2obj_list
+	 *		@return data {Object} フィルード情報
+	 **/
 	field2obj_list: function(){
-		var y, x, key,
+		var y, 
+				x, 
+				key,
 			 	node_list,
 			 	eid, data = [],
 			 	type,
@@ -114,7 +132,6 @@ var Config = {
 			}))
 		}
 
-		console.log( data );
 		return data;
 	},
 
@@ -130,9 +147,17 @@ var Config = {
   	});
 	},
 
+	/**
+	 *		経路情報を文字列へと変換を行う
+	 *		@method path2string
+	 *		@param path {Array} 経路情報
+	 *		@return res {String} 経路情報を文字列に変換したもの
+	 **/
 	path2string: function( path ){
 		var array = [],
-				i, elem;
+				i, 
+				elem,
+				res;
 
 		for( i in path ){
 			elem = path[i];
@@ -141,9 +166,16 @@ var Config = {
 			array.push(elem.wait);
 		}
 
-		return JSON.stringify(array).replace(/,/g, "*");  
+		res = JSON.stringify(array).replace(/,/g, "*"); 
+		return res;  
 	},
 
+	/**
+	 *		フィールド情報を文字列に変換
+	 *		@method create_data
+	 *		@param type {String} 情報のタイプ
+	 *		@param opt {Object} 情報の内容
+	 **/
 	create_data: function( type, opt ){
 		var data = [],
 				key;
@@ -160,31 +192,22 @@ var Config = {
 		switch(type){
 			case 'user':
 			  return 'rgba(0,0,0,1.0)';
-				break;
 			case 'start':
 				return 'rgba(218,0,10,1.0)';
-				break;
 			case 'end':
 				return 'rgba(10,0,218,1.0)';
-				break;
 			case 'server':
 				return 'rgba(255,0,0,1.0)';
-				break;
 			case 'car':
 				return 'rgba(0,59,255,1.0)';
-				break;
 			case 'wall':
 				return 'rgba(92,92,92,1.0)';
-				break;
 			case 'tree':
 				return 'rgba(0,88,0,1.0)';
-				break;
 			case 'lake':
 				return 'rgba(128,255,212,0.98)';
-				break;
 			case 'road':
 				return 'rgba(211,211,211,1.0)';
-				break;
 		}
 	},
 }

@@ -115,7 +115,9 @@ var View = {
 
 	clear_route: function(){
 		console.log("clear route =>");
-		var i, cell, coord;
+		var i, 
+        cell, 
+        coord;
 		for( i in this.route_list ){
 			cell = this.route_list[i];
 			Simulator.map.removeChild(cell.obj);

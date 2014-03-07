@@ -21,20 +21,15 @@ var Message = {
 		switch(Simulator.protocol_type){
 			case 'epidemic':
 				return message;
-				break;
 			case 'spray_and_wait':
 				message.ftoken = from.strage[id].ftoken / 2 | 0;
 				return message;
-				break;
 			case 'pro_phet':
 				return message;
-				break;
 			case 'n_hop_forwarding':
 				return message;
-				break;
 			default:
 				return message;
-				break;
 		};
 	}
 };

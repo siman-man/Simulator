@@ -20,9 +20,17 @@ var Search = {
 	find: function(from, to, eid){
 		var route = [],
 				queue = new PriorityQueue(),
-    		i, j, ny, nx,
-    		cell, neighbor_list, neighbor,
-    		h, s, c, elem;
+    		i, 
+        j, 
+        ny, 
+        nx,
+    		cell, 
+        neighbor_list, 
+        neighbor,
+    		h, 
+        s, 
+        c, 
+        elem;
 
     this.check_count++;
 		

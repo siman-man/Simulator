@@ -18,7 +18,8 @@ var Street = {
 	},
 
 	clear: function(){
-		var x, y;
+		var x, 
+				y;
 
 		for( y = 0; y < View.height; y++ ){
 			for( x = 0; x < View.width; x++ ){

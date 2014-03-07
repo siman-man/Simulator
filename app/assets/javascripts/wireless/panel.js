@@ -1,4 +1,4 @@
-/**
+/*
  * The control panel.
  */
 
@@ -261,19 +261,14 @@ var Panel = {
   	switch(move_model){
   		case 'RandomWayPoint':
   			return 0;
-  			break;
   		case 'MapRouteMovement':
   			return 1;
-  			break;
   		case 'RandomWalk':
   			return 2;
-  			break;
   		case 'StationaryMovement':
   			return 3;
-  			break;
   		case 'CarMovement':
   			return 4;
-  			break;
   	}
   },
 

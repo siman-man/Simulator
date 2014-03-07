@@ -1,5 +1,17 @@
+/**
+ *		状態管理を行う
+ * 
+ *		@class FSM
+ **/
+
 var FSM = {
-	simulator: function(user){
+	/**
+	 *	  シミュレータの管理を行う関数
+	 *		@method simulator
+	 *    @param 無し
+	 *		@return StateMachineのインスタンス
+	 **/
+	simulator: function(){
 		return new StateMachine.create({
 			initial: 'init',
 			events: [

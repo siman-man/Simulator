@@ -1,9 +1,18 @@
+/**
+ *  @class PriorityQueue
+ **/
 var PriorityQueue = function(){
   this.heap=[]; 
   this.pointer=0;
 };
  
 PriorityQueue.prototype = {
+  /**
+  *   要素の追加
+  *   @method push
+  *   @param 追加する要素
+  *   @return 無し  
+  **/
   push: function(data){
     var p, i;
     i = this.pointer++;

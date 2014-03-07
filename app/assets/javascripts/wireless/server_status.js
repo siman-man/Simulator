@@ -13,7 +13,7 @@ var ServerStatus = {
 				onsleep: function(event, from, to, server) { 
 					$("div#articles").append('<p>hello ' + server.id + '</p>');
 				}
-			},
+			}
 		});
 	},
 }
